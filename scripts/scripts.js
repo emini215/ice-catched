@@ -30,6 +30,20 @@
             App.canvas.attachEvent("mousemove", mouseMove);
         }
 
+        // loads the socket.io-client and connects
+        var socket = io();
+        socket.emit("msg", "Hello world!");
+
+        // listen for msg
+        socket.on("msg", function(msg) {
+            console.log(msg);
+        });
+
+        // listen for drawing
+        socket.on("draw", function(x, y) {
+            // TODO: draw shit
+        });
+
         function mouseDown(event) {
             App.drawing = true;
             App.ctx.moveTo(event.clientX, event.clientY);
