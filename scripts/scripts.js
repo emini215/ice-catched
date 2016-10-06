@@ -15,6 +15,8 @@
         App.ctx.strokeStyle = "#0078ff";
         App.ctx.lineWidth = 5;
         App.ctx.lineCap = "round";
+
+	// whether or not the mouse is pressed
         App.drawing = false;
 
         // add event listeners
