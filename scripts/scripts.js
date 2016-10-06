@@ -36,7 +36,16 @@
         var socket = io();
         socket.emit("msg", "Hello world!");
 
-        // listen for msg
+	// handle any errors that occur.
+	socket.onerror = function(error) {
+	    console.log('WebSocket Error: ' + error);
+	};
+
+	// log whatever message sent by server (this far unused?)
+	socket.onmessage = function(e) {
+	    console.log(e);
+	};
+
         socket.on("msg", function(msg) {
             console.log(msg);
         });
