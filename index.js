@@ -14,7 +14,7 @@ app.use("/scripts", express.static(__dirname + "/scripts"));
 var drawing_history = [];
 
 io.on("connection", function(socket) {
-    console.log("New connection.");
+    console.log("New connection. "+ socket.id);
 
     // send the history of all lines so that a client does not end up without
     // the lines drawn previous to the client's connection
