@@ -19,7 +19,7 @@ io.on("connection", function(socket) {
     // send the history of all lines so that a client does not end up without
     // the lines drawn previous to the client's connection
     for (var line in drawing_history) {
-        socket.emit("draw", line);
+        socket.emit("draw", JSON.stringify(drawing_history[line]));
     }
 
     // nothing really needed for disconnections, yet at least
@@ -37,10 +37,13 @@ io.on("connection", function(socket) {
     // send the necessary data for drawing lines
     socket.on("draw", function(data) {
         // save it history
-        drawing_history.push(data);
+        drawing_history.push(JSON.parse(data));
 
-        // send to all but the drawer who already drew it.
-        socket.broadcast.emit(data);
+	// TODO: Verify contents
+	// otherwise might be able to send stuff to clients
+
+	// send to all but the drawer who already drew it.
+        socket.broadcast.emit("draw", data);
     });
 
     socket.on("undo", function() {
