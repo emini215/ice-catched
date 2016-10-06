@@ -40,19 +40,42 @@
         });
 
         // listen for drawing
-        socket.on("draw", function(x, y) {
-            // TODO: draw shit
+        socket.on("draw", function(data) {
+	    data = JSON.parse(data);
+
+	    if (data.type == "mousemove")
+		drawMove(data);
+	    else if (data.type == "mouseup")
+		drawUp(data);
+	    else if (data.type == "mousedown")
+		drawDown(data);
+	    else {
+		// TODO: REMOVE
+		console.log("FAILED DRAW");
+		console.log(data);
+	    }
         });
 
         function mouseDown(event) {
             App.drawing = true;
-            App.ctx.moveTo(event.clientX, event.clientY);
-            App.ctx.beginPath();
+
+	    // start line and emit to other clients
+	    drawDown(event);
+	    socket.emit("draw", JSON.stringify({
+		"type": event.type,
+		"clientX": event.clientX,
+		"clientY": event.clientY
+	    }));
         };
 
-        function mouseUp(){
+        function mouseUp(event){
             App.drawing = false;
-            App.ctx.closePath();
+	   
+	    // stop drawing and send to server
+	    drawUp(event); 
+	    socket.emit("draw", JSON.stringify({
+		"type": event.type
+	    }));
         };
 
         function mouseMove(event) {
@@ -61,9 +84,31 @@
             if (!App.drawing)
                 return;
 
+	    // draw the move and emit object to other clients
+	    drawMove(event);
+	    socket.emit("draw", JSON.stringify({
+		"type": event.type,
+		"clientX": event.clientX,
+		"clientY": event.clientY
+	    }));
+        };
+
+	function drawUp(event) {
+	    // close path
+	    App.ctx.closePath();
+	};
+
+	function drawDown(event) {
+	    // start line
+            App.ctx.moveTo(event.clientX, event.clientY);
+            App.ctx.beginPath();
+	};
+
+	function drawMove(event) {
+	    // draw the line
             App.ctx.lineTo(event.clientX, event.clientY);
             App.ctx.stroke();
-        };
+	};
     };
 
     // create App on window load
