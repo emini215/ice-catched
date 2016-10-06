@@ -46,6 +46,7 @@
 	    console.log(e);
 	};
 
+	// listen for msg
         socket.on("msg", function(msg) {
             console.log(msg);
         });
