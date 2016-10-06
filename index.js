@@ -27,6 +27,7 @@ io.on("connection", function(socket) {
         console.log("Disconnected.");
     });
 
+    // send message all
     socket.on("msg", function(msg) {
         console.log("Client says: " + msg);
         
