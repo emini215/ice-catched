@@ -18,15 +18,39 @@ var drawing_history = [];
 
 // main function for handling connection to client
 io.on("connection", function(socket) {
-    console.log("New connection. "+ socket.id);
+    console.log("New connection: " + socket.id);
+    
+    // send the drawing history to the new user so that the user
+    // does not miss all drawing before the time of joining
+    sendHistory(socket);
+
     // reactions on messages
     socket.on("nick", function(nick)	{   setNick(socket, nick)   });
+    socket.on("msg", function(msg)	{   messageAll(socket, msg) });
+    socket.on("draw", function(data)	{   draw(socket, data)	    });
+    socket.on("undo", function()	{   undo(socket)	    });
 
+    // if the user was identified let other use know of disconnection
+    // otherwise ignore as the user has gone by unnoticed
+    socket.on("disconnect", function() {
+	if (socket.nick == null)
+	    return;
+
+        // let other clients know that user has disconnected
+	console.log(socket.nick + " has disconnected.");
+	io.emit("msg", socket.nick + " has disconnected.");
+    });
+
+});
+
+// send drawing history to socket
+function sendHistory(socket) {
     // send the history of all lines so that a client does not end up without
     // the lines drawn previous to the client's connection
     for (var line in drawing_history) {
         socket.emit("draw", JSON.stringify(drawing_history[line]));
     }
+};
 
 // set the user's nick
 function setNick(socket, nick) {
@@ -49,43 +73,35 @@ function setNick(socket, nick) {
     socket.nick = nick;
 };
 
-    // nothing really needed for disconnections, yet at least
-    socket.on("disconnect", function() {
-        console.log("Disconnected.");
-    });
+// message all users
+function messageAll(socket, message) {
+    if (socket.nick == null)
+	return;
 
-    // send message all
-    socket.on("msg", function(msg) {
-       if (socket.nick == undefined)
-	    return;
+    console.log(socket.nick + ": " + message);
     
-	console.log("Client says: " + msg);
-	
-        // send to everyone 
-        io.emit("msg", socket.nick + ": " + msg);
-    });
+    // send to everyone 
+    io.emit("msg", socket.nick + ": " + message);
+};
 
-    // send the necessary data for drawing lines
-    socket.on("draw", function(data) {
-        // save it history
-        drawing_history.push(JSON.parse(data));
+function draw(socket, data) {
+    // save it history
+    drawing_history.push(JSON.parse(data));
 
-	// TODO: Verify contents
-	// otherwise might be able to send stuff to clients
+    // TODO: Verify contents
+    // otherwise might be able to send stuff to clients
 
-	// send to all but the drawer who already drew it.
-        socket.broadcast.emit("draw", data);
-    });
+    // send to all but the drawer who already drew it.
+    socket.broadcast.emit("draw", data);
+};
 
-    socket.on("undo", function() {
-        // remove the last element
-        drawing_history.splice(-1, 1);
+function undo(socket) {
+    // remove the last element
+    drawing_history.splice(-1, 1);
 
-        // TODO: clear clients and send lines again
-        // or save in clients and send undo
-    });
-
-});
+    // TODO: clear clients and send lines again
+    // or save in clients and send undo
+};
 
 http.listen(3000, function() {
     console.log("Listening on port 3000.");
