@@ -88,12 +88,18 @@ App.init = function() {
     function mouseDown(event) {
 	App.drawing = true;
 
+	var rect = App.canvas.getBoundingClientRect();
+	var e = {};
+	e.type = event.type;
+	e.clientX = (event.clientX - rect.left) / (rect.right - rect.left) * App.canvas.width;
+	e.clientY = (event.clientY - rect.top) / (rect.bottom - rect.top) * App.canvas.height;
+
 	// start line and emit to other clients
-	drawDown(event);
+	drawDown(e);
 	socket.emit("draw", JSON.stringify({
-	    "type": event.type,
-	    "clientX": event.clientX,
-	    "clientY": event.clientY
+	    "type": e.type,
+	    "clientX": e.clientX,
+	    "clientY": e.clientY
 	}));
     };
 
@@ -108,17 +114,22 @@ App.init = function() {
     };
 
     function mouseMove(event) {
-
 	// only draw if the mouse is down
 	if (!App.drawing)
 	    return;
 
+	var rect = App.canvas.getBoundingClientRect();
+	var e = {};
+	e.type = event.type;
+	e.clientX = (event.clientX - rect.left) / (rect.right - rect.left) * App.canvas.width;
+	e.clientY = (event.clientY - rect.top) / (rect.bottom - rect.top) * App.canvas.height;
+
 	// draw the move and emit object to other clients
-	drawMove(event);
+	drawMove(e);
 	socket.emit("draw", JSON.stringify({
-	    "type": event.type,
-	    "clientX": event.clientX,
-	    "clientY": event.clientY
+	    "type": e.type,
+	    "clientX": e.clientX,
+	    "clientY": e.clientY
 	}));
     };
 
