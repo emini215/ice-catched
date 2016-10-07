@@ -4,39 +4,50 @@
 }
 
 body {
-    background-color: #000;
+    background-color: #262727;
 }
 
-header {
-    background-color: #000;
-    
-    padding: 25px;
-}
-
-header h1 {
-    text-align: center;
-   
-    font-family: "Oswald", sans-serif;
-    font-size: 4em;
-    color: #fff;
-}
-
-article {
+#content {
+    width: 100%;
     background-color: #fff;
+    
+    display: table;
+    table-layout: fixed;
 
-    padding: 20px;
+    text-align: center;
+}
+
+#content article {
+    padding: 50px 0 50px 0;
+    /* include the border in the size */
+    box-sizing: border-box;
+}
+
+#chat {
+    display: table-cell;
+    width: 30%;
+    border-right: 1px solid #262727;
+}
+
+#chat-area {
+    width: 80%;
+    margin: 0 auto 20px auto;
+    height: 400px;
+    border: 1px solid #262727;
+    text-align: left;
 }
 
 #drawing {
-    border: 1px solid #333;
+    display: table-cell;
 }
 
-canvas {
-    border: 1px dashed red;
+#drawing canvas {
+    border: 1px solid #262727;
+    padding: 10px;
 }
 
 footer {
-    background-color: #000;
+    background-color: #262727;
     padding: 5px;
 }
 
