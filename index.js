@@ -66,7 +66,7 @@ function setNick(socket, nick) {
 	// if the user has no previous nick it just joined
 	// (or at least is considered so as no previous actions
 	// has been possible)
-	io.emit("msg", nick + " has joined,");
+	io.emit("msg", nick + " has joined.");
     } else {
 	// otherwise notify of name-change
 	io.emit("msg", socket.nick + " is now known as " + nick + ".");
@@ -81,10 +81,9 @@ function messageAll(socket, message) {
     if (socket.nick == null)
 	return;
 
-    console.log(socket.nick + ": " + message);
-    
     // send to everyone 
     io.emit("msg", socket.nick + ": " + message);
+    console.log(socket.nick + ": " + message);
 };
 
 function draw(socket, data) {
