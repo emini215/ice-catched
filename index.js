@@ -3,6 +3,9 @@ var app = express();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 
+// port used to serve files
+var PORT = 3000;
+
 // as this is a single-page application this is the only
 // html-file that will be served
 app.get("/", function(req, res) {
@@ -103,7 +106,7 @@ function undo(socket) {
     // or save in clients and send undo
 };
 
-http.listen(3000, function() {
-    console.log("Listening on port 3000.");
+http.listen(PORT, function() {
+    console.log("Listening on port " + PORT + ".");
 });
 
