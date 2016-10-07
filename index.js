@@ -4,11 +4,11 @@ var http = require("http").Server(app);
 var io = require("socket.io")(http);
 
 app.get("/", function(req, res) {
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/public/home/index.html");
 });
 
-app.use("/styles", express.static(__dirname + "/styles"));
-app.use("/scripts", express.static(__dirname + "/scripts"));
+// serve static files from public
+app.use(express.static("public"));
 
 // history of drawn lines
 var drawing_history = [];
