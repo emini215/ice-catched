@@ -18,7 +18,7 @@ function join() {
 };
 
 // call function when enter is pressed
-window.onload = function() {
+window.addEventListener("load", function() {
     document.getElementById("nickname")
 	.addEventListener("keyup", function(event) {
 	event.preventDefault();
@@ -26,4 +26,4 @@ window.onload = function() {
 	    join();
 	}
     });
-}
+});
