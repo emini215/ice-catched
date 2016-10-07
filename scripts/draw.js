@@ -1,4 +1,7 @@
 var App = {};
+App.sendNick = function(nick) {
+    App.socket.emit("nick", nick);
+}
 App.init = function() {
     // create a canvas element
     App.canvas = document.createElement("canvas");
@@ -33,6 +36,7 @@ App.init = function() {
 
     // loads the socket.io-client and connects
     var socket = io();
+    App.socket = socket;
     socket.emit("msg", "Hello world!");
 
     // handle any errors that occur.

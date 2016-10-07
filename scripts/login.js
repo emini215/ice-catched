@@ -10,6 +10,8 @@ function join() {
 	return;
     }
 
+    App.sendNick(nickname);
+
     // hide login
     document.getElementById("login").style.display = "none";
 

@@ -23,6 +23,17 @@ io.on("connection", function(socket) {
         socket.emit("draw", JSON.stringify(drawing_history[line]));
     }
 
+    // set clients nick to whats given
+    socket.on("nick", function(nick) {
+	console.log(nick);
+
+	// TODO: send error
+	if (nick == undefined || nick == "")
+	    return;
+
+	socket.nick = nick;
+    });
+
     // nothing really needed for disconnections, yet at least
     socket.on("disconnect", function() {
         console.log("Disconnected.");
@@ -30,10 +41,13 @@ io.on("connection", function(socket) {
 
     // send message all
     socket.on("msg", function(msg) {
-        console.log("Client says: " + msg);
-        
+       if (socket.nick == undefined)
+	    return;
+    
+	console.log("Client says: " + msg);
+	
         // send to everyone 
-        io.emit("msg", "SOMeONE SAID: " + msg);
+        io.emit("msg", socket.nick + ": " + msg);
     });
 
     // send the necessary data for drawing lines
