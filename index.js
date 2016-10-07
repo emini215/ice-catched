@@ -88,6 +88,11 @@ function messageAll(socket, message) {
 };
 
 function draw(socket, data) {
+    // verify user
+    // TODO: verify that user is supposed to draw
+    if (socket.nick == null)
+	return;
+
     // save it history
     drawing_history.push(JSON.parse(data));
 
@@ -99,6 +104,10 @@ function draw(socket, data) {
 };
 
 function undo(socket) {
+    // TODO: not yet implement
+    // nothing to do for now
+    return;
+
     // remove the last element
     drawing_history.splice(-1, 1);
 
