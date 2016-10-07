@@ -6,15 +6,31 @@
 
         <title>ice-catch</title>
 
-        <link rel="stylesheet" href="/draw/index.css" />
+        <link rel="stylesheet" href="style/index.css" />
 
         <script src="/socket.io/socket.io.js"></script>
-        <script type="text/javascript" src="/draw/draw.js"></script>
+        <script type="text/javascript" src="scripts/draw.js"></script>
+	<script type="text/javascript" src="scripts/login.js"></script>
 
 	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
     </head>
 
     <body>
+
+	<!-- login section -->
+	<section id="login">
+	    <h1>Welcome to ICE-CATCH</h1>
+	    <article>
+		<h2>Enter the secret password!</h2>
+		<div id="login-input">
+		    <input id="nickname" name="nick" type="text" autofocus />
+		    <a href="#" onclick="join();">JOIN</a>
+		</div>
+	    </article>
+	    <article id="login-error">
+		<p id="login-error-message"></p>
+	    </article>
+	</section>
 
 	<header>
 	    <h1>ICE-CATCHED</h1>
