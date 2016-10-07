@@ -19,6 +19,8 @@ var drawing_history = [];
 // main function for handling connection to client
 io.on("connection", function(socket) {
     console.log("New connection. "+ socket.id);
+    // reactions on messages
+    socket.on("nick", function(nick)	{   setNick(socket, nick)   });
 
     // send the history of all lines so that a client does not end up without
     // the lines drawn previous to the client's connection
@@ -26,16 +28,26 @@ io.on("connection", function(socket) {
         socket.emit("draw", JSON.stringify(drawing_history[line]));
     }
 
-    // set clients nick to whats given
-    socket.on("nick", function(nick) {
-	console.log(nick);
+// set the user's nick
+function setNick(socket, nick) {
+    // TODO: send error
+    if (nick == null || nick == "")
+	return;
 
-	// TODO: send error
-	if (nick == undefined || nick == "")
-	    return;
+    // notify other users of change
+    if (socket.nick == null) {
+	// if the user has no previous nick it just joined
+	// (or at least is considered so as no previous actions
+	// has been possible)
+	io.emit("msg", nick + " has joined,");
+    } else {
+	// otherwise notify of name-change
+	io.emit("msg", socket.nick + " is now known as " + nick + ".");
+    }
 
-	socket.nick = nick;
-    });
+    // update nick
+    socket.nick = nick;
+};
 
     // nothing really needed for disconnections, yet at least
     socket.on("disconnect", function() {
