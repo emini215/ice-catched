@@ -10,6 +10,7 @@ function join() {
 	return;
     }
 
+    // register nick
     App.sendNick(nickname);
 
     // hide login
