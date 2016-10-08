@@ -54,10 +54,11 @@ App.init = function() {
 	console.log(msg);
 
 	// append message to chat-area	
-	var paragraph = document.createElement("p");
-	paragraph.appendChild(document.createTextNode(msg));
-	document.getElementById("chat-area")
-	    .appendChild(paragraph);
+	var textarea = document.getElementById("chat-area");
+
+	// scroll down automatically
+	textarea.value += msg + "\n";
+	textarea.scrollTop = textarea.scrollHeight;
     });
 
     // listen for drawing
