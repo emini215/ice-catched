@@ -2,6 +2,15 @@ var App = {};
 App.sendNick = function(nick) {
     App.socket.emit("nick", nick);
 }
+
+App.sendMessage = function() {
+    // send message
+    App.socket.emit("msg", document.getElementById("message").value);
+    
+    // clear box
+    document.getElementById("message").value = "";
+}
+
 App.init = function() {
     // create a canvas element
     App.canvas = document.createElement("canvas");
@@ -36,7 +45,6 @@ App.init = function() {
     // loads the socket.io-client and connects
     var socket = io();
     App.socket = socket;
-    socket.emit("msg", "Hello world!");
 
     // handle any errors that occur.
     socket.onerror = function(error) {
@@ -76,14 +84,6 @@ App.init = function() {
 	    console.log(data);
 	}
     });
-
-    function sendMessage() {
-	// send message
-	socket.emit("msg", document.getElementById("message").value);
-	
-	// clear box
-	document.getElementById("message").value = "";
-    };
 
     function mouseDown(event) {
 	App.drawing = true;
@@ -155,7 +155,7 @@ App.init = function() {
 	.addEventListener("keyup", function(event) {
 	event.preventDefault();
 	if (event.which == 13) {
-	    sendMessage();
+	    App.sendMessage();
 	}
     });
 };
