@@ -29,7 +29,9 @@ io.on("connection", function(socket) {
     sendHistory(socket);
 
     // reactions on messages
+    socket.on("help" function(data)	{   helpPage(data)	    });
     socket.on("nick", function(nick)	{   setNick(socket, nick)   });
+    socket.on("list", function()	{   list(socket)	    });
     socket.on("msg", function(msg)	{   messageAll(socket, msg) });
     socket.on("draw", function(data)	{   draw(socket, data)	    });
     socket.on("undo", function()	{   undo(socket)	    });
@@ -115,6 +117,9 @@ function draw(socket, data) {
     socket.broadcast.emit("draw", data);
 };
 
+function list(socket) {
+
+}
 
 function clear(socket) {
     if (socket.nick == null) 
@@ -142,6 +147,9 @@ function undo(socket) {
     sendHistory(io);
 };
 
+function helpPage(data) {
+
+};
 
 function findStrokeEnd(arr) {
     for (var i = arr.length; --i >= 0;) {
