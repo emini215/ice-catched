@@ -33,6 +33,7 @@ io.on("connection", function(socket) {
     socket.on("msg", function(msg)	{   messageAll(socket, msg) });
     socket.on("draw", function(data)	{   draw(socket, data)	    });
     socket.on("undo", function()	{   undo(socket)	    });
+    socket.on("clear", function()	{   clear(socket)	    });
 
     // if the user was identified let other use know of disconnection
     // otherwise ignore as the user has gone by unnoticed
@@ -114,16 +115,44 @@ function draw(socket, data) {
     socket.broadcast.emit("draw", data);
 };
 
+
+function clear(socket) {
+    if (socket.nick == null) 
+	return;
+
+    // send clear-message
+    io.emit("CLEAR");
+}
+
 function undo(socket) {
-    // TODO: not yet implement
-    // nothing to do for now
-    return;
+    // only allow verified users to undo
+    if (socket.nick == null)
+        return;
 
     // remove the last element
-    drawing_history.splice(-1, 1);
+    //drawing_history.splice(-1, 1);
+    var strokeEnd = findStrokeEnd(drawing_history);
+    console.log(strokeEnd);
+    if (strokeEnd != null)
+	drawing_history.splice(strokeEnd);
+    console.log(drawing_history);
 
-    // TODO: clear clients and send lines again
-    // or save in clients and send undo
+    // clear clients and send history to all
+    clear(socket);
+    sendHistory(io);
+};
+
+
+function findStrokeEnd(arr) {
+    for (var i = arr.length; --i >= 0;) {
+	if (arr[i].type == "mouseup")
+	    return i;
+    }
+    for (var i = arr.length; --i >= 0;) {
+	if (arr[i].type == "mousedown")
+	    return i;
+    }
+    return null;
 };
 
 http.listen(PORT, function() {

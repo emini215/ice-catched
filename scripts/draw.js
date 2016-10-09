@@ -6,9 +6,13 @@ App.sendNick = function(nick) {
 App.sendMessage = function() {
     // send message
     App.socket.emit("msg", document.getElementById("message").value);
-    
+
     // clear box
     document.getElementById("message").value = "";
+}
+
+App.undo = function() {
+    App.socket.emit("undo");
 }
 
 App.init = function() {
@@ -83,6 +87,12 @@ App.init = function() {
 	    console.log("FAILED DRAW");
 	    console.log(data);
 	}
+    });
+
+    // clear canvas
+    socket.on("CLEAR", function() {
+	console.log("CLEARING");
+	App.ctx.clearRect(0, 0, App.canvas.width, App.canvas.height);
     });
 
     function mouseDown(event) {
@@ -160,6 +170,15 @@ App.init = function() {
 	event.preventDefault();
 	if (event.which == 13) {
 	    App.sendMessage();
+	}
+    });
+
+    // global key events
+    window.addEventListener("keyup", function(event) {
+	// undo when U is pressed 
+	// TODO: unless typing
+	if (event.which == 85) {
+	    App.undo();
 	}
     });
 };
