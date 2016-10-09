@@ -82,7 +82,7 @@ body {
     box-shadow: 0px 0px 5px #000;
 }
 
-#send-bar input {
+input {
     box-sizing: border-box;
     float: left;
     height: 100%;
@@ -91,31 +91,31 @@ body {
     font-family: "Oswald", "san-serif";
 }
 
-#send-bar input:hover {
+input:hover {
     box-shadow: 0px 0px 10px #262727 inset;
 }
 
-#send-bar input:focus {
+input:focus {
     outline: none;
 }
 
-#send-bar input[type="text"] {
+input[type="text"] {
     border: 1px solid #262727;
     width: 80%;
 
     font-size: 0.9em;
 }
 
-#send-bar input[type="text"]:hover {
+input[type="text"]:hover {
     box-shadow: 0px 0px 15px #262727 inset;
 }
 
-#send-bar input[type="text"]:focus {
+input[type="text"]:focus {
     box-shadow: 0px 0px 10px #262727 inset;
     outline: none;
 }
 
-#send-bar input[type="submit"] {
+input[type="button"] {
     border: 1px solid #262727;
     border-left: none;
     width: 20%;
@@ -127,7 +127,7 @@ body {
     color: #262727;
 }
 
-#send-bar input[type="submit"]:active {
+input[type="button"]:active {
     box-shadow: 0px 0px 25px #262727 inset;
     color: #c0634c;
 }
@@ -192,30 +192,19 @@ footer p:nth-of-type(2) {
 }
 
 #login-input {
-    margin-top: 20px;
+    width: 250px;
+    height: 50px;
+    margin: 15px auto;
 }
 
-#login input {
-    border-radius: 5px;
-    padding: 6px;
-    font-size: 1em;
-}
-
-#login a {
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 5px;
-    color: #262727;
-    font-family: "Oswald", "sans-serif";
-    font-weight: bold;
-}
 
 #login-error {
     display: none;
+    width: 250px;
+    margin: 0 auto;
 }
 
 #login-error-message {
+    padding-top: 50px;
     color: #fff;
 }
