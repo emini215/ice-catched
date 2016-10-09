@@ -24,8 +24,8 @@
 	    <article>
 		<h2>Enter the secret password!</h2>
 		<div id="login-input">
-		    <input id="nickname" name="nick" type="text" autofocus />
-		    <a href="#" onclick="join();">JOIN</a>
+		    <input id="nickname" name="nick" type="text" autofocus placeholder="kartoffelauflauf"/>
+		    <input id="join" value="JOIN" type="submit" onclick="join()"/>
 		</div>
 	    </article>
 	    <article id="login-error">
@@ -37,8 +37,8 @@
 	    <article id="chat">
 		<textarea id="chat-area" readonly ></textarea>
 		<div id="send-bar">
-		    <input id="message" name="message" type="text" />
-		    <input id="send-message" name="send" type="submit" value="SEND" />
+		    <input id="message" name="message" type="text" placeholder="omg blixn is amazing"/>
+		    <input id="send-message" name="send" type="button" value="SEND" onclick="App.sendMessage()"/>
 		</div>
 	    </article>
 	    <article id="drawing"><!-- canvas --></article>
