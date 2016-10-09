@@ -126,7 +126,7 @@ function clear(socket) {
 	return;
 
     // send clear-message
-    io.emit("CLEAR");
+    io.emit("clear");
 }
 
 function undo(socket) {

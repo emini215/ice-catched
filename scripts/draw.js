@@ -90,8 +90,7 @@ App.init = function() {
     });
 
     // clear canvas
-    socket.on("CLEAR", function() {
-	console.log("CLEARING");
+    socket.on("clear", function() {
 	App.ctx.clearRect(0, 0, App.canvas.width, App.canvas.height);
     });
 
