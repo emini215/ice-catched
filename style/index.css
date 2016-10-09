@@ -52,6 +52,7 @@ body {
     height: 80%;
 
     border: 1px solid #262727;
+    box-shadow: 0px 0px 5px #000;
 
     padding: 10px;
     padding-bottom: 0;
@@ -65,24 +66,37 @@ body {
     font-size: 0.9em;
 }
 
+#chat-area:focus {
+    outline: none;
+}
+
 #chat-area:hover {
     overflow: auto;
 }
 
 #send-bar {
     box-sizing: border-box;
-    height: 10%;
+    height: 8%;
     width: 80%;
     margin: 0 auto;
+    box-shadow: 0px 0px 5px #000;
 }
 
 #send-bar input {
     box-sizing: border-box;
     float: left;
-    height: 80%;
+    height: 100%;
     padding: 8px;
     
     font-family: "Oswald", "san-serif";
+}
+
+#send-bar input:hover {
+    box-shadow: 0px 0px 10px #262727 inset;
+}
+
+#send-bar input:focus {
+    outline: none;
 }
 
 #send-bar input[type="text"] {
@@ -92,6 +106,15 @@ body {
     font-size: 0.9em;
 }
 
+#send-bar input[type="text"]:hover {
+    box-shadow: 0px 0px 15px #262727 inset;
+}
+
+#send-bar input[type="text"]:focus {
+    box-shadow: 0px 0px 10px #262727 inset;
+    outline: none;
+}
+
 #send-bar input[type="submit"] {
     border: 1px solid #262727;
     border-left: none;
@@ -99,6 +122,14 @@ body {
 
     font-size: 1em;
     font-weight: bold;
+
+    background-color: #fff;
+    color: #262727;
+}
+
+#send-bar input[type="submit"]:active {
+    box-shadow: 0px 0px 25px #262727 inset;
+    color: #c0634c;
 }
 
 footer {
