@@ -91,8 +91,10 @@ App.init = function() {
 	var rect = App.canvas.getBoundingClientRect();
 	var e = {};
 	e.type = event.type;
-	e.clientX = (event.clientX - rect.left) / (rect.right - rect.left) * App.canvas.width;
-	e.clientY = (event.clientY - rect.top) / (rect.bottom - rect.top) * App.canvas.height;
+	e.clientX = (event.clientX - rect.left) / 
+	    (rect.right - rect.left) * App.canvas.width;
+	e.clientY = (event.clientY - rect.top) / 
+	    (rect.bottom - rect.top) * App.canvas.height;
 
 	// start line and emit to other clients
 	drawDown(e);
@@ -121,8 +123,10 @@ App.init = function() {
 	var rect = App.canvas.getBoundingClientRect();
 	var e = {};
 	e.type = event.type;
-	e.clientX = (event.clientX - rect.left) / (rect.right - rect.left) * App.canvas.width;
-	e.clientY = (event.clientY - rect.top) / (rect.bottom - rect.top) * App.canvas.height;
+	e.clientX = (event.clientX - rect.left) / 
+	    (rect.right - rect.left) * App.canvas.width;
+	e.clientY = (event.clientY - rect.top) / 
+	    (rect.bottom - rect.top) * App.canvas.height;
 
 	// draw the move and emit object to other clients
 	drawMove(e);
