@@ -18,11 +18,12 @@ app.use("/style", express.static(__dirname + "/style"));
 
 // history of drawn lines
 var drawing_history = [];
+var drawing_order = [];
 
 // main function for handling connection to client
 io.on("connection", function(socket) {
     console.log("New connection: " + socket.id);
-    
+
     // send the drawing history to the new user so that the user
     // does not miss all drawing before the time of joining
     sendHistory(socket);
@@ -38,6 +39,13 @@ io.on("connection", function(socket) {
     socket.on("disconnect", function() {
 	if (socket.nick == null)
 	    return;
+
+	// remove socket from list of drawers
+	drawing_order = drawing_order.filter(function(e) { 
+	    return e !== socket.id 
+	});
+	console.log(drawing_order);
+	// TODO: change active if active
 
         // let other clients know that user has disconnected
 	console.log(socket.nick + " has disconnected.");
@@ -67,6 +75,10 @@ function setNick(socket, nick) {
 	// (or at least is considered so as no previous actions
 	// has been possible)
 	io.emit("msg", nick + " has joined.");
+
+	// add client to list of drawers
+	drawing_order.push(socket.id);
+	console.log(drawing_order);
     } else {
 	// otherwise notify of name-change
 	io.emit("msg", socket.nick + " is now known as " + nick + ".");
