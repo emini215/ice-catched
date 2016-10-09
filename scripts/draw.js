@@ -5,11 +5,10 @@ App.sendNick = function(nick) {
 App.init = function() {
     // create a canvas element
     App.canvas = document.createElement("canvas");
-    App.canvas.height = 400;
-    App.canvas.width = 400;
-    
-    // append canvas element to article
     document.getElementById("drawing").appendChild(App.canvas);
+    var parentSize = App.canvas.parentNode.getBoundingClientRect();
+    App.canvas.width = parentSize.width;
+    App.canvas.height = parentSize.height;
 
     // drawing settings
     App.ctx = App.canvas.getContext("2d");
