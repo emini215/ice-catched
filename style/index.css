@@ -10,13 +10,16 @@ html, body {
 
 body {
     background-color: #262727;
+    overflow: hidden;
 }
 
 #content {
     width: 100vw;
-    height: 80vh;
+    height: 85vh;
 
     background-color: #fff;
+
+    border-bottom: 1px solid #050505;
 }
 
 #content article {
@@ -29,13 +32,74 @@ body {
     width: 25vw;
     float: left;
 
-    border-right: 1px solid #262727;
+    border-right: 1px solid #994f3c;
+    text-align: center;
+
+    background-color: #c0634c;
+    box-shadow: 1px 0px 5px #733b2d; 
 }
 
 #drawing {
     margin-left: 25vw;
 }
 
+#chat-area {
+    box-sizing: border-box;
+
+    resize: none;
+
+    width: 80%;
+    height: 80%;
+
+    border: 1px solid #262727;
+
+    padding: 10px;
+    padding-bottom: 0;
+
+    margin: 10% auto;
+    margin-bottom: 0;
+
+    overflow: hidden;
+
+    font-family: "Slabo+27px", "serif";
+    font-size: 0.9em;
+}
+
+#chat-area:hover {
+    overflow: auto;
+}
+
+#send-bar {
+    box-sizing: border-box;
+    height: 10%;
+    width: 80%;
+    margin: 0 auto;
+}
+
+#send-bar input {
+    box-sizing: border-box;
+    float: left;
+    height: 80%;
+    padding: 8px;
+    
+    font-family: "Oswald", "san-serif";
+}
+
+#send-bar input[type="text"] {
+    border: 1px solid #262727;
+    width: 80%;
+
+    font-size: 0.9em;
+}
+
+#send-bar input[type="submit"] {
+    border: 1px solid #262727;
+    border-left: none;
+    width: 20%;
+
+    font-size: 1em;
+    font-weight: bold;
+}
 
 footer {
     background-color: #262727;
