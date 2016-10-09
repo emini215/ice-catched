@@ -34,9 +34,11 @@
 
 	<section id="content">
 	    <article id="chat">
-		<div id="chat-area"></div>
-		<input id="message" name="message" type="text" />
-		<a href="#" onclick="App.sendMessage();">SEND</a>
+		<textarea id="chat-area" readonly ></textarea>
+		<div id="send-bar">
+		    <input id="message" name="message" type="text" />
+		    <a href="#" onclick="App.sendMessage();" class="button">SEND</a>
+		</div>
 	    </article>
 	    <article id="drawing"><!-- canvas --></article>
 	</section>
