@@ -155,7 +155,9 @@ function clear(socket) {
 
 function active(socket) {
     // send along nick only if the drawer is not the receiver
-    if (socket.id == active_drawer) 
+    if (active_drawer == null)
+	socket.emit("msg", "Game has not started yet.");
+    else if (socket.id == active_drawer) 
 	socket.emit("active");
     else 
         socket.emit("active", io.sockets.connected[active_drawer].nick);
