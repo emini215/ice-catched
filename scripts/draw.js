@@ -10,7 +10,7 @@ App.sendMessage = function() {
 
     if (message == "/list") {
 	App.socket.emit("list");
-    } if (message == "/active") { 
+    } else if (message == "/active") { 
 	App.socket.emit("active");
     } else {
         // send message
