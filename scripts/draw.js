@@ -4,8 +4,16 @@ App.sendNick = function(nick) {
 }
 
 App.sendMessage = function() {
-    // send message
-    App.socket.emit("msg", document.getElementById("message").value);
+
+    // fetch message
+    var message = document.getElementById("message").value;
+
+    if (message == "/list") {
+	App.socket.emit("list");
+    } else {
+        // send message
+	App.socket.emit("msg", message);
+    }
 
     // clear box
     document.getElementById("message").value = "";
@@ -59,6 +67,25 @@ App.init = function() {
     socket.onmessage = function(e) {
 	console.log(e);
     };
+
+    // display list of users
+    socket.on("list", function(message) {
+	var textarea = document.getElementById("chat-area");
+
+	// put label on list
+	textarea.value += "List of connected users:\n";
+
+	// append all users to the list
+	message.forEach(function(username) {
+	    textarea.value += "\t" + username + "\n";
+	});
+
+	// add space between list and next message
+	textarea.value += "\n";
+
+	// scroll down
+	textarea.scrollTop = textarea.scrollHeight;
+    });
 
     // listen for msg
     socket.on("msg", function(msg) {

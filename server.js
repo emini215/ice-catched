@@ -119,6 +119,15 @@ function draw(socket, data) {
 
 function list(socket) {
 
+    // create list of all users' nick
+    var users = [];
+    drawing_order.forEach(function(e) {
+	// retrieve nick from socket.id
+	users.push(io.sockets.connected[e].nick);
+    });
+
+    // send list to user
+    socket.emit("list", users);
 }
 
 function clear(socket) {
