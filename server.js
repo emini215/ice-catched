@@ -144,12 +144,10 @@ function undo(socket) {
         return;
 
     // remove the last element
-    //drawing_history.splice(-1, 1);
     var strokeEnd = findStrokeEnd(drawing_history);
     console.log(strokeEnd);
     if (strokeEnd != null)
 	drawing_history.splice(strokeEnd);
-    console.log(drawing_history);
 
     // clear clients and send history to all
     clear(socket);
