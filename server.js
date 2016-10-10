@@ -93,6 +93,9 @@ function setNick(socket, nick) {
 	    // then to everyone else
 	    var active_socket = io.sockets.connected[active_drawer];
 	    active_socket.broadcast.emit("active", active_socket.nick);
+	} else if (active_drawer != null) {
+	    // notify user of current drawer
+	    active(socket);
 	}
 
     } else {
