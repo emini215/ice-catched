@@ -99,10 +99,10 @@ App.init = function() {
 	var text;
 	if (nick == null) {
 	    App.active = true;
-	    text = "You are the drawer.";
+	    text = "You are drawing.";
 	} else {
 	    App.active = false;
-	    text = nick + " is the drawer.";
+	    text = nick + " is drawing.";
 	}
 
 	// TODO: extract function of appending text
