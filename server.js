@@ -19,6 +19,7 @@ app.use("/style", express.static(__dirname + "/style"));
 // history of drawn lines
 var drawing_history = [];
 var drawing_order = [];
+var active_drawer = null;
 
 // main function for handling connection to client
 io.on("connection", function(socket) {
@@ -32,6 +33,7 @@ io.on("connection", function(socket) {
     socket.on("help", function(data)	{   helpPage(data)	    });
     socket.on("nick", function(nick)	{   setNick(socket, nick)   });
     socket.on("list", function()	{   list(socket)	    });
+    socket.on("active", function()	{   active(socket)	    });
     socket.on("msg", function(msg)	{   messageAll(socket, msg) });
     socket.on("draw", function(data)	{   draw(socket, data)	    });
     socket.on("undo", function()	{   undo(socket)	    });
@@ -81,7 +83,18 @@ function setNick(socket, nick) {
 
 	// add client to list of drawers
 	drawing_order.push(socket.id);
-	console.log(drawing_order);
+
+	// start drawing game if 2 players or more
+	if (drawing_order.length > 1) {
+	    active_drawer = drawing_order[0];
+
+	    // send to drawer first
+	    io.to(active_drawer).emit("active");
+	    // then to everyone else
+	    var active_socket = io.sockets.connected[active_drawer];
+	    active_socket.broadcast.emit("active", active_socket.nick);
+	}
+
     } else {
 	// otherwise notify of name-change
 	io.emit("msg", socket.nick + " is now known as " + nick + ".");
@@ -103,8 +116,7 @@ function messageAll(socket, message) {
 
 function draw(socket, data) {
     // verify user
-    // TODO: verify that user is supposed to draw
-    if (socket.nick == null)
+    if (socket.id != active_drawer)
 	return;
 
     // save it history
@@ -131,21 +143,28 @@ function list(socket) {
 }
 
 function clear(socket) {
-    if (socket.nick == null) 
+    if (socket.id != active_drawer) 
 	return;
 
     // send clear-message
     io.emit("clear");
-}
+};
+
+function active(socket) {
+    // send along nick only if the drawer is not the receiver
+    if (socket.id == active_drawer) 
+	socket.emit("active");
+    else 
+        socket.emit("active", io.sockets.connected[active_drawer].nick);
+};
 
 function undo(socket) {
     // only allow verified users to undo
-    if (socket.nick == null)
+    if (socket.id != active_drawer)
         return;
 
     // remove the last element
     var strokeEnd = findStrokeEnd(drawing_history);
-    console.log(strokeEnd);
     if (strokeEnd != null)
 	drawing_history.splice(strokeEnd);
 

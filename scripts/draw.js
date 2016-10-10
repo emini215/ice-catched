@@ -10,6 +10,8 @@ App.sendMessage = function() {
 
     if (message == "/list") {
 	App.socket.emit("list");
+    } if (message == "/active") { 
+	App.socket.emit("active");
     } else {
         // send message
 	App.socket.emit("msg", message);
@@ -40,6 +42,9 @@ App.init = function() {
 
     // whether or not the mouse is pressed
     App.drawing = false;
+
+    // whether or not its clients turn to draw
+    App.active = false;
 
     // add event listeners
     if (document.addEventListener) {
@@ -87,6 +92,27 @@ App.init = function() {
 	textarea.scrollTop = textarea.scrollHeight;
     });
 
+    socket.on("active", function(nick) {
+   
+	// update variable active according to given nick, null being self
+	// also set the text to be displayed
+	var text;
+	if (nick == null) {
+	    App.active = true;
+	    text = "You are the drawer.";
+	} else {
+	    App.active = false;
+	    text = nick + " is the drawer.";
+	}
+
+	// TODO: extract function of appending text
+	// display notification of active-drawer status
+	var textarea = document.getElementById("chat-area");
+	textarea.value += text + "\n";
+	textarea.scrollTop = textarea.scrollHeight;
+
+    });
+
     // listen for msg
     socket.on("msg", function(msg) {
 	console.log(msg);
@@ -122,6 +148,9 @@ App.init = function() {
     });
 
     function mouseDown(event) {
+	if (App.active == false) 
+	    return;
+
 	App.drawing = true;
 
 	var rect = App.canvas.getBoundingClientRect();
@@ -141,7 +170,10 @@ App.init = function() {
 	}));
     };
 
-    function mouseUp(event){
+    function mouseUp(event) {
+	if (App.active == false) 
+	    return;
+
 	App.drawing = false;
        
 	// stop drawing and send to server
@@ -152,6 +184,9 @@ App.init = function() {
     };
 
     function mouseMove(event) {
+	if (App.active == false)
+	    return;
+
 	// only draw if the mouse is down
 	if (!App.drawing)
 	    return;
