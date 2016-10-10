@@ -29,7 +29,7 @@ io.on("connection", function(socket) {
     sendHistory(socket);
 
     // reactions on messages
-    socket.on("help" function(data)	{   helpPage(data)	    });
+    socket.on("help", function(data)	{   helpPage(data)	    });
     socket.on("nick", function(nick)	{   setNick(socket, nick)   });
     socket.on("list", function()	{   list(socket)	    });
     socket.on("msg", function(msg)	{   messageAll(socket, msg) });
