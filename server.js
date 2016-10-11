@@ -316,6 +316,17 @@ function joinRoom(socket, name, password) {
 };
 
 /**
+ * Check if the nick is used in a room.
+ * @param {string} nick - The nick to check.
+ * @param {Object} room - The room to check if nick is taken in.
+ * @param {string[]} room.users - List of users in room.
+ * @return {boolean}
+ */
+function nickInRoom(nick, room) {
+    return room.users.find(function(other) { return other==nick; });
+};
+
+/**
  * Check if the room exists.
  * @param {string} room - The name of room to check whether exists.
  * @return {boolean}
