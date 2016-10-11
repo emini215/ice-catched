@@ -6,6 +6,7 @@ Login.showError = function(message) {
 
     // reenable input fields
     document.getElementById("nick-text").disabled = false;
+    document.getElementById("nick-text").focus();
     document.getElementById("join-room-text").disabled = false;
     document.getElementById("create-room-text").disabled = false;
 };
