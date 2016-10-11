@@ -309,7 +309,7 @@ function createRoom(socket, name, password, visible) {
  * @return {boolean}
  */
 function nickInRoom(nick, room) {
-    return room.users.find(function(other) { return other==nick; });
+    return null != room.users.find(function(other) { return other==nick; });
 };
 
 /**
