@@ -301,65 +301,6 @@ function findStrokeEnd(arr) {
     return null;
 };
 
-function createRoom(socket, name, password, visible) {
-    // verify that the user is indeed connected and not in a room
-    if (socket.nick == null || socket.room != null)
-	return {    
-	    room: null, 
-	    message: "Client must be registered and not already in a room."
-	};
-
-    // try to create room
-    var room = {};
-    if (name != null) {
-	// room is already taken
-	if (rooms.find(function(room) { return room.name==name })) {
-	    return {	
-		room: null,
-		message: "Already exists room with given name."
-	    };
-	}
-    
-	// name is alright
-	room.name = name;
-
-	// check if password is given
-	if (password != null) {
-	    // verify password type
-	    if (typeof password !== "string") {
-		return {
-		    room: null,
-		    message: "Password given must be of type string."
-		};
-	    }
-
-	    // password is fine
-	    room.password = password;
-	} else {
-	    room.password = null;
-	}
-
-	// make sure visible is exactly false befores setting it to false.
-	// if it is not it is okay to set visible to true as it is supposed
-	// to be the default value
-	if (visible === false)
-	    room.visible = false;
-	else
-	    room.visible = true;
-
-    } else {
-	return {
-	    room: null,
-	    message: "You must provide a name for the room."
-	};
-    }
-
-    // add room to rooms, and add user to room
-    room.users = [];
-    rooms.push(room);
-    return joinRoom(socket, room.name, password);
-};
-
 /**
  * Check if the nick is used in a room.
  * @param {string} nick - The nick to check.
