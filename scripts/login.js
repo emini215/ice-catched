@@ -33,16 +33,16 @@ Login.register = function() {
     document.getElementById("nick-button").focus();
 };
 
-Login.hideNick = function() {
+Login.showNick = function() {
 
-    // hide nick entry and focus input
-    document.getElementById("nick").style.display = "none";
-
-    // show room buttons
+    // hide room buttons
     var elements = document.getElementsByClassName("rooms");
     for (var i = 0; i < elements.length; i++) {
-	elements[i].style.display = "block";
+	elements[i].style.display = "none";
     }
+
+    // show nick entry and focus input
+    document.getElementById("nick").style.display = "block";
 };
 
 // make the main page visible

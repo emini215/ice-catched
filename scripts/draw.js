@@ -101,7 +101,7 @@ App.init = function() {
 	    App.displayMessage(message);
 	} else {
 	    // TODO: only do this if not already registered
-	    Login.hideNick();
+	    Login.showMainPage();
 	}
     });
 
@@ -114,7 +114,7 @@ App.init = function() {
 	    App.displayMessage(message);
 	} else {
 	    App.room = room;
-	    Login.showMainPage();
+	    Login.showNick();
 	}
     });
 
@@ -126,7 +126,7 @@ App.init = function() {
 	    App.displayMessage(message);
 	} else {
 	    App.room = room;
-	    Login.showMainPage();
+	    Login.showNick();
 	}
     });
 

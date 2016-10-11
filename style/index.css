@@ -177,7 +177,7 @@ footer p:nth-of-type(2) {
     position: relative;
 }
 
-.rooms {
+#nick {
     display: none;
 }
 
