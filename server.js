@@ -82,7 +82,7 @@ function join(name, password) {
     // TODO: leave room upon 0
     if (name === 0) {}
     
-    var room = roomExists(name, password);
+    var room = roomExists(name);
     if (!room) {
 	// room does not exist
 	return {
