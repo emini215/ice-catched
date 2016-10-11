@@ -154,6 +154,7 @@ function create(socket, name, password, visible) {
     room.name = name;
     room.password = password;
     room.visible = visible;
+    room.users = [];
     rooms.push(room);
 
     // remember which room user created
