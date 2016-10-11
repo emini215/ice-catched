@@ -261,26 +261,6 @@ function createRoom(socket, name, password, visible) {
     return joinRoom(socket, room.name, password);
 };
 
-/**
- * Check if the room exists.
- * @param {string} room - The name of room to check whether exists.
- * @return {boolean}
- */
-function roomExists(room) {
-    return rooms.find(function(other) { return other.name===room; });
-};
-
-/**
- * Check if the password matches password of room.
- * @param {string} password - The password to check.
- * @param {Object} room	- The room to check password with.
- * @param {string] room.password - The password of the room.
- * @return {boolean}
- */
-function passwordMatch(password, room) {
-    return room.password == password;
-};
-
 function joinRoom(socket, name, password) {
     // verify user is not already in a room and has registered
     if (socket.nick == null || socket.room != null) {
@@ -333,6 +313,26 @@ function joinRoom(socket, name, password) {
 	    message: "Password does not match."
 	};
     }
+};
+
+/**
+ * Check if the room exists.
+ * @param {string} room - The name of room to check whether exists.
+ * @return {boolean}
+ */
+function roomExists(room) {
+    return rooms.find(function(other) { return other.name===room; });
+};
+
+/**
+ * Check if the password matches password of room.
+ * @param {string} password - The password to check.
+ * @param {Object} room	- The room to check password with.
+ * @param {string] room.password - The password of the room.
+ * @return {boolean}
+ */
+function passwordMatch(password, room) {
+    return room.password == password;
 };
 
 http.listen(PORT, function() {
