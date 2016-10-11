@@ -10,6 +10,10 @@ Login.showError = function(message) {
     document.getElementById("create-room-text").disabled = false;
 };
 
+Login.hideError = function() {
+    document.getElementById("login-error").style.disply = "none";
+};
+
 Login.joinRoom = function() {
     App.joinRoom(document.getElementById("join-room-text").value);
     document.getElementById("join-room-text").disabled = true;
@@ -34,6 +38,8 @@ Login.register = function() {
 };
 
 Login.showNick = function() {
+    // hide previous errors
+    Login.hideError();
 
     // hide room buttons
     var elements = document.getElementsByClassName("rooms");
@@ -47,8 +53,9 @@ Login.showNick = function() {
 
 // make the main page visible
 Login.showMainPage = function() {
-    // hide the login page
+    // hide the login page and previous errors
     document.getElementById("login").style.display = "none";
+    Login.hideErrors();
 
     // set focus to message-box
     document.getElementById("message").focus();
