@@ -11,7 +11,7 @@ Login.showError = function(message) {
 };
 
 Login.hideError = function() {
-    document.getElementById("login-error").style.disply = "none";
+    document.getElementById("login-error").style.display = "none";
 };
 
 Login.joinRoom = function() {
