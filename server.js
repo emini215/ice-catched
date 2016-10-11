@@ -76,7 +76,7 @@ io.on("connection", function(socket) {
  * @param {Object} socket - The socket of the user joining the room.
  * @param {string} name - The name of the room to join.
  * @param {?string} password - The password (if any) of the room to join.
- * @return {Object} - A response to request
+ * @return {Object} - A response to request.
  */
 function join(socket, name, password) {	
 
@@ -117,6 +117,7 @@ function join(socket, name, password) {
  * @param {string} name - The name of the room.
  * @param {string} password - The password of the room.
  * @param {boolean} [visible] - Whether or not the room shows in room-list.
+ * @return {Object} - A response to request.
  */
 function create(socket, name, password, visible) {
 
