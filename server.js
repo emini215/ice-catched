@@ -321,6 +321,12 @@ function joinRoom(socket, name, password) {
  * @return {boolean}
  */
 function roomExists(room) {
+    
+    // the room that is null does not exist
+    if (room == null) 
+	return false;
+
+    // otherwise rooms exist if there are a room with given name
     return rooms.find(function(other) { return other.name===room; });
 };
 
