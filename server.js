@@ -302,6 +302,18 @@ function findStrokeEnd(arr) {
 };
 
 /**
+ * Check if the nick is valid.
+ * @param {string} nick - The nick to check.
+ * @return {boolean}
+ */
+function nickIsValid(nick) {
+    if (typeof nick !== "string" || nick.length < 3)
+       return false;
+
+    return true;    
+};
+
+/**
  * Check if the nick is used in a room.
  * @param {string} nick - The nick to check.
  * @param {Object} room - The room to check if nick is taken in.
