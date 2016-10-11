@@ -38,12 +38,17 @@ io.on("connection", function(socket) {
     socket.on("draw", function(data)	{   draw(socket, data)	    });
     socket.on("undo", function()	{   undo(socket)	    });
     socket.on("clear", function()	{   clear(socket)	    });
+    
     socket.on("nick", function(nick) {   
-	socket.emit("nick", setNick(socket, nick)) });
+	socket.emit("nick", setNick(socket, nick)) 
+    });
+    
     socket.on("create", function(room, password, visible) {
-	socket.emit("create", createRoom(socket, room, password, visible)) });
+	socket.emit("create", createRoom(socket, room, password, visible)) 
+    });
     
     socket.on("join", function(room, password) {
+	socket.emit("join", join(room, password)); 
     });
  
     // if the user was identified let other use know of disconnection
@@ -65,6 +70,40 @@ io.on("connection", function(socket) {
     });
 
 });
+
+/**
+ * Check credentials for joining room.
+ * @param {string} name - The name of the room to join.
+ * @param {?string} password - The password (if any) of the room to join.
+ * @return {Object} - A response to request
+ */
+function join(name, password) {	
+
+    // TODO: leave room upon 0
+    if (name === 0) {}
+    
+    var room = roomExists(name, password);
+    if (!room) {
+	// room does not exist
+	return {
+	    room: null,
+	    message: "Password does not match."
+	};
+    }
+
+    if (!passwordMatch(password, room)) {
+	// password does not match
+	return {
+	    room: null,
+	    message: "Password does not match."
+	};
+    }
+    
+    // everything okay
+    return {
+	room: room.name
+    };
+};
 
 // send drawing history to socket
 function sendHistory(socket) {
