@@ -44,11 +44,11 @@ io.on("connection", function(socket) {
     });
     
     socket.on("create", function(room, password, visible) {
-	socket.emit("create", create(room, password, visible)) 
+	socket.emit("create", create(socket, room, password, visible)) 
     });
     
     socket.on("join", function(room, password) {
-	socket.emit("join", join(room, password)); 
+	socket.emit("join", join(socket, room, password)); 
     });
  
     // if the user was identified let other use know of disconnection
@@ -73,11 +73,12 @@ io.on("connection", function(socket) {
 
 /**
  * Check credentials for joining room.
+ * @param {Object} socket - The socket of the user joining the room.
  * @param {string} name - The name of the room to join.
  * @param {?string} password - The password (if any) of the room to join.
  * @return {Object} - A response to request
  */
-function join(name, password) {	
+function join(socket, name, password) {	
 
     // TODO: leave room upon 0
     if (name === 0) {}
@@ -98,7 +99,12 @@ function join(name, password) {
 	    message: "Password does not match."
 	};
     }
-    
+
+    // make sure we remember which room the user is joining
+    // must be saved here as the user does not actaully join until the
+    // nick has been sent
+    socket.room = room.name;
+
     // everything okay
     return {
 	room: room.name
@@ -107,11 +113,12 @@ function join(name, password) {
 
 /**
  * Create a room.
+ * @param {Object} socket - The socket of the user creating the room.
  * @param {string} name - The name of the room.
  * @param {string} password - The password of the room.
  * @param {boolean} [visible] - Whether or not the room shows in room-list.
  */
-function create(name, password, visible) {
+function create(socket, name, password, visible) {
 
     // default visible to false
     if (visible == null) {
@@ -148,6 +155,9 @@ function create(name, password, visible) {
     room.password = password;
     room.visible = visible;
     rooms.push(room);
+
+    // remember which room user created
+    socket.room  room.name;
 
     return {
 	room: name
