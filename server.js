@@ -44,7 +44,7 @@ io.on("connection", function(socket) {
     });
     
     socket.on("create", function(room, password, visible) {
-	socket.emit("create", createRoom(socket, room, password, visible)) 
+	socket.emit("create", create(room, password, visible)) 
     });
     
     socket.on("join", function(room, password) {
@@ -102,6 +102,55 @@ function join(name, password) {
     // everything okay
     return {
 	room: room.name
+    };
+};
+
+/**
+ * Create a room.
+ * @param {string} name - The name of the room.
+ * @param {string} password - The password of the room.
+ * @param {boolean} [visible] - Whether or not the room shows in room-list.
+ */
+function create(name, password, visible) {
+
+    // default visible to false
+    if (visible == null) {
+	visible = false;
+    }
+    
+    if (roomExists(name)) {
+	// room already exists
+	return {
+	    room: null,
+	    message: "Room already exists:"
+	};
+    }
+
+    if (password != null && typeof password !== "string") {
+	// password must a string (or null if not given)
+	return {
+	    room: null,
+	    message: "Password must be of type string or null."
+	};
+    }
+
+    if (visible != null && typeof visible !== "boolean") {
+	// visible must be a boolean
+	return {
+	    room: null,
+	    message: "Visibility must be set by a boolean or null."
+	};
+    }
+
+    // everything fine, create the room and return
+    room = {};
+    room.name = name;
+    room.password = password;
+    room.visible = visible;
+    rooms.push(room);
+
+    return {
+	room: name
     };
 };
 
