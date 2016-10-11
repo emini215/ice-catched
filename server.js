@@ -166,6 +166,54 @@ function create(socket, name, password, visible) {
     };
 };
 
+/**
+ * Set client's nick and designated room.
+ * @param {Object} socket - The socket of the client to set the nick of.
+ * @param {string} nick - The nick to set.
+ * @return {Object} - A response to request.
+ */
+function nick(socket, nick) {
+    
+    if (!nickIsValid(nick)) {
+	// nick is not correct
+	return {
+	    nick: socket.nick,
+	    message: "The nick must be of type string and at least" + 
+		" 3 characters long."
+	};
+    }
+
+    if (nickIsTaken(nick, room)) {
+	// the nick is already taken
+	return {
+	    nick: socket.nick,
+	    message: "The nick is already taken."
+	};
+    }
+
+    if (socket.nick == null) {
+	// add user to room
+	addUser(nick, room);
+
+	// add the user to the socket.io's room
+	socket.join(room.name);
+
+	// message room
+	messageRoom(room, nick + " joined this room!");
+    } else {
+	// rename user
+	renameUser(nick, room);
+
+	// message room
+	messageRoom(socket.nick + " is now called: " + nick);
+    }
+
+    socket.nick = nick;
+    return {
+	nick: nick
+    };
+};
+
 // send drawing history to socket
 function sendHistory(socket) {
     // send the history of all lines so that a client does not end up without
