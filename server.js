@@ -315,7 +315,7 @@ function nickInRoom(nick, room) {
 /**
  * Check if the room exists.
  * @param {string} room - The name of room to check whether exists.
- * @return {boolean}
+ * @return {undefined|Object} - Either false or the room found.
  */
 function roomExists(room) {
     
