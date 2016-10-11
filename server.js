@@ -39,8 +39,8 @@ io.on("connection", function(socket) {
     socket.on("undo", function()	{   undo(socket)	    });
     socket.on("clear", function()	{   clear(socket)	    });
     
-    socket.on("nick", function(nick) {   
-	socket.emit("nick", nick(socket, nick)) 
+    socket.on("nick", function(name) {   
+	socket.emit("nick", nick(socket, name)); 
     });
     
     socket.on("create", function(room, password, visible) {
