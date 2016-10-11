@@ -98,7 +98,6 @@ App.init = function() {
 	if (nick == null) {
 	    // display error
 	    Login.showError(message);
-	    App.displayMessage(message);
 	} else {
 	    // TODO: only do this if not already registered
 	    Login.showMainPage();
@@ -111,7 +110,6 @@ App.init = function() {
 	if (room == null) {
 	    // display error message
 	    Login.showError(message);
-	    App.displayMessage(message);
 	} else {
 	    App.room = room;
 	    Login.showNick();
@@ -123,7 +121,6 @@ App.init = function() {
 	var message = data.message;
 	if (room == null) {
 	    Login.showError(message);
-	    App.displayMessage(message);
 	} else {
 	    App.room = room;
 	    Login.showNick();
