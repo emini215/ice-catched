@@ -20,6 +20,7 @@ app.use("/style", express.static(__dirname + "/style"));
 var drawing_history = [];
 var drawing_order = [];
 var active_drawer = null;
+var rooms = [];
 
 // main function for handling connection to client
 io.on("connection", function(socket) {
@@ -31,14 +32,19 @@ io.on("connection", function(socket) {
 
     // reactions on messages
     socket.on("help", function(data)	{   helpPage(data)	    });
-    socket.on("nick", function(nick)	{   setNick(socket, nick)   });
     socket.on("list", function()	{   list(socket)	    });
     socket.on("active", function()	{   active(socket)	    });
     socket.on("msg", function(msg)	{   messageAll(socket, msg) });
     socket.on("draw", function(data)	{   draw(socket, data)	    });
     socket.on("undo", function()	{   undo(socket)	    });
     socket.on("clear", function()	{   clear(socket)	    });
-
+    socket.on("nick", function(nick) {   
+	socket.emit("nick", setNick(socket, nick)) });
+    socket.on("create", function(room, password, visible) {
+	socket.emit("create", createRoom(socket, room, password, visible)) });
+    socket.on("join", function(room, password) {
+	socket.emit("join", joinRoom(socket, room, password)) });
+ 
     // if the user was identified let other use know of disconnection
     // otherwise ignore as the user has gone by unnoticed
     socket.on("disconnect", function() {
@@ -71,8 +77,12 @@ function sendHistory(socket) {
 // set the user's nick
 function setNick(socket, nick) {
     // TODO: send error
-    if (nick == null || nick == "")
-	return;
+    if (nick == null || nick == "") {
+	return {
+	    nick: null,
+	    message: "Nick is invalid."
+	};	    
+    }
 
     // notify other users of change
     if (socket.nick == null) {
@@ -81,30 +91,28 @@ function setNick(socket, nick) {
 	// has been possible)
 	io.emit("msg", nick + " has joined.");
 
-	// add client to list of drawers
-	drawing_order.push(socket.id);
-
-	// start drawing game if 2 players or more
-	if (drawing_order.length > 1) {
-	    active_drawer = drawing_order[0];
-
-	    // send to drawer first
-	    io.to(active_drawer).emit("active");
-	    // then to everyone else
-	    var active_socket = io.sockets.connected[active_drawer];
-	    active_socket.broadcast.emit("active", active_socket.nick);
-	} else if (active_drawer != null) {
-	    // notify user of current drawer
-	    active(socket);
-	}
-
     } else {
-	// otherwise notify of name-change
-	io.emit("msg", socket.nick + " is now known as " + nick + ".");
+	// user's nicks are unique in rooms
+	if (socket.room != null) {
+	    if (socket.room.users.find(function(other) { 
+		return other==nick })) {
+		
+		return {
+		    nick: null,
+		    message: "Nick is already taken in room."
+		};
+	    } else {
+	    	// otherwise notify of name-change
+		io.emit("msg", socket.nick + " is now known as " + nick + ".");
+	    }
+	}
     }
 
     // update nick
     socket.nick = nick;
+    return {
+	nick: nick
+    };
 };
 
 // message all users
@@ -192,6 +200,119 @@ function findStrokeEnd(arr) {
 	    return i;
     }
     return null;
+};
+
+function createRoom(socket, name, password, visible) {
+    // verify that the user is indeed connected and not in a room
+    if (socket.nick == null || socket.room != null)
+	return {    
+	    room: null, 
+	    message: "Client must be registered and not already in a room."
+	};
+
+    // try to create room
+    var room = {};
+    if (name != null) {
+	// room is already taken
+	if (rooms.find(function(room) { return room.name==name })) {
+	    return {	
+		room: null,
+		message: "Already exists room with given name."
+	    };
+	}
+    
+	// name is alright
+	room.name = name;
+
+	// check if password is given
+	if (password != null) {
+	    // verify password type
+	    if (typeof password !== "string") {
+		return {
+		    room: null,
+		    message: "Password given must be of type string."
+		};
+	    }
+
+	    // password is fine
+	    room.password = password;
+	} else {
+	    room.password = null;
+	}
+
+	// make sure visible is exactly false befores setting it to false.
+	// if it is not it is okay to set visible to true as it is supposed
+	// to be the default value
+	if (visible === false)
+	    room.visible = false;
+	else
+	    room.visible = true;
+
+    } else {
+	return {
+	    room: null,
+	    message: "You must provide a name for the room."
+	};
+    }
+
+    // add room to rooms, and add user to room
+    room.users = [];
+    rooms.push(room);
+    return joinRoom(socket, room.name, password);
+};
+
+function joinRoom(socket, name, password) {
+    // verify user is not already in a room and has registered
+    if (socket.nick == null || socket.room != null) {
+	return {
+	    room: null, 
+	    message: "Client must be registered and not already in a room."
+	};
+    }
+
+    // make sure the client sent a room
+    if (name == null) {
+	return {
+	    room: null,
+	    message: "Request missing room."
+	};
+    }
+
+    // verify that the room exists
+    var room = rooms.find(function(room) { return room.name = name });
+    if (room == null) {
+
+	return {
+	    room: null,
+	    message: "Room does not exist."
+	};
+    }
+
+    // make sure there is no other user with your name in room
+    if (room.users.find(function(nick) { return nick==socket.nick })) {
+	return {
+	    room: null,
+	    message: "Nick is already used in the room."
+	};
+    }
+
+    // check password
+    if (room.password == password) {
+	// successfully joined room
+	socket.room = room;
+	socket.join(room.name);
+	room.users.push(socket.nick);
+	
+	return {
+	    room: name
+	};
+    } else {
+	
+	return {
+	    room: null,
+	    message: "Password does not match."
+	};
+    }
 };
 
 http.listen(PORT, function() {

@@ -177,6 +177,10 @@ footer p:nth-of-type(2) {
     position: relative;
 }
 
+.rooms {
+    display: none;
+}
+
 #login article a {
     position: relative;
     display: block;
@@ -199,6 +203,10 @@ footer p:nth-of-type(2) {
 
 .orange {
     background-color: #e59400;
+}
+
+.green {
+    background-color: #0daf4a;
 }
 
 .shrink {

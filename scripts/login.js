@@ -1,22 +1,56 @@
-function join() {
-    var nickname = document.getElementById("nickname").value;
-    // TODO: flashy animation screen?
-    // TODO: verify nickname not taken
+var Login = {};
 
-    if (nickname == "") {
-	// TODO: FADE IN CUS COOL
-	document.getElementById("login-error-message").innerHTML = "ERROR: Nickname is bad.";
-	document.getElementById("login-error").style.display = "block";
-	return;
+Login.showError = function(message) {
+    document.getElementById("login-error").style.display = "block";
+    document.getElementById("login-error-message").innerHTML = message;
+
+    // reenable input fields
+    document.getElementById("nick-text").disabled = false;
+    document.getElementById("join-room-text").disabled = false;
+    document.getElementById("create-room-text").disabled = false;
+};
+
+Login.joinRoom = function() {
+    App.joinRoom(document.getElementById("join-room-text").value);
+    document.getElementById("join-room-text").disabled = true;
+    document.getElementById("join-room-button").focus();
+};
+
+Login.createRoom = function() {
+    // try creating room
+    App.createRoom(document.getElementById("create-room-text").value);
+    document.getElementById("create-room-text").disabled = true;
+    document.getElementById("create-room-button").focus();
+};
+
+Login.register = function() {
+
+    // send nick to server
+    App.sendNick(document.getElementById("nick-text").value);
+    
+    // set focus to button and disable text input
+    document.getElementById("nick-text").disabled = true;
+    document.getElementById("nick-button").focus();
+};
+
+Login.hideNick = function() {
+
+    // hide nick entry and focus input
+    document.getElementById("nick").style.display = "none";
+
+    // show room buttons
+    var elements = document.getElementsByClassName("rooms");
+    for (var i = 0; i < elements.length; i++) {
+	elements[i].style.display = "block";
     }
+};
 
-    // register nick
-    App.sendNick(nickname);
-
-    // hide login
+// make the main page visible
+Login.showMainPage = function() {
+    // hide the login page
     document.getElementById("login").style.display = "none";
 
-    // focus text-box
+    // set focus to message-box
     document.getElementById("message").focus();
 };
 
@@ -54,12 +88,31 @@ window.addEventListener("load", function() {
     createSlideButtons("join-room");
     createSlideButtons("create-room");
 
-    // call join() when enter is pressed
+    // focus text input and 
+    document.getElementById("nick-text").focus();
+    document.getElementById("nick-text")
+	.addEventListener("keyup", function(event) {
+	    event.preventDefault();
+	    if (event.which == 13) {
+		Login.register();
+	    }
+	});
+
+
     document.getElementById("join-room-text")
 	.addEventListener("keyup", function(event) {
 	    event.preventDefault();
 	    if (event.which == 13) {
-		join();
+		Login.joinRoom();
+	    }
+	});
+
+
+    document.getElementById("create-room-text")
+	.addEventListener("keyup", function(event) {
+	    event.preventDefault();
+	    if (event.which == 13) {
+		Login.createRoom();
 	    }
 	});
 });

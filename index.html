@@ -22,19 +22,26 @@
 	<section id="login">
 	    <h1>Welcome to ICE-CATCH</h1>
 	    <!-- main menu -->
-	    <article>
+	    <article class="rooms">
 		<a id="join-room" class="purple" href="#">JOIN ROOM</a>
 		<input id="join-room-text" type="text" placeholder="#room"/>
 		<input id="join-room-button" type="button" value="JOIN"
-		    class="purple" />
+		    class="purple" onclick="Login.joinRoom();"/>
 		<!-- TODO: display available rooms when hovered -->
 	    </article>
 
-	    <article>
+	    <article class="rooms">
 		<a id="create-room" class="orange" href="#">CREATE ROOM</a>
 		<input id="create-room-text" type="text" placeholder="#room"/>
 		<input id="create-room-button" type="button" value="CREATE"
-		    class="orange" />
+		    class="orange" onclick="Login.createRoom();"/>
+	    </article>
+
+	    <article id="nick">
+		<input id="nick-text" type="text" 
+		    placeholder="enter nickname"/>
+		<input id="nick-button" type="button" value="LOGIN" 
+		    class="green" onclick="Login.register();"/>
 	    </article>
 
 	    <article id="login-error">

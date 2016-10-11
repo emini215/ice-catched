@@ -1,7 +1,26 @@
 var App = {};
+
+// send a request to create a room with given name
+App.createRoom = function(room) {
+    // TODO: Make it possible to send password and private
+    App.socket.emit("create", room);
+};
+
+App.joinRoom = function(room) {
+    // TODO: make it possible to enter password
+    App.socket.emit("join", room);
+};
+
 App.sendNick = function(nick) {
     App.socket.emit("nick", nick);
-}
+};
+
+// display given message in the chat-area
+App.displayMessage = function(message) {
+    var textarea = document.getElementById("chat-area");
+    textarea.value += message + "\n";
+    textarea.scrollTop = textarea.scrollHeight; 
+};
 
 App.sendMessage = function() {
 
@@ -19,11 +38,11 @@ App.sendMessage = function() {
 
     // clear box
     document.getElementById("message").value = "";
-}
+};
 
 App.undo = function() {
     App.socket.emit("undo");
-}
+};
 
 App.init = function() {
     // create a canvas element
@@ -73,6 +92,44 @@ App.init = function() {
 	console.log(e);
     };
 
+    socket.on("nick", function(data) {
+	var nick = data.nick;
+	var message = data.message;
+	if (nick == null) {
+	    // display error
+	    Login.showError(message);
+	    App.displayMessage(message);
+	} else {
+	    // TODO: only do this if not already registered
+	    Login.hideNick();
+	}
+    });
+
+    socket.on("create", function(data) {
+	var room = data.room;
+	var message = data.message;
+	if (room == null) {
+	    // display error message
+	    Login.showError(message);
+	    App.displayMessage(message);
+	} else {
+	    App.room = room;
+	    Login.showMainPage();
+	}
+    });
+
+    socket.on("join", function(data) {
+	var room = data.room;
+	var message = data.message;
+	if (room == null) {
+	    Login.showError(message);
+	    App.displayMessage(message);
+	} else {
+	    App.room = room;
+	    Login.showMainPage();
+	}
+    });
+
     // display list of users
     socket.on("list", function(message) {
 	var textarea = document.getElementById("chat-area");
@@ -114,15 +171,8 @@ App.init = function() {
     });
 
     // listen for msg
-    socket.on("msg", function(msg) {
-	console.log(msg);
-
-	// append message to chat-area	
-	var textarea = document.getElementById("chat-area");
-
-	// scroll down automatically
-	textarea.value += msg + "\n";
-	textarea.scrollTop = textarea.scrollHeight;
+    socket.on("msg", function(message) {
+	App.displayMessage(message);	
     });
 
     // listen for drawing
