@@ -49,6 +49,7 @@ Login.showNick = function() {
 
     // show nick entry and focus input
     document.getElementById("nick").style.display = "block";
+    document.getElementById("nick-text").focus();
 };
 
 // make the main page visible
