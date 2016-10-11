@@ -303,6 +303,16 @@ function findStrokeEnd(arr) {
 };
 
 /**
+ * Send message to room.
+ * @param {Object} room - The room to send message to.
+ * @param {string} room.name - The name of the room.
+ * @param {string} message - The message to be sent.
+ */
+function messageRoom(room, message) {
+    io.to(room.name).emit("msg", message);
+};
+
+/**
  * Rename the user.
  * @param {string} prev - The previous name of the user.
  * @param {string} next - The new name of the user.
