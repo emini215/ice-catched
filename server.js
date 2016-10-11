@@ -320,7 +320,7 @@ function nickIsValid(nick) {
  * @param {string[]} room.users - List of users in room.
  * @return {boolean}
  */
-function nickInRoom(nick, room) {
+function nickIsTaken(nick, room) {
     return null != room.users.find(function(other) { return other==nick; });
 };
 
