@@ -103,7 +103,7 @@ function join(socket, name, password) {
     // make sure we remember which room the user is joining
     // must be saved here as the user does not actaully join until the
     // nick has been sent
-    socket.room = room.name;
+    socket.room = room;
 
     // everything okay
     return {
@@ -157,7 +157,7 @@ function create(socket, name, password, visible) {
     rooms.push(room);
 
     // remember which room user created
-    socket.room  room.name;
+    socket.room  room;
 
     return {
 	room: name
