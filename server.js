@@ -40,7 +40,7 @@ io.on("connection", function(socket) {
     socket.on("clear", function()	{   clear(socket)	    });
     
     socket.on("nick", function(nick) {   
-	socket.emit("nick", setNick(socket, nick)) 
+	socket.emit("nick", nick(socket, nick)) 
     });
     
     socket.on("create", function(room, password, visible) {
@@ -221,47 +221,6 @@ function sendHistory(socket) {
     for (var line in drawing_history) {
         socket.emit("draw", JSON.stringify(drawing_history[line]));
     }
-};
-
-// set the user's nick
-function setNick(socket, nick) {
-    // TODO: send error
-    if (nick == null || nick == "") {
-	return {
-	    nick: null,
-	    message: "Nick is invalid."
-	};	    
-    }
-
-    // notify other users of change
-    if (socket.nick == null) {
-	// if the user has no previous nick it just joined
-	// (or at least is considered so as no previous actions
-	// has been possible)
-	io.emit("msg", nick + " has joined.");
-
-    } else {
-	// user's nicks are unique in rooms
-	if (socket.room != null) {
-	    if (socket.room.users.find(function(other) { 
-		return other==nick })) {
-		
-		return {
-		    nick: null,
-		    message: "Nick is already taken in room."
-		};
-	    } else {
-	    	// otherwise notify of name-change
-		io.emit("msg", socket.nick + " is now known as " + nick + ".");
-	    }
-	}
-    }
-
-    // update nick
-    socket.nick = nick;
-    return {
-	nick: nick
-    };
 };
 
 // message all users
