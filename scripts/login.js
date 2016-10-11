@@ -20,13 +20,46 @@ function join() {
     document.getElementById("message").focus();
 };
 
-// call function when enter is pressed
+// add slides to button-covers
+function createSlideButtons(id) {
+    
+    // set focus to input field when hovering over cover
+    document.getElementById(id)
+	.addEventListener("mouseover", function(event) {
+	    // set focus to input
+	    document.getElementById(id + "-text").focus();
+
+	    // show input
+	    this.classList.add("shrink");
+	    this.classList.remove("anti-shrink");
+
+	});
+
+    // when focus is lost of input hide the input again
+    document.getElementById(id + "-text")
+	.addEventListener("blur", function(e) {
+
+	    // hide input
+	    var label = document.getElementById(id);
+	    label.classList.remove("shrink");
+	    label.classList.add("anti-shrink");
+
+	}, true);
+}
+
+// onload
 window.addEventListener("load", function() {
-    document.getElementById("nickname")
+
+    // create sliding buttons
+    createSlideButtons("join-room");
+    createSlideButtons("create-room");
+
+    // call join() when enter is pressed
+    document.getElementById("join-room-text")
 	.addEventListener("keyup", function(event) {
-	event.preventDefault();
-        if (event.which == 13) {
-	    join();
-	}
-    });
+	    event.preventDefault();
+	    if (event.which == 13) {
+		join();
+	    }
+	});
 });

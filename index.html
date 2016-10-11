@@ -21,18 +21,28 @@
 	<!-- login section -->
 	<section id="login">
 	    <h1>Welcome to ICE-CATCH</h1>
+	    <!-- main menu -->
 	    <article>
-		<h2>Enter the secret password!</h2>
-		<div id="login-input">
-		    <input id="nickname" name="nick" type="text" autofocus placeholder="kartoffelauflauf"/>
-		    <input id="join" value="JOIN" type="submit" onclick="join()"/>
-		</div>
+		<a id="join-room" class="purple" href="#">JOIN ROOM</a>
+		<input id="join-room-text" type="text" placeholder="#room"/>
+		<input id="join-room-button" type="button" value="JOIN"
+		    class="purple" />
+		<!-- TODO: display available rooms when hovered -->
 	    </article>
+
+	    <article>
+		<a id="create-room" class="orange" href="#">CREATE ROOM</a>
+		<input id="create-room-text" type="text" placeholder="#room"/>
+		<input id="create-room-button" type="button" value="CREATE"
+		    class="orange" />
+	    </article>
+
 	    <article id="login-error">
 		<p id="login-error-message"></p>
 	    </article>
 	</section>
 
+	<!-- content section -->
 	<section id="content">
 	    <article id="chat">
 		<textarea id="chat-area" readonly ></textarea>
