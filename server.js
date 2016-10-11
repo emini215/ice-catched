@@ -332,9 +332,9 @@ function roomExists(room) {
 
 /**
  * Check if the password matches password of room.
- * @param {string} password - The password to check.
+ * @param {?string} password - The password to check.
  * @param {Object} room	- The room to check password with.
- * @param {string] room.password - The password of the room.
+ * @param {?string] room.password - The password of the room.
  * @return {boolean}
  */
 function passwordMatch(password, room) {
