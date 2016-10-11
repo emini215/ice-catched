@@ -1,8 +1,8 @@
 var Login = {};
 
 Login.showError = function(message) {
-    document.getElementById("login-error").style.display = "block";
     document.getElementById("login-error-message").innerHTML = message;
+    document.getElementById("login-error").style.display = "block";
 
     // reenable input fields
     document.getElementById("nick-text").disabled = false;
