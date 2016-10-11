@@ -261,6 +261,14 @@ function createRoom(socket, name, password, visible) {
     return joinRoom(socket, room.name, password);
 };
 
+/**
+ * Check if the room exists.
+ * @param {string} room - The name of room to check whether exists.
+ * @return {boolean}
+ */
+function roomExists(room) {
+    return rooms.find(function(other) { return other.name===room; });
+};
 
 /**
  * Check if the password matches password of room.
