@@ -159,7 +159,7 @@ function create(socket, name, password, visible) {
     rooms.push(room);
 
     // remember which room user created
-    socket.room  room;
+    socket.room = room;
 
     return {
 	room: name
