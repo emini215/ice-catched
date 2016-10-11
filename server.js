@@ -42,8 +42,9 @@ io.on("connection", function(socket) {
 	socket.emit("nick", setNick(socket, nick)) });
     socket.on("create", function(room, password, visible) {
 	socket.emit("create", createRoom(socket, room, password, visible)) });
+    
     socket.on("join", function(room, password) {
-	socket.emit("join", joinRoom(socket, room, password)) });
+    });
  
     // if the user was identified let other use know of disconnection
     // otherwise ignore as the user has gone by unnoticed
@@ -259,60 +260,6 @@ function createRoom(socket, name, password, visible) {
     room.users = [];
     rooms.push(room);
     return joinRoom(socket, room.name, password);
-};
-
-function joinRoom(socket, name, password) {
-    // verify user is not already in a room and has registered
-    if (socket.nick == null || socket.room != null) {
-	return {
-	    room: null, 
-	    message: "Client must be registered and not already in a room."
-	};
-    }
-
-    // make sure the client sent a room
-    if (name == null) {
-	return {
-	    room: null,
-	    message: "Request missing room."
-	};
-    }
-
-    // verify that the room exists
-    var room = rooms.find(function(room) { return room.name = name });
-    if (room == null) {
-
-	return {
-	    room: null,
-	    message: "Room does not exist."
-	};
-    }
-
-    // make sure there is no other user with your name in room
-    if (room.users.find(function(nick) { return nick==socket.nick })) {
-	return {
-	    room: null,
-	    message: "Nick is already used in the room."
-	};
-    }
-
-    // check password
-    if (room.password == password) {
-	// successfully joined room
-	socket.room = room;
-	socket.join(room.name);
-	room.users.push(socket.nick);
-	
-	return {
-	    room: name
-	};
-    } else {
-	
-	return {
-	    room: null,
-	    message: "Password does not match."
-	};
-    }
 };
 
 /**
