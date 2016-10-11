@@ -302,6 +302,42 @@ function findStrokeEnd(arr) {
 };
 
 /**
+ * Rename the user.
+ * @param {string} prev - The previous name of the user.
+ * @param {string} next - The new name of the user.
+ * @param {Object} room - The room to change user's name in.
+ * @param {string[]} room.users - A list of users in the room.
+ */
+function renameUser(prev, next, room) {
+    var index = room.users.indexOf(prev);
+
+    if (index !== -1)
+	room[index] = next;
+};
+
+/**
+ * Add user to room.
+ * @param {string} nick - Name of user.
+ * @param {Object} room - The room to join.
+ * @param {string[]} room.users - List of users.
+ */
+function addUser(nick, room) {
+    room.users.push(nick);
+};
+
+/**
+ * Remove user from room.
+ * @param {string} nick - Name of user to remove.
+ * @param {Object} room - The room to leave.
+ * @param {string[]} room.users - List of users.
+ */
+function removeUser(nick, room) {
+    room.users = room.users.filter(
+	function(other) { return other !== nick }
+    );
+};
+
+/**
  * Check if the nick is valid.
  * @param {string} nick - The nick to check.
  * @return {boolean}
