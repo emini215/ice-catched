@@ -261,6 +261,16 @@ function createRoom(socket, name, password, visible) {
     return joinRoom(socket, room.name, password);
 };
 
+
+/**
+ * Check if the password matches password of room.
+ * @param {string} password - The password to check.
+ * @param {string} room	- The room to check password with.
+ */
+function passwordMatch(password, room) {
+    return room.password == password;
+};
+
 function joinRoom(socket, name, password) {
     // verify user is not already in a room and has registered
     if (socket.nick == null || socket.room != null) {
