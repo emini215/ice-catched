@@ -419,19 +419,33 @@ function active(socket) {
         socket.emit("active", io.sockets.connected[active_drawer].nick);
 };
 
+/**
+ * Undo previous draw-event in room.
+ * @param {Object} socket - The user performing undo.
+ * @return {Object} - Containing "statusCode" set to 0 if successful.
+ */
 function undo(socket) {
-    // only allow verified users to undo
-    if (socket.id != active_drawer)
-        return;
+
+    if (!isArtist(socket)) {
+	// only artsits can undo
+	return {
+	    statusCode: -1,
+	    message: "Only artists can undo.";
+	};
+    }
 
     // remove the last element
-    var strokeEnd = findStrokeEnd(drawing_history);
+    var strokeEnd = findStrokeEnd(socket.room.history);
     if (strokeEnd != null)
-	drawing_history.splice(strokeEnd);
+	socket.room.history.splice(strokeEnd);
 
     // clear clients and send history to all
     clear(socket);
-    sendHistory(io);
+    sendHistory(io, socket.room);
+
+    return {
+	statusCode: 0
+    };
 };
 
 function helpPage(data) {
