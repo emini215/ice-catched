@@ -173,6 +173,10 @@ function leave(socket) {
 	    return other.name !== socket.room.name 
 	});
     } else {
+	if (isArtist(socket)) {
+	    // change artist if leaving user is artist
+	    nextArtist(socket.room);
+	}
         // let other clients know that user has disconnected
 	messageRoom(socket.room, socket.nick + " has disconnected.");
     }
