@@ -112,6 +112,21 @@ function join(socket, name, password) {
 };
 
 /**
+ * Make user leave room. Delete the room if it has no other users.
+ * @param {string} nick - The nick of the user.
+ * @param {Object} room - The room to delete user from.
+ * @param {string} room.name - The name of the room.
+ * @param {string[]} room.users - The users in the room.
+ */
+function leave(nick, room) {
+    removeUser(nick, room);
+    if (room.users.length === 0) {
+	// no more users in room, delete it
+	rooms.filter(function(other) { return other.name !=== room.name });
+    }
+};
+
+/**
  * Create a room.
  * @param {Object} socket - The socket of the user creating the room.
  * @param {string} name - The name of the room.
