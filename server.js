@@ -181,8 +181,8 @@ function leave(socket) {
     removeUser(socket.nick, socket.room);
 
     if (userIsArtist) {
-	// change artist if leaving user is artist
-	nextArtist(socket.room);
+	// restart round
+	restart(socket, true);
     }
 
     // let other clients know that user has disconnected
@@ -327,7 +327,28 @@ function start(socket) {
     return {
 	statusCode: 0
     };
+};
 
+/**
+ * Restart the round.
+ * @param {Object} socket - The client restarting.
+ * @param {Object} socket.room - The room to be restarted.
+ * @param {boolean} leaving - Whether restart is because of leaving user 
+ *				or not.
+ */
+function restart(socket, leaving = false) {
+    
+    if (leaving) {
+	// if restarting because of user leaving subtract one from
+	// room's artist to not skip the next artist
+	socket.room.artist--;
+    }
+    
+    // clear the canvas before selecting new artist
+    clear(socket);
+
+    // set the next artist
+    nextArtist(socket.room);
 };
 
 /**
