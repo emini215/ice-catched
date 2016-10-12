@@ -232,7 +232,7 @@ function create(socket, name, password, visible) {
 
     // default visible to false
     if (visible == null) {
-	visible = false;
+	visible = true;
     }
     
     if (roomExists(name) != null) {
