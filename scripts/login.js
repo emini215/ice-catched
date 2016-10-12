@@ -53,10 +53,28 @@ Login.showNick = function() {
     document.getElementById("nick-text").focus();
 };
 
+Login.showLoginPage = function() {
+
+    // hide previous errors
+    Login.hideError();
+
+    // show login and hide content
+    document.getElementById("content").style.display = "none";
+    document.getElementById("login").style.display = "block";
+
+    // hide nick and show rooms
+    document.getElementById("nick").style.display = "none";
+    var elements = document.getElementsByClassName("rooms");
+    for (var i = 0; i < elements.length; i++) {
+	elements[i].style.display = "block";
+    }
+};
+
 // make the main page visible
 Login.showMainPage = function() {
     // hide the login page and previous errors
     document.getElementById("login").style.display = "none";
+    document.getElementById("content").style.display = "block";
     Login.hideError();
 
     // set focus to message-box

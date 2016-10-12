@@ -20,7 +20,17 @@ App.draw = function(data) {
 };
 
 App.leave = function() {
-    // TODO: implement
+
+    // tell server you are leaving
+    App.socket.emit("join", 0);
+
+    // reset variables
+    App.room = null;
+    App.nick = null;
+    App.active = false;
+
+    // go back to login page
+    Login.showLoginPage();
 };
 
 App.skip = function() {
@@ -39,8 +49,7 @@ App.displayMessage = function(message) {
     chatarea.appendChild(paragraph);
 
     // scroll down chat area
-    chatarea.scrollTop = chatarea.scrollHeight; 
- 
+    chatarea.scrollTop = chatarea.scrollHeight;  
 };
 
 App.sendMessage = function() {

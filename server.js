@@ -97,7 +97,7 @@ io.on("connection", function(socket) {
 		" has disconnected.");
 
 	    // leave room if in any
-	    leave(socket.nick, socket.room);
+	    leave(socket);
 	}
     });
 
@@ -112,9 +112,9 @@ io.on("connection", function(socket) {
  */
 function join(socket, name, password) {	
 
-    // TODO: leave room upon 0
     if (name === 0) {
-    
+	// try leaving
+
 	if (socket.nick == null || socket.room == null) {
 	    // cant leave anything you are not in
 	    return {
@@ -123,8 +123,10 @@ function join(socket, name, password) {
 	    };
 	}
 
-	// otherwise leave room
-	leave(socket.nick, socket.room);
+	// otherwise leave room	
+	console.log(socket.room.name + "@" + socket.nick + 
+	    " has disconnected.");
+	leave(socket);
 	return {
 	    nick: 0
 	};
@@ -160,20 +162,22 @@ function join(socket, name, password) {
 
 /**
  * Make user leave room. Delete the room if it has no other users.
- * @param {string} nick - The nick of the user.
- * @param {Object} room - The room to delete user from.
- * @param {string} room.name - The name of the room.
- * @param {string[]} room.users - The users in the room.
+ * @param {string} socket.nick - The nick of the user.
+ * @param {Object} socket.room - The room to delete user from.
  */
-function leave(nick, room) {
-    removeUser(nick, room);
-    if (room.users.length === 0) {
+function leave(socket) {
+    removeUser(socket.nick, socket.room);
+    if (socket.room.users.length === 0) {
 	// no more users in room, delete it
-	rooms =	rooms.filter(function(other) { return other.name !== room.name });
+	rooms =	rooms.filter(function(other) { 
+	    return other.name !== socket.room.name 
+	});
     } else {
         // let other clients know that user has disconnected
-	messageRoom(room, nick + " has disconnected.");
+	messageRoom(socket.room, socket.nick + " has disconnected.");
     }
+    socket.room = null;
+    socket.nick = null;
 };
 
 /**
