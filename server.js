@@ -277,7 +277,7 @@ function sendMessage(socket, message) {
     }
    
     // send message to room 
-    io.to(socket.room.name).emit("msg", socket.nick + ": " + message);
+    messageRoom(socket.room, socket.nick + ": " + message);
     console.log(socket.room.name + "@" + socket.nick + ": " + message);
     return {
 	status: 0
