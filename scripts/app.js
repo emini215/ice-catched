@@ -162,22 +162,17 @@ App.init = function() {
 	    // error occured
 	    Login.showError(data.message);
 	}
-
-	var textarea = document.getElementById("chat-area");
-
-	// put label on list
-	textarea.value += "List of connected users:\n";
+	
+	// display list-label
+	App.displayMessage("List of connected users:");
 
 	// append all users to the list
 	data.users.forEach(function(username) {
-	    textarea.value += "\t" + username + "\n";
+	    App.displayMessage(username);
 	});
 
-	// add space between list and next message
-	textarea.value += "\n";
-
-	// scroll down
-	textarea.scrollTop = textarea.scrollHeight;
+	// add space
+	App.displayMessage("");
     });
 
     socket.on("active", function(nick) {
