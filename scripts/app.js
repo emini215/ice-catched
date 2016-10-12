@@ -19,11 +19,28 @@ App.draw = function(data) {
     App.socket.emit("draw", data);
 };
 
+App.leave = function() {
+    // TODO: implement
+};
+
+App.skip = function() {
+    // TODO: implement
+};
+
 // display given message in the chat-area
 App.displayMessage = function(message) {
-    var textarea = document.getElementById("chat-area");
-    textarea.value += message + "\n";
-    textarea.scrollTop = textarea.scrollHeight; 
+   
+    // create paragraph
+    var paragraph = document.createElement("p");
+    paragraph.textContent = message;
+    
+    // append paragraph to chat-area
+    var chatarea = document.getElementById("chat-area");
+    chatarea.appendChild(paragraph);
+
+    // scroll down chat area
+    chatarea.scrollTop = chatarea.scrollHeight; 
+ 
 };
 
 App.sendMessage = function() {

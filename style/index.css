@@ -43,10 +43,42 @@ body {
     margin-left: 25vw;
 }
 
+#chat-button-bar {
+    height: 10%;
+    width: 80%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 2% 0;
+}
+
+#chat-button-bar input {
+    height: 100%;
+    width: 50%;
+    
+    box-sizing: border-box;
+    float: left;
+
+    padding: 8px;
+ 
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: "Oswald", "san-serif";
+    color: #262727;
+
+    box-shadow: 0px 0px 5px #000;
+    border: 1px solid #262727;
+}
+
+#chat-button-bar input:first-of-type {
+    border-right: none;
+}
+
+#chat-button-bar input:hover {
+    box-shadow: 0px 0px 5px #000, inset 0px 0px 10px #000;
+}
+
 #chat-area {
     box-sizing: border-box;
-
-    resize: none;
 
     width: 80%;
     height: 80%;
@@ -55,15 +87,16 @@ body {
     box-shadow: 0px 0px 5px #000;
 
     padding: 10px;
-    padding-bottom: 0;
 
-    margin: 10% auto;
-    margin-bottom: 0;
+    margin: 0 auto;
 
     overflow: hidden;
 
     font-family: "Slabo+27px", "serif";
     font-size: 0.9em;
+    text-align: left;
+
+    background-color: #fff;
 }
 
 #chat-area:focus {
@@ -76,46 +109,54 @@ body {
 
 #send-bar {
     box-sizing: border-box;
-    height: 8%;
+    height: 10%;
     width: 80%;
     margin: 0 auto;
+    padding: 2% 0;
+}
+
+#send-bar div{
+    height: 100%;
+    width: 100%;
+
     box-shadow: 0px 0px 5px #000;
 }
 
-#content input {
+#send-bar input {
     box-sizing: border-box;
     float: left;
     height: 100%;
     padding: 8px;
-    
+   
+    /* TODO: add box shadow again */
     font-family: "Oswald", "san-serif";
 }
 
-#content input:hover {
+#send-bar input:hover {
     box-shadow: 0px 0px 10px #262727 inset;
 }
 
-#content input:focus {
+#send-bar input:focus {
     outline: none;
 }
 
-#content input[type="text"] {
+#send-bar input[type="text"] {
     border: 1px solid #262727;
     width: 80%;
 
     font-size: 0.9em;
 }
 
-#content input[type="text"]:hover {
+#send-bar input[type="text"]:hover {
     box-shadow: 0px 0px 15px #262727 inset;
 }
 
-#content input[type="text"]:focus {
+#send-bar input[type="text"]:focus {
     box-shadow: 0px 0px 10px #262727 inset;
     outline: none;
 }
 
-#content input[type="button"] {
+#send-bar input[type="button"] {
     border: 1px solid #262727;
     border-left: none;
     width: 20%;
@@ -127,7 +168,7 @@ body {
     color: #262727;
 }
 
-#content input[type="button"]:active {
+#send-bar input[type="button"]:active {
     box-shadow: 0px 0px 25px #262727 inset;
     color: #c0634c;
 }
@@ -197,37 +238,6 @@ footer p:nth-of-type(2) {
     font-family: "Oswald", "san-serif";
 }
 
-.purple {
-    background-color: #654da3;
-}
-
-.orange {
-    background-color: #e59400;
-}
-
-.green {
-    background-color: #0daf4a;
-}
-
-.shrink {
-    -webkit-transition: 0.6s ease-in-out;
-    -moz-transition: 0.6s ease-in-out;
-    -ms-transition: 0.6s ease-in-out;
-    -o-transition: 0.6s ease-in-out;
-    transition: 0.6s ease-in-out;
-    width: 0 !important;
-    overflow: hidden;
-}
-.anti-shrink {
-    -webkit-transition: 0.6s ease-in-out;
-    -moz-transition: 0.6s ease-in-out;
-    -ms-transition: 0.6s ease-in-out;
-    -o-transition: 0.6s ease-in-out;
-    transition: 0.6s ease-in-out;
-    width: 100% !important;
-    overflow: hidden;
-}
-
 #login article input {
     position: absolute;
     top: 0;
@@ -283,3 +293,36 @@ footer p:nth-of-type(2) {
     padding-top: 50px;
     color: #fff;
 }
+
+.purple {
+    background-color: #654da3;
+}
+
+.orange {
+    background-color: #e59400;
+}
+
+.green {
+    background-color: #0daf4a;
+}
+
+.shrink {
+    -webkit-transition: 0.6s ease-in-out;
+    -moz-transition: 0.6s ease-in-out;
+    -ms-transition: 0.6s ease-in-out;
+    -o-transition: 0.6s ease-in-out;
+    transition: 0.6s ease-in-out;
+    width: 0 !important;
+    overflow: hidden;
+}
+
+.anti-shrink {
+    -webkit-transition: 0.6s ease-in-out;
+    -moz-transition: 0.6s ease-in-out;
+    -ms-transition: 0.6s ease-in-out;
+    -o-transition: 0.6s ease-in-out;
+    transition: 0.6s ease-in-out;
+    width: 100% !important;
+    overflow: hidden;
+}
+

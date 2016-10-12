@@ -53,10 +53,20 @@
 	<!-- content section -->
 	<section id="content">
 	    <article id="chat">
+		<div id="chat-button-bar">
+		    <input id="leave-button" type="button" value="Leave" 
+			class="purple" onclick="App.leave()"/>
+		    <input id="skip-button" type="button" value="Skip"
+			class="orange" onclick="App.skip()"/>
+		</div>
 		<div id="chat-area"></div>
 		<div id="send-bar">
-		    <input id="message" name="message" type="text" placeholder="omg blixn is amazing"/>
-		    <input id="send-message" name="send" type="button" value="SEND" onclick="App.sendMessage()"/>
+		    <div>
+			<input id="message" name="message" type="text" 
+			    placeholder="omg blixn is amazing"/>
+			<input id="send-message" name="send" type="button" 
+			    value="SEND" onclick="App.sendMessage()"/>
+		    </div>
 		</div>
 	    </article>
 	    <article id="drawing"><!-- canvas --></article>
