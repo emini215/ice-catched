@@ -65,15 +65,6 @@ io.on("connection", function(socket) {
 	    // leave room if in any
 	    leave(socket.nick, room);
 	}
-
-	// no need to let others know someone disconnected who never joined
-	// a room
-	if (socket.nick == null)
-	    return;
-
-        // let other clients know that user has disconnected
-	console.log(socket.nick + " has disconnected.");
-	io.emit("msg", socket.nick + " has disconnected.");
     });
 
 });
@@ -145,7 +136,12 @@ function leave(nick, room) {
     if (room.users.length === 0) {
 	// no more users in room, delete it
 	rooms.filter(function(other) { return other.name !== room.name });
+    } else {
+        // let other clients know that user has disconnected
+	messageRoom(room, nick + " has disconnected.");
     }
+    
+    console.log(room.name + "@" + nick + " has disconnected.");
 };
 
 /**
@@ -236,7 +232,7 @@ function nick(socket, nick) {
 	socket.join(room.name);
 
 	// message room
-	messageRoom(room, nick + " joined this room!");
+	messageRoom(room, nick + " joined this room.");
     } else {
 	// rename user
 	renameUser(nick, room);
