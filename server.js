@@ -52,7 +52,7 @@ io.on("connection", function(socket) {
 
     socket.on("msg", function(msg) {
 	var res = sendMessage(socket, msg);
-	if (res.status !== 0) {
+	if (res.statusCode !== 0) {
 	    // message could not be sent
 	    socket.emit("exception", res.message);
 	}
@@ -266,13 +266,13 @@ function sendHistory(socket) {
  * @param {Object} socket.room - The room to send message to.
  * @param {string} socket.room.name - The name of the recipient room.
  * @param {string} message - The message to be sent.
- * @return {Object} - Containing property "status" set to 0 if successful
+ * @return {Object} - Containing property "statusCode" set to 0 if successful.
  */
 function sendMessage(socket, message) {
     if (socket.room == null || socket.nick == null) {
 	// not connected to room
 	return {
-	    status: -1,
+	    statusCode: -1,
 	    message: "You are not connected to any room. " + 
 		"Could not send message."
 	};
@@ -282,7 +282,7 @@ function sendMessage(socket, message) {
     messageRoom(socket.room, socket.nick + ": " + message);
     console.log(socket.room.name + "@" + socket.nick + ": " + message);
     return {
-	status: 0
+	statusCode: 0
     };
 };
 
