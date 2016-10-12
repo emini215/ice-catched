@@ -62,10 +62,12 @@ io.on("connection", function(socket) {
     // otherwise ignore as the user has gone by unnoticed
     socket.on("disconnect", function() {
 	if (socket.nick != null) {
-	    // leave room if in any
-	    leave(socket.nick, socket.room);
+
 	    console.log(socket.room.name + "@" + socket.nick + 
 		" has disconnected.");
+
+	    // leave room if in any
+	    leave(socket.nick, socket.room);
 	}
     });
 
