@@ -32,11 +32,11 @@ Draw.init = function() {
  */
 Draw.draw = function(data) {	
     if (data.type == "mousemove")
-	drawMove(data);
+	Draw._drawMove(data);
     else if (data.type == "mouseup")
-	drawUp(data);
+	Draw._drawUp(data);
     else if (data.type == "mousedown")
-	drawDown(data);
+	Draw._drawDown(data);
     else {
 	// TODO: REMOVE
 	console.log("FAILED DRAW");
