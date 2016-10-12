@@ -300,6 +300,53 @@ footer p:nth-of-type(2) {
     color: #fff;
 }
 
+#join-room-options,
+#join-room-password,
+#create-room-options {
+    display: none;
+}
+
+#join-room-options,
+#create-room-options {
+    filter: brightness(50%);
+}
+
+#room-list {
+    width: 100%;
+
+    background-color: #fff;
+}
+
+.room-list-item {
+    display: flex;
+
+    border: 1px solid #262727;
+    border-bottom: none;
+}
+
+.room-list-item:last-of-type {
+    border-bottom: 1px solid #262727;
+}
+
+.room-list-item > div {
+    flex: 1;
+
+    border-left: 1px solid #262727;
+    text-align: right;
+}
+
+.room-list-item > div:first-of-type {
+    flex: 8;
+
+    border-left: none;
+
+    text-align: left;
+}
+
+.room-list-item > div:nth-of-type(2) {
+    flex: 6;
+}
+
 .purple {
     background-color: #654da3;
 }
