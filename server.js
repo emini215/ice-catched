@@ -137,7 +137,7 @@ function leave(nick, room) {
     removeUser(nick, room);
     if (room.users.length === 0) {
 	// no more users in room, delete it
-	rooms.filter(function(other) { return other.name !=== room.name });
+	rooms.filter(function(other) { return other.name !== room.name });
     }
 };
 
