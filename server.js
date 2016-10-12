@@ -74,7 +74,7 @@ io.on("connection", function(socket) {
 /**
  * Check credentials for joining room.
  * @param {Object} socket - The socket of the user joining the room.
- * @param {string} name - The name of the room to join.
+ * @param {string|int} name - The name of the room to join, or 0 to leave.
  * @param {?string} password - The password (if any) of the room to join.
  * @return {Object} - A response to request.
  */
