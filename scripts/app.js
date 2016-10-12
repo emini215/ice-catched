@@ -25,7 +25,7 @@ App.leave = function() {
 };
 
 App.skip = function() {
-    // TODO: implement
+    App.socket.emit("skip");
 };
 
 // display given message in the chat-area
@@ -188,25 +188,25 @@ App.init = function() {
 	App.displayMessage("");
     });
 
-    socket.on("active", function(nick) {
-   
-	// update variable active according to given nick, null being self
-	// also set the text to be displayed
-	var text;
-	if (nick == null) {
-	    App.active = true;
-	    text = "You are drawing.";
+    socket.on("skip", function(data) {
+    
+	if (data.skipped === data.nick) {
+	    // artist skipped
+	    App.displayMessage((data.nick === App.nick ?
+		"You" : data.nick) + " skipped.");
+
 	} else {
-	    App.active = false;
-	    text = nick + " is drawing.";
+	    // display who voted to skip and status
+	    App.displayMessage((data.nick === App.nick ?
+		"You" : data.nick) + " voted to skip. (" + 
+		    data.count + "/" + data.total + ")");
+
+	    if (data.code === 0) {
+		// vote was successful	    
+		App.displayMessage((data.skipped === App.nick ? 
+		    "You were" : data.skipped + " was") + " skippped.");
+	    }
 	}
-
-	// TODO: extract function of appending text
-	// display notification of active-drawer status
-	var textarea = document.getElementById("chat-area");
-	textarea.value += text + "\n";
-	textarea.scrollTop = textarea.scrollHeight;
-
     });
 
     // listen for msg

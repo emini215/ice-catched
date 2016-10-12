@@ -43,6 +43,14 @@ io.on("connection", function(socket) {
 	}
     });
 
+    socket.on("skip", function() {
+	var res = skip(socket);
+	if (res.statusCode !== 0) {
+	    // could not skip
+	    socket.emit("exception", res.message);
+	}
+    });
+
     socket.on("clear", function() {
 	var res = clear(socket);
 	if (res.statusCode !== 0) {
@@ -234,6 +242,7 @@ function create(socket, name, password, visible) {
     room.users = [];
     room.artist = null;
     room.history = [];
+    room.skip = [];
     rooms.push(room);
 
     // remember which room user created
@@ -338,8 +347,74 @@ function restart(socket) {
     clear(socket);
     socket.room.history = [];
 
+    // reset skip
+    socket.room.skip.fill(0);
+
     // set the next artist
     nextArtist(socket.room);
+};
+
+/**
+ * Vote to skip round.
+ * @param {Object} socket - The client voting to skip.
+ * @return {Object} - Containing "statusCode" set to 0 if successful.
+ */
+function skip(socket) {
+    if (isArtist(socket)) {
+	// artists can always skip
+	io.to(socket.room.name).emit("skip", {
+	    code: 0,
+	    nick: socket.nick,
+	    skipped: socket.nick
+	});
+
+	restart(socket);
+	return {
+	    statusCode: 0
+	};
+    }
+
+    if (room.skip[socket.room.users.indexOf(socket.nick)] === 1) {
+	// user already skipped
+	return {
+	    statusCode: -1,
+	    message: "You have already voted to skip."
+	};
+    } 
+
+    // set skip of user
+    room.skip[socket.room.users.indexOf(socket.nick)] = 1;
+
+    if (isMajority(socket.room)) {
+	// majority of the users skipped, accepted
+	io.to(socket.room.name).emit("skip", { 
+	    code: 0,
+	    count: skipCount(socket.room),
+	    nick: socket.nick,
+	    skipped: artistNick(socket.room),
+	    total: socket.room.skip.length
+	});
+	
+	// start new round
+	restart(socket);
+	return {
+	    statusCode: 0
+	};
+
+    } else {
+	// skip added, but not yet majority
+	// tell the room of updated status
+	io.to(socket.room.name).emit("skip", {
+	    code: -1,
+	    count: skipCount(socket.room),
+	    nick: socket.nick,
+	    total: socket.room.skip.length
+	});
+
+	return {
+	    statusCode: 0
+	};
+    }
 };
 
 /**
@@ -566,6 +641,25 @@ function messageRoom(room, message) {
 };
 
 /**
+ * Add all skips.
+ * @param {Object} room - The room to count skips in.
+ * @param {int[]} room.skip - The skips to count.
+ * @return {int} - The count.
+ */
+function skipCount(room) {
+    return room.skip.reduce(function(x, y) { return x + y; }, 0);
+};
+
+/**
+ * Check if majority of room-members want to skip.
+ * @param {Object} room - The room to check.
+ * @return {boolean}
+ */
+function isMajority(room) {
+    return skipCount(room) > room.skip.length/2;
+};
+
+/**
  * Rename the user.
  * @param {string} prev - The previous name of the user.
  * @param {string} next - The new name of the user.
@@ -587,6 +681,7 @@ function renameUser(prev, next, room) {
  */
 function addUser(nick, room) {
     room.users.push(nick);
+    room.skip.push(0);
 };
 
 /**
@@ -603,6 +698,10 @@ function removeUser(nick, room) {
 	room.artist--;
     }
 
+    // remove user's skip value
+    room.skip.splice(room.users.indexOf(nick), 1);
+
+    // remove user from list
     room.users = room.users.filter(
 	function(other) { return other !== nick }
     );
