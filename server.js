@@ -34,7 +34,6 @@ io.on("connection", function(socket) {
     socket.on("help", function(data)	{   helpPage(data)	    });
     socket.on("list", function()	{   list(socket)	    });
     socket.on("active", function()	{   active(socket)	    });
-    socket.on("msg", function(msg)	{   messageAll(socket, msg) });
     socket.on("draw", function(data)	{   draw(socket, data)	    });
     socket.on("undo", function()	{   undo(socket)	    });
     socket.on("clear", function()	{   clear(socket)	    });
@@ -49,6 +48,14 @@ io.on("connection", function(socket) {
     
     socket.on("join", function(room, password) {
 	socket.emit("join", join(socket, room, password)); 
+    });
+
+    socket.on("msg", function(msg) {
+	var res = sendMessage(socket, msg);
+	if (res.status !== 0) {
+	    // message could not be sent
+	    socket.emit("exception", res.message);
+	}
     });
  
     // if the user was identified let other use know of disconnection
@@ -253,14 +260,31 @@ function sendHistory(socket) {
     }
 };
 
-// message all users
-function messageAll(socket, message) {
-    if (socket.nick == null)
-	return;
-
-    // send to everyone 
-    io.emit("msg", socket.nick + ": " + message);
-    console.log(socket.nick + ": " + message);
+/**
+ * Send message to everyone in clients room.
+ * @param {Object} socket - The socket of the client sending message.
+ * @param {string} socket.nick - The nick of the user sending message.
+ * @param {Object} socket.room - The room to send message to.
+ * @param {string} socket.room.name - The name of the recipient room.
+ * @param {string} message - The message to be sent.
+ * @return {Object} - Containing property "status" set to 0 if successful
+ */
+function sendMessage(socket, message) {
+    if (socket.room == null || socket.nick == null) {
+	// not connected to room
+	return {
+	    status: -1,
+	    message: "You are not connected to any room. " + 
+		"Could not send message."
+	};
+    }
+   
+    // send message to room 
+    io.to(socket.room.name).emit("msg", socket.nick + ": " + message);
+    console.log(socket.room.name + "@" + socket.nick + ": " + message);
+    return {
+	status: 0
+    };
 };
 
 function draw(socket, data) {
