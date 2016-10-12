@@ -335,19 +335,32 @@ function sendMessage(socket, message) {
     };
 };
 
+/**
+ * Tell clients to draw from data and add to room history.
+ * @param {Object} socket - The artist.
+ * @param {Object} data - The content to be drawn.
+ * @return {Object} - Containing "statusCode" set to 0 if successful.
+ */
 function draw(socket, data) {
-    // verify user
-    if (socket.id != active_drawer)
-	return;
+    
+    if (!isArtist(socket)) {
+	// the user is not artist
+	return {
+	    statusCode: -1,
+	    message: "The user is not the artist."
+	};
+    }
 
     // save it history
-    drawing_history.push(JSON.parse(data));
-
-    // TODO: Verify contents
-    // otherwise might be able to send stuff to clients
+    socket.room.history.push(JSON.parse(data));
 
     // send to all but the drawer who already drew it.
-    socket.broadcast.emit("draw", data);
+    socket.broadcast.to(socket.room.name).emit("draw", data);
+
+    // everything went fine
+    return {
+	statusCode: 0
+    };
 };
 
 function list(socket) {
