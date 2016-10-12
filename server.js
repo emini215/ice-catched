@@ -61,7 +61,7 @@ io.on("connection", function(socket) {
     // if the user was identified let other use know of disconnection
     // otherwise ignore as the user has gone by unnoticed
     socket.on("disconnect", function() {
-	if (socket.room != null) {
+	if (socket.nick != null) {
 	    // leave room if in any
 	    leave(socket.nick, room);
 	}
