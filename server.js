@@ -205,6 +205,7 @@ function create(socket, name, password, visible) {
     room.visible = visible;
     room.users = [];
     room.artist = null;
+    room.history = [];
     rooms.push(room);
 
     // remember which room user created
