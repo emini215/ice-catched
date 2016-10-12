@@ -54,15 +54,15 @@ io.on("connection", function(socket) {
     // if the user was identified let other use know of disconnection
     // otherwise ignore as the user has gone by unnoticed
     socket.on("disconnect", function() {
+	if (socket.room != null) {
+	    // leave room if in any
+	    leave(socket.nick, room);
+	}
+
+	// no need to let others know someone disconnected who never joined
+	// a room
 	if (socket.nick == null)
 	    return;
-
-	// remove socket from list of drawers
-	drawing_order = drawing_order.filter(function(e) { 
-	    return e !== socket.id 
-	});
-	console.log(drawing_order);
-	// TODO: change active if active
 
         // let other clients know that user has disconnected
 	console.log(socket.nick + " has disconnected.");
