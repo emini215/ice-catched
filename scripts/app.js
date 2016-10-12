@@ -20,17 +20,8 @@ App.draw = function(data) {
 };
 
 App.leave = function() {
-
     // tell server you are leaving
     App.socket.emit("join", 0);
-
-    // reset variables
-    App.room = null;
-    App.nick = null;
-    App.active = false;
-
-    // go back to login page
-    Login.showLoginPage();
 };
 
 App.skip = function() {
@@ -72,6 +63,12 @@ App.sendMessage = function() {
 
 App.undo = function() {
     App.socket.emit("undo");
+};
+
+App._resetVariables = function() {
+    App.room = null;
+    App.nick = null;
+    App.active = false;
 };
 
 App.init = function() {
@@ -118,7 +115,7 @@ App.init = function() {
     socket.on("nick", function(data) {
 	var nick = data.nick;
 	var message = data.message;
-	
+
 	if (nick == null) {
 	    // display error
 	    Login.showError(message);
@@ -133,6 +130,7 @@ App.init = function() {
     socket.on("create", function(data) {
 	var room = data.room;
 	var message = data.message;
+
 	if (room == null) {
 	    // display error message
 	    Login.showError(message);
@@ -145,11 +143,15 @@ App.init = function() {
     socket.on("join", function(data) {
 	var room = data.room;
 	var message = data.message;
+
 	if (room == null) {
 	    Login.showError(message);
-	} else {
+	} else if (room !== 0){
 	    App.room = room;
 	    Login.showNick();
+	} else if (App.room != null) {
+	    App._resetVariables();
+	    Login.showLoginPage();
 	}
     });
 
