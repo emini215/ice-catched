@@ -191,6 +191,7 @@ function create(socket, name, password, visible) {
     room.password = password;
     room.visible = visible;
     room.users = [];
+    room.artist = null;
     rooms.push(room);
 
     // remember which room user created
@@ -244,10 +245,53 @@ function nick(socket, nick) {
 	messageRoom(socket.room, socket.nick + " is now called: " + nick);
     }
 
+    // update socket.nick
     socket.nick = nick;
+
+    // try to start the game and tell client who is the current artist
+    // if the game was not started the client becomes the artist
+    var res = start(socket);
+    if (res != 0) {
+	socket.emit("msg", socket.room.users[socket.room.artist] + 
+	    " is drawing.");
+    } else {
+	socket.emit("msg", "You are drawing.");
+    }
+
     return {
 	nick: nick
     };
+};
+
+/**
+ * Start the game.
+ * @param {Object} socket - The socket of user to start the game.
+ * @param {string} socket.nick - The name of the user.
+ * @return {Object} - Containing "statusCode" set to 0 if successful.
+ */
+function start(socket) {
+    if (socket.nick == null) {
+	// user is not connected
+	return {
+	    statusCode: -1,
+	    message: "The user is not connected."
+	};
+    }
+    
+    if (socket.room.artist != null) {
+	// someone is already drawing
+	return {
+	    statusCode: -1,
+	    message: "Game is already started."
+	};
+    }
+
+    // set the user as artist
+    nextArtist(socket.room);
+    return {
+	statusCode: 0
+    };
+
 };
 
 // send drawing history to socket
@@ -361,6 +405,25 @@ function findStrokeEnd(arr) {
 	    return i;
     }
     return null;
+};
+
+/**
+ * Set artist to next in line.
+ * @param {Object} room - The room to switch artist in.
+ * @param {int} room.artist - Index of artist in room.users.
+ * @param {string[]} room.users - List of users in room.
+ */
+function nextArtist(room) {
+    
+    // update artist
+    if (room.artist == room.users.length -1 || room.artist == null) {
+	room.artist = 0;
+    } else {
+	room.artist++;
+    }
+    
+    // notify members of room
+    io.to("artist", room.users[room.artist]);
 };
 
 /**
