@@ -1,5 +1,48 @@
 var Login = {};
 
+Login.fillRoomList = function(list) {
+    
+    // get room-list and clear it
+    var roomList = document.getElementById("room-list");
+    while (roomList.firstChild)
+	roomList.removeChild(roomList.firstChild);
+
+    list.forEach(function(room) {
+	// create list object and append to list
+	roomList.appendChild(Login._createListItem(room));
+    });
+};
+
+/**
+ * Create room list-item for room.
+ * @param {Object} room - The room to create object of.
+ * @param {string} room.name - The name of the room.
+ * @param {boolean} room.password - Whether room is passworded or not.
+ * @param {int} room.users - The amount of players in room.
+ * @return // TODO
+ */
+Login._createListItem = function(room) {
+    var item = document.createElement("div");
+    item.className = "room-list-item";
+    
+    // create children
+    var name = document.createElement("div");
+    name.appendChild(document.createTextNode(room.name));
+    
+    var password = document.createElement("div");
+    password.appendChild(document.createTextNode(room.password));
+
+    var users = document.createElement("div");
+    users.appendChild(document.createTextNode(room.users));
+    
+    // append children
+    item.appendChild(name);
+    item.appendChild(password);
+    item.appendChild(users);
+
+    return item;
+};
+
 Login.showError = function(message) {
     document.getElementById("login-error-message").innerHTML = message;
     document.getElementById("login-error").style.display = "block";
