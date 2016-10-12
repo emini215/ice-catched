@@ -547,6 +547,15 @@ function isArtist(socket) {
 }
 
 /**
+ * Get the name of the artist.
+ * @param {Object} room - The room to return artist of.
+ * @return {string} - The nick of the artist.
+ */
+function artistNick(room) {
+    return room.users[room.artist];
+}
+
+/**
  * Send message to room.
  * @param {Object} room - The room to send message to.
  * @param {string} room.name - The name of the room.
