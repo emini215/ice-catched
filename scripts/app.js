@@ -128,14 +128,20 @@ App.init = function() {
     });
 
     // display list of users
-    socket.on("list", function(message) {
+    socket.on("list", function(data) {
+
+	if (data.users == null) {
+	    // error occured
+	    Login.showError(data.message);
+	}
+
 	var textarea = document.getElementById("chat-area");
 
 	// put label on list
 	textarea.value += "List of connected users:\n";
 
 	// append all users to the list
-	message.forEach(function(username) {
+	data.users.forEach(function(username) {
 	    textarea.value += "\t" + username + "\n";
 	});
 
