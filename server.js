@@ -432,6 +432,23 @@ function nextArtist(room) {
 };
 
 /**
+ * Check if user is the artist.
+ * @param {Object} socket - The connection to the user.
+ * @param {string} socket.nick - The user's nick.
+ * @param {Object} socket.room - The room to check if artist in.
+ * @return {boolean}
+ */
+function isArtist(socket) {
+    if (socket.nick == null) {
+	// if the user is not connected return false
+	// there is no way the user is artist
+	return false;
+    }
+
+    return socket.nick === socket.room.users[socket.room.artist];
+}
+
+/**
  * Send message to room.
  * @param {Object} room - The room to send message to.
  * @param {string} room.name - The name of the room.
