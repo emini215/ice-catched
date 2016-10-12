@@ -64,6 +64,8 @@ io.on("connection", function(socket) {
 	if (socket.nick != null) {
 	    // leave room if in any
 	    leave(socket.nick, socket.room);
+	    console.log(socket.room.name + "@" + socket.nick + 
+		" has disconnected.");
 	}
     });
 
@@ -231,6 +233,7 @@ function nick(socket, nick) {
 
 	// message room
 	messageRoom(socket.room, nick + " joined this room.");
+	console.log(socket.room.name + "@" + nick + " joined this room.");
     } else {
 	// rename user
 	renameUser(nick, socket.room);
@@ -275,6 +278,7 @@ function sendMessage(socket, message) {
    
     // send message to room 
     io.to(socket.room.name).emit("msg", socket.nick + ": " + message);
+    console.log(socket.room.name + "@" + socket.nick + ": " + message);
     return {
 	status: 0
     };
