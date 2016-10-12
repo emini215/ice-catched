@@ -57,7 +57,7 @@ App.init = function() {
 
     // user's nick
     App.nick = null;
-
+    App.room = null;
 
     // loads the socket.io-client and connects
     var socket = io();
