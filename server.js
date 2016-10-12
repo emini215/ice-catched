@@ -118,7 +118,7 @@ function join(socket, name, password) {
 	if (socket.nick == null || socket.room == null) {
 	    // cant leave anything you are not in
 	    return {
-		nick: null,
+		room: null,
 		message: "You are not in a room, cannot leave."
 	    };
 	}
@@ -128,7 +128,7 @@ function join(socket, name, password) {
 	    " has disconnected.");
 	leave(socket);
 	return {
-	    nick: 0
+	    room: 0
 	};
     }
    
