@@ -28,7 +28,14 @@
 		<input id="join-room-text" type="text" placeholder="#room"/>
 		<input id="join-room-button" type="button" value="JOIN"
 		    class="purple" onclick="Login.joinRoom();"/>
-		<!-- TODO: display available rooms when hovered -->
+		<div id="join-room-options" class="purple">
+		    <input id="join-room-password" type="password" 
+			placeholder="password"/>
+		    <a id="show-rooms" href="#">show rooms</a>
+		    <div id="room-list">
+			<!-- visible rooms -->
+		    </div>
+		</div>
 	    </article>
 
 	    <article class="rooms">
@@ -36,6 +43,16 @@
 		<input id="create-room-text" type="text" placeholder="#room"/>
 		<input id="create-room-button" type="button" value="CREATE"
 		    class="orange" onclick="Login.createRoom();"/>
+
+		<div id="create-room-options" class="orange">
+		    <input id="create-room-password" type="password"
+			placeholder="password"/>
+		    <label>
+			<input id="create-room-private" type="checkbox" 
+			    value="private" checked/>
+			hide froom room-list
+		    </label>
+		</div>
 	    </article>
 
 	    <article id="nick">
