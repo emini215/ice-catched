@@ -130,7 +130,7 @@ function create(socket, name, password, visible) {
 	// room already exists
 	return {
 	    room: null,
-	    message: "Room already exists:"
+	    message: "Room already exists."
 	};
     }
 
