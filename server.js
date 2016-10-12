@@ -367,18 +367,27 @@ function draw(socket, data) {
     };
 };
 
+/**
+ * Return list of users in client's room.
+ * @param {Object} socket - The client retrieving list.
+ * @return {Object} - Containing "users" if successful, otherwise with 
+ *		    explaining message.
+ */
 function list(socket) {
+    
+    if (socket.nick == null) {
+	// user is not connected
+	return {
+	    users: null,
+	    message: "You are not connected to a room."
+	};
+    }
 
-    // create list of all users' nick
-    var users = [];
-    drawing_order.forEach(function(e) {
-	// retrieve nick from socket.id
-	users.push(io.sockets.connected[e].nick);
-    });
-
-    // send list to user
-    socket.emit("list", users);
-}
+    // everything fine
+    return {
+	users: socket.room.users
+    };
+};
 
 /**
  * Clear the drawing for everyone in room.
