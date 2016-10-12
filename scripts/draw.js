@@ -99,6 +99,14 @@ App.init = function() {
 	console.log("EXCEPTION: " + error);
     });
 
+    socket.on("artist", function(artist) {
+
+	// set as artist if server tells you you are artist
+	if (App.nick === artist) {
+	    App.active = true;
+	}
+    });
+
     socket.on("nick", function(data) {
 	var nick = data.nick;
 	var message = data.message;
