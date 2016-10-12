@@ -57,7 +57,7 @@ Login.showNick = function() {
 Login.showMainPage = function() {
     // hide the login page and previous errors
     document.getElementById("login").style.display = "none";
-    Login.hideErrors();
+    Login.hideError();
 
     // set focus to message-box
     document.getElementById("message").focus();
