@@ -78,6 +78,10 @@ App.init = function() {
 	// set as artist if server tells you you are artist
 	if (App.nick === artist) {
 	    App.active = true;
+	    App.displayMessage("You are drawing.");
+	} else {
+	    App.active = false;
+	    App.displayMessage(artist + " is drawing.");
 	}
     });
 
