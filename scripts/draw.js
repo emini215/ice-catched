@@ -106,12 +106,8 @@ Draw._mouseUp = function(event) {
 };
 
 Draw._mouseMove = function(event) {
-    console.log("MOUSEMOVE");
-    if (App.active == false)
-	return;
-
-    // only draw if the mouse is down
-    if (!Draw.drawing)
+    // only draw if user is artist and mouse is down
+    if (App.active == false || !Draw.drawing)
 	return;
 
     var rect = Draw.canvas.getBoundingClientRect();
