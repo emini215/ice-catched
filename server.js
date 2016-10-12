@@ -251,7 +251,7 @@ function nick(socket, nick) {
     // try to start the game and tell client who is the current artist
     // if the game was not started the client becomes the artist
     var res = start(socket);
-    if (res != 0) {
+    if (res.statusCode !== 0) {
 	socket.emit("msg", socket.room.users[socket.room.artist] + 
 	    " is drawing.");
     } else {
