@@ -224,15 +224,6 @@ App.init = function() {
 	Draw.clear();
     });
 
-    // global key events
-    window.addEventListener("keyup", function(event) {
-	// undo when U is pressed 
-	// TODO: unless typing
-	if (event.which == 85) {
-	    App.undo();
-	}
-    });
-
     // send message when enter is pressed
     document.getElementById("message")
 	.addEventListener("keyup", function(event) {

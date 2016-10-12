@@ -12,6 +12,9 @@ Draw.init = function() {
     Draw.canvas.width = parentSize.width;
     Draw.canvas.height = parentSize.height;
 
+    // make canvas focusable
+    Draw.canvas.tabIndex = 1;
+
     // drawing settings
     Draw.ctx = Draw.canvas.getContext("2d");
     Draw.ctx.fillstyle = "solid";
@@ -60,12 +63,21 @@ Draw._addEventListeners = function() {
 	Draw.canvas.addEventListener("mousedown", Draw._mouseDown);
 	Draw.canvas.addEventListener("mouseup", Draw._mouseUp);
 	Draw.canvas.addEventListener("mousemove", Draw._mouseMove);
+	Draw.canvas.addEventListener("keyup", Draw._keyUp);
     }
     else if (document.attachEvent) {
 	// for cross-browser support IE8-
 	Draw.canvas.attachEvent("mousedown", Draw._mouseDown);
 	Draw.canvas.attachEvent("mouseup", Draw._mouseUp);
 	Draw.canvas.attachEvent("mousemove", Draw._mouseMove);
+	Draw.canvas.attachEvent("keyup", Draw._keyUp);
+    }
+};
+
+Draw._keyUp = function(event) {
+    // undo on u, only if artist
+    if (event.which == 85 && App.active) {
+	App.undo();
     }
 };
 
