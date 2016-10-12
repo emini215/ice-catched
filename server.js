@@ -17,9 +17,6 @@ app.use("/scripts", express.static(__dirname + "/scripts"));
 app.use("/style", express.static(__dirname + "/style"));
 
 // history of drawn lines
-var drawing_history = [];
-var drawing_order = [];
-var active_drawer = null;
 var rooms = [];
 
 // main function for handling connection to client
@@ -29,7 +26,6 @@ io.on("connection", function(socket) {
     // reactions on messages
     socket.on("help", function(data)	{   helpPage(data)	    });
     socket.on("list", function()	{   list(socket)	    });
-    socket.on("active", function()	{   active(socket)	    });
     socket.on("draw", function(data)	{   draw(socket, data)	    });
     socket.on("undo", function()	{   undo(socket)	    });
     socket.on("clear", function()	{   clear(socket)	    });
@@ -407,16 +403,6 @@ function clear(socket) {
     return {
 	statusCode: 0
     };
-};
-
-function active(socket) {
-    // send along nick only if the drawer is not the receiver
-    if (active_drawer == null)
-	socket.emit("msg", "Game has not started yet.");
-    else if (socket.id == active_drawer) 
-	socket.emit("active");
-    else 
-        socket.emit("active", io.sockets.connected[active_drawer].nick);
 };
 
 /**
