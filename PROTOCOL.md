@@ -61,6 +61,12 @@
 
 > ---
 ## join
+
+> `("join", <room>, [password])`
+
+> `room``**(string|0)** the name of the room to join or `0` if client want 
+> to leave the room.
+
 > ---
 ## list
 > ---
