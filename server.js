@@ -21,7 +21,6 @@ var rooms = [];
 
 // main function for handling connection to client
 io.on("connection", function(socket) {
-    console.log("New connection: " + socket.id);
 
     // reactions on messages
     socket.on("help", function(data){});
