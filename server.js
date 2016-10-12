@@ -430,7 +430,7 @@ function undo(socket) {
 	// only artsits can undo
 	return {
 	    statusCode: -1,
-	    message: "Only artists can undo.";
+	    message: "Only artists can undo."
 	};
     }
 
