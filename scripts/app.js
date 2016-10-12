@@ -16,7 +16,6 @@ App.sendNick = function(nick) {
 };
 
 App.draw = function(data) {
-    console.log(data);
     App.socket.emit("draw", data);
 };
 
