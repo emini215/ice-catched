@@ -66,7 +66,7 @@ App.init = function() {
 
     // log whatever message sent by server (this far unused?)
     socket.onmessage = function(e) {
-	console.log(e);
+	console.log("STRANGE: " + e);
     };
 
     socket.on("exception", function(error) {
@@ -95,7 +95,7 @@ App.init = function() {
 	} else if (App.nick == null) {
 	    Login.showMainPage();
 	}
-
+	
 	// update nick
 	App.nick = nick;
     });
