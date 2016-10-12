@@ -166,20 +166,27 @@ function join(socket, name, password) {
  * @param {Object} socket.room - The room to delete user from.
  */
 function leave(socket) {
-    removeUser(socket.nick, socket.room);
-    if (socket.room.users.length === 0) {
-	// no more users in room, delete it
+    var userIsArtist = false;
+
+    if (socket.room.users.length === 1) {
+	// if the user is only one in the room delete it
 	rooms =	rooms.filter(function(other) { 
 	    return other.name !== socket.room.name 
 	});
     } else {
-	if (isArtist(socket)) {
-	    // change artist if leaving user is artist
-	    nextArtist(socket.room);
-	}
-        // let other clients know that user has disconnected
-	messageRoom(socket.room, socket.nick + " has disconnected.");
+	userIsArtist = isArtist(socket);
     }
+
+    // remove the user from the room
+    removeUser(socket.nick, socket.room);
+
+    if (userIsArtist) {
+	// change artist if leaving user is artist
+	nextArtist(socket.room);
+    }
+
+    // let other clients know that user has disconnected
+    messageRoom(socket.room, socket.nick + " has disconnected.");
     socket.room = null;
     socket.nick = null;
 };
