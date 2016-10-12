@@ -65,6 +65,9 @@ App.init = function() {
     // whether or not its clients turn to draw
     App.active = false;
 
+    // user's nick
+    App.nick = null;
+
     // add event listeners
     if (document.addEventListener) {
 	App.canvas.addEventListener("mousedown", mouseDown);
@@ -99,13 +102,16 @@ App.init = function() {
     socket.on("nick", function(data) {
 	var nick = data.nick;
 	var message = data.message;
+	
 	if (nick == null) {
 	    // display error
 	    Login.showError(message);
-	} else {
-	    // TODO: only do this if not already registered
+	} else if (App.nick == null) {
 	    Login.showMainPage();
 	}
+
+	// update nick
+	App.nick = nick;
     });
 
     socket.on("create", function(data) {
