@@ -165,7 +165,6 @@ function join(socket, name, password) {
  * @param {Object} socket.room - The room to delete user from.
  */
 function leave(socket) {
-    var userIsArtist = false;
 
     if (socket.room.users.length === 1) {
 	// if the user is only one in the room delete it
@@ -173,17 +172,15 @@ function leave(socket) {
 	    return other.name !== socket.room.name 
 	});
     } else {
-	userIsArtist = isArtist(socket);
+	if (isArtist(socket)) {
+	    // restart round
+	    restart(socket, true);
+	}
     }
 
     // remove the user from the room
     removeUser(socket.nick, socket.room);
-
-    if (userIsArtist) {
-	// restart round
-	restart(socket, true);
-    }
-
+   
     // let other clients know that user has disconnected
     messageRoom(socket.room, socket.nick + " has disconnected.");
     socket.room = null;
@@ -335,16 +332,11 @@ function start(socket) {
  * @param {boolean} leaving - Whether restart is because of leaving user 
  *				or not.
  */
-function restart(socket, leaving = false) {
-    
-    if (leaving) {
-	// if restarting because of user leaving subtract one from
-	// room's artist to not skip the next artist
-	socket.room.artist--;
-    }
+function restart(socket) {
     
     // clear the canvas before selecting new artist
     clear(socket);
+    socket.room.history = [];
 
     // set the next artist
     nextArtist(socket.room);
@@ -595,6 +587,13 @@ function addUser(nick, room) {
  * @param {string[]} room.users - List of users.
  */
 function removeUser(nick, room) {
+
+    // if the artist is after the to be removed user then
+    // decrement the artist-index
+    if (room.users.indexOf(nick) < room.artist) {
+	room.artist--;
+    }
+
     room.users = room.users.filter(
 	function(other) { return other !== nick }
     );
