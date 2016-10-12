@@ -443,10 +443,13 @@ function undo(socket) {
     };
 };
 
-function helpPage(data) {
-
-};
-
+/**
+ * Find the index of last "mouseup"-event in array or the last 
+ * "mousedown"-event if the previous was not found.
+ * @param {Object[]} arr - Array of draw-events.
+ * @return {int|null} - The index of last "mouseup", or if none found last
+ *			"mousedown", if none of those were found returns null.
+ */
 function findStrokeEnd(arr) {
     for (var i = arr.length; --i >= 0;) {
 	if (arr[i].type == "mouseup")
