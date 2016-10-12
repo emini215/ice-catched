@@ -57,6 +57,10 @@ io.on("connection", function(socket) {
 	    socket.emit("exception", res.message);
 	}
     });
+
+    socket.on("rooms", function() {
+	socket.emit("rooms", getRooms());
+    });
     
     socket.on("nick", function(name) {
 	var firstTime = socket.nick == null;
@@ -109,6 +113,27 @@ io.on("connection", function(socket) {
     });
 
 });
+
+/**
+ * Find all visible rooms.
+ * @return {Object[]} - A list of rooms.
+ */
+function getRooms() {
+    var list = [];
+    for (var i = 0; i < rooms.length; i++) {
+	// only include visible rooms
+	if (!rooms[i].visible) {
+	    break;
+	}
+
+	list.push({
+	    name: rooms[i].name,
+	    password: (rooms[i].password != null),
+	    users: rooms[i].users.length
+	});
+    }
+    return list;
+};
 
 /**
  * Check credentials for joining room.
@@ -226,7 +251,7 @@ function create(socket, name, password, visible) {
 	};
     }
 
-    if (visible != null && typeof visible !== "boolean") {
+    if (typeof visible !== "boolean") {
 	// visible must be a boolean
 	return {
 	    room: null,
