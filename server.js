@@ -38,8 +38,21 @@ io.on("connection", function(socket) {
     socket.on("undo", function()	{   undo(socket)	    });
     socket.on("clear", function()	{   clear(socket)	    });
     
-    socket.on("nick", function(name) {   
-	socket.emit("nick", nick(socket, name)); 
+    socket.on("nick", function(name) {
+	var firstTime = socket.nick == null;
+
+	// respond to nick-register
+	socket.emit("nick", nick(socket, name));
+
+	if (firstTime) {
+	    // try to start the game and tell client who is the current 
+	    // artist, if the game was not started the client becomes 
+	    // the artist
+	    if (start(socket).statusCode !== 0) {
+		socket.emit("artist", 
+		    socket.room.users[socket.room.artist]);
+	    } 
+	}
     });
     
     socket.on("create", function(room, password, visible) {
@@ -247,16 +260,6 @@ function nick(socket, nick) {
 
     // update socket.nick
     socket.nick = nick;
-
-    // try to start the game and tell client who is the current artist
-    // if the game was not started the client becomes the artist
-    var res = start(socket);
-    if (res.statusCode !== 0) {
-	socket.emit("msg", socket.room.users[socket.room.artist] + 
-	    " is drawing.");
-    } else {
-	socket.emit("msg", "You are drawing.");
-    }
 
     return {
 	nick: nick
