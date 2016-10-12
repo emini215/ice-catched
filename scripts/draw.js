@@ -92,6 +92,10 @@ App.init = function() {
 	console.log(e);
     };
 
+    socket.on("exception", function(error) {
+	console.log("EXCEPTION: " + error);
+    });
+
     socket.on("nick", function(data) {
 	var nick = data.nick;
 	var message = data.message;
