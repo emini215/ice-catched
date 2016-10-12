@@ -32,15 +32,19 @@ body {
     width: 25vw;
     float: left;
 
-    border-right: 1px solid #994f3c;
+    border-right: 1px solid #999;
     text-align: center;
 
-    background-color: #c0634c;
-    box-shadow: 1px 0px 5px #733b2d; 
+    background-color: #ddd;
+    box-shadow: 0px -5px 5px #777; 
 }
 
 #drawing {
     margin-left: 25vw;
+}
+
+canvas:focus {
+    outline: none;
 }
 
 #chat-button-bar {
