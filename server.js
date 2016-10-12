@@ -384,12 +384,29 @@ function list(socket) {
     socket.emit("list", users);
 }
 
+/**
+ * Clear the drawing for everyone in room.
+ * @param {Object} socket - The user who clears the room.
+ * @param {Objecc} socket.room - The room to be cleared.
+ * @return {Object} - Containing "statusCode" set to 0 if successful.
+ */
 function clear(socket) {
-    if (socket.id != active_drawer) 
-	return;
+    
+    if (!isArtist(socket)) {
+	// only artists can clear
+	return {
+	    statusCode: -1,
+	    message: "Only artists can clear."
+	};
+    }
 
     // send clear-message
-    io.emit("clear");
+    io.to(socket.room.name).emit("clear");
+
+    // all goood
+    return {
+	statusCode: 0
+    };
 };
 
 function active(socket) {
