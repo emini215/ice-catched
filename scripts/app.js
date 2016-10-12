@@ -28,6 +28,10 @@ App.skip = function() {
     App.socket.emit("skip");
 };
 
+App.rooms = function() {
+    App.socket.emit("rooms");
+};
+
 // display given message in the chat-area
 App.displayMessage = function(message) {
    App._appendParagraph(App._createParagraph(message)); 
@@ -111,6 +115,10 @@ App.init = function() {
     socket.on("exception", function(error) {
 	console.log("EXCEPTION: " + error);
 	App.displayError(error);
+    });
+
+    socket.on("rooms", function(list) {
+	Login.fillRoomList(list);
     });
 
     socket.on("artist", function(artist) {
