@@ -30,12 +30,24 @@ App.skip = function() {
 
 // display given message in the chat-area
 App.displayMessage = function(message) {
-   
-    // create paragraph
+   App._appendParagraph(App._createParagraph(message)); 
+};
+
+App.displayError = function(message) {
+    var paragraph = App._createParagraph(message);
+    paragraph.style.color = "#ff0000";
+    App._appendParagraph(paragraph);
+};
+
+App._createParagraph = function(message) { 
     var paragraph = document.createElement("p");
     paragraph.textContent = message;
+    return paragraph;
+};
+
+App._appendParagraph = function(paragraph) {
     
-    // append paragraph to chat-area
+    // append paragraph
     var chatarea = document.getElementById("chat-area");
     chatarea.appendChild(paragraph);
 
@@ -98,6 +110,7 @@ App.init = function() {
 
     socket.on("exception", function(error) {
 	console.log("EXCEPTION: " + error);
+	App.displayError(error);
     });
 
     socket.on("artist", function(artist) {
