@@ -24,11 +24,32 @@ io.on("connection", function(socket) {
     console.log("New connection: " + socket.id);
 
     // reactions on messages
-    socket.on("help", function(data)	{   helpPage(data)	    });
-    socket.on("list", function()	{   list(socket)	    });
-    socket.on("draw", function(data)	{   draw(socket, data)	    });
-    socket.on("undo", function()	{   undo(socket)	    });
-    socket.on("clear", function()	{   clear(socket)	    });
+    socket.on("help", function(data){});
+
+    socket.on("list", function() {
+	socket.emit("list", list(socket));
+    });
+
+    socket.on("draw", function(data) {  
+	var res = draw(socket, data);
+	if (res.statusCode !== 0) {
+	    socket.emit("exception", res.message);
+	}
+    });
+
+    socket.on("undo", function() {
+	var res = undo(socket);
+	if (res.statusCode !== 0) {
+	    socket.emit("exception", res.message);
+	}
+    });
+
+    socket.on("clear", function() {
+	var res = clear(socket);
+	if (res.statusCode !== 0) {
+	    socket.emit("exception", res.message);
+	}
+    });
     
     socket.on("nick", function(name) {
 	var firstTime = socket.nick == null;
