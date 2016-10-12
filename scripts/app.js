@@ -15,6 +15,11 @@ App.sendNick = function(nick) {
     App.socket.emit("nick", nick);
 };
 
+App.draw = function(data) {
+    console.log(data);
+    App.socket.emit("draw", data);
+};
+
 // display given message in the chat-area
 App.displayMessage = function(message) {
     var textarea = document.getElementById("chat-area");

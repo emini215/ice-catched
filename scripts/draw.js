@@ -22,24 +22,7 @@ Draw.init = function() {
     // whether or not the mouse is pressed
     Draw.drawing = false;
 
-};
-
-/**
- * Add event-listeners for canvas 
- */
-Draw.addEventListeners = function() {
-    // add event listeners
-    if (document.addEventListener) {
-	Draw.canvas.addEventListener("mousedown", mouseDown);
-	Draw.canvas.addEventListener("mouseup", mouseUp);
-	Draw.canvas.addEventListener("mousemove", mouseMove);
-    }
-    else if (document.attachEvent) {
-	// for cross-browser support IE8-
-	Draw.canvas.attachEvent("mousedown", mouseDown);
-	Draw.canvas.attachEvent("mouseup", mouseUp);
-	Draw.canvas.attachEvent("mousemove", mouseMove);
-    }
+    Draw._addEventListeners();
 };
 
 /**
@@ -68,7 +51,25 @@ Draw.clear = function() {
     Draw.ctx.clearRect(0, 0, Draw.canvas.width, Draw.canvas.height);
 };
 
-function mouseDown(event) {
+/**
+ * Add event-listeners for canvas 
+ */
+Draw._addEventListeners = function() {
+    // add event listeners
+    if (document.addEventListener) {
+	Draw.canvas.addEventListener("mousedown", Draw._mouseDown);
+	Draw.canvas.addEventListener("mouseup", Draw._mouseUp);
+	Draw.canvas.addEventListener("mousemove", Draw._mouseMove);
+    }
+    else if (document.attachEvent) {
+	// for cross-browser support IE8-
+	Draw.canvas.attachEvent("mousedown", Draw._mouseDown);
+	Draw.canvas.attachEvent("mouseup", Draw._mouseUp);
+	Draw.canvas.attachEvent("mousemove", Draw._mouseMove);
+    }
+};
+
+Draw._mouseDown = function(event) {
     if (App.active == false) 
 	return;
 
@@ -83,28 +84,29 @@ function mouseDown(event) {
 	(rect.bottom - rect.top) * Draw.canvas.height;
 
     // start line and emit to other clients
-    drawDown(e);
-    socket.emit("draw", JSON.stringify({
+    Draw._drawDown(e);
+    App.draw(JSON.stringify({
 	"type": e.type,
 	"clientX": e.clientX,
 	"clientY": e.clientY
     }));
 };
 
-function mouseUp(event) {
+Draw._mouseUp = function(event) {
     if (App.active == false) 
 	return;
 
     Draw.drawing = false;
    
     // stop drawing and send to server
-    drawUp(event); 
-    socket.emit("draw", JSON.stringify({
+    Draw._drawUp(event); 
+    App.draw(JSON.stringify({
 	"type": event.type
     }));
 };
 
-function mouseMove(event) {
+Draw._mouseMove = function(event) {
+    console.log("MOUSEMOVE");
     if (App.active == false)
 	return;
 
@@ -121,26 +123,26 @@ function mouseMove(event) {
 	(rect.bottom - rect.top) * Draw.canvas.height;
 
     // draw the move and emit object to other clients
-    drawMove(e);
-    socket.emit("draw", JSON.stringify({
+    Draw._drawMove(e);
+    App.draw(JSON.stringify({
 	"type": e.type,
 	"clientX": e.clientX,
 	"clientY": e.clientY
     }));
 };
 
-function drawUp(event) {
+Draw._drawUp = function(event) {
     // close path
     Draw.ctx.closePath();
 };
 
-function drawDown(event) {
+Draw._drawDown = function(event) {
     // start line
     Draw.ctx.moveTo(event.clientX, event.clientY);
     Draw.ctx.beginPath();
 };
 
-function drawMove(event) {
+Draw._drawMove = function(event) {
     // draw the line
     Draw.ctx.lineTo(event.clientX, event.clientY);
     Draw.ctx.stroke();
