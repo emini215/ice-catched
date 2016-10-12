@@ -423,7 +423,7 @@ function nextArtist(room) {
     }
     
     // notify members of room
-    io.to("artist", room.users[room.artist]);
+    io.to(room.name).emit("artist", room.users[room.artist]);
 };
 
 /**
