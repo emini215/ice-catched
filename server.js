@@ -81,7 +81,22 @@ io.on("connection", function(socket) {
 function join(socket, name, password) {	
 
     // TODO: leave room upon 0
-    if (name === 0) {}
+    if (name === 0) {
+    
+	if (socket.nick == null || socket.room == null) {
+	    // cant leave anything you are not in
+	    return {
+		nick: null,
+		message: "You are not in a room, cannot leave."
+	    };
+	}
+
+	// otherwise leave room
+	leave(socket.nick, socket.room);
+	return {
+	    nick: 0
+	};
+    }
    
     var room = roomExists(name);
     if (room == null) {
