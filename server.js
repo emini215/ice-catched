@@ -63,7 +63,7 @@ io.on("connection", function(socket) {
     socket.on("disconnect", function() {
 	if (socket.nick != null) {
 	    // leave room if in any
-	    leave(socket.nick, room);
+	    leave(socket.nick, socket.room);
 	}
     });
 
@@ -135,13 +135,11 @@ function leave(nick, room) {
     removeUser(nick, room);
     if (room.users.length === 0) {
 	// no more users in room, delete it
-	rooms.filter(function(other) { return other.name !== room.name });
+	rooms =	rooms.filter(function(other) { return other.name !== room.name });
     } else {
         // let other clients know that user has disconnected
 	messageRoom(room, nick + " has disconnected.");
     }
-    
-    console.log(room.name + "@" + nick + " has disconnected.");
 };
 
 /**
@@ -216,7 +214,7 @@ function nick(socket, nick) {
 	};
     }
 
-    if (nickIsTaken(nick, room)) {
+    if (nickIsTaken(nick, socket.room)) {
 	// the nick is already taken
 	return {
 	    nick: socket.nick,
@@ -226,19 +224,19 @@ function nick(socket, nick) {
 
     if (socket.nick == null) {
 	// add user to room
-	addUser(nick, room);
+	addUser(nick, socket.room);
 
 	// add the user to the socket.io's room
-	socket.join(room.name);
+	socket.join(socket.room.name);
 
 	// message room
-	messageRoom(room, nick + " joined this room.");
+	messageRoom(socket.room, nick + " joined this room.");
     } else {
 	// rename user
-	renameUser(nick, room);
+	renameUser(nick, socket.room);
 
 	// message room
-	messageRoom(socket.nick + " is now called: " + nick);
+	messageRoom(socket.room, socket.nick + " is now called: " + nick);
     }
 
     socket.nick = nick;
@@ -277,7 +275,6 @@ function sendMessage(socket, message) {
    
     // send message to room 
     io.to(socket.room.name).emit("msg", socket.nick + ": " + message);
-    console.log(socket.room.name + "@" + socket.nick + ": " + message);
     return {
 	status: 0
     };
