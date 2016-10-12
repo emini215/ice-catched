@@ -26,10 +26,6 @@ var rooms = [];
 io.on("connection", function(socket) {
     console.log("New connection: " + socket.id);
 
-    // send the drawing history to the new user so that the user
-    // does not miss all drawing before the time of joining
-    sendHistory(socket);
-
     // reactions on messages
     socket.on("help", function(data)	{   helpPage(data)	    });
     socket.on("list", function()	{   list(socket)	    });
@@ -52,6 +48,10 @@ io.on("connection", function(socket) {
 		socket.emit("artist", 
 		    socket.room.users[socket.room.artist]);
 	    } 
+
+	    // send the drawing history to the new user so that the user
+	    // does not miss all drawing before the time of joining
+	    sendHistory(socket);
 	}
     });
     
@@ -297,12 +297,14 @@ function start(socket) {
 
 };
 
-// send drawing history to socket
+/**
+ * Send the the drawing history to client.
+ * @param {Object} socket - The socket to send history to.
+ * @param {Object[]} socket.room.history - The history to send.
+ */
 function sendHistory(socket) {
-    // send the history of all lines so that a client does not end up without
-    // the lines drawn previous to the client's connection
-    for (var line in drawing_history) {
-        socket.emit("draw", JSON.stringify(drawing_history[line]));
+    for (var line in socket.room.history) {
+        socket.emit("draw", JSON.stringify(socket.room.history[line]));
     }
 };
 
