@@ -301,11 +301,18 @@ function start(socket) {
 /**
  * Send the the drawing history to client.
  * @param {Object} socket - The socket to send history to.
- * @param {Object[]} socket.room.history - The history to send.
+ * @param {Object} [room] - The room which's history to send.
  */
-function sendHistory(socket) {
-    for (var line in socket.room.history) {
-        socket.emit("draw", JSON.stringify(socket.room.history[line]));
+function sendHistory(socket, room) {
+    room = room || socket.room;
+
+    if (room.history == null) {
+	// server error
+	console.log("SEND HISTORY FAILED");
+    }
+
+    for (var line in room.history) {
+        socket.emit("draw", JSON.stringify(room.history[line]));
     }
 };
 
