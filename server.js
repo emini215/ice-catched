@@ -123,7 +123,7 @@ function getRooms() {
     for (var i = 0; i < rooms.length; i++) {
 	// only include visible rooms
 	if (!rooms[i].visible) {
-	    break;
+	    continue;
 	}
 
 	list.push({
