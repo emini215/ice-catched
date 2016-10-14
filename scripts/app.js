@@ -32,6 +32,11 @@ App.rooms = function() {
     App.socket.emit("rooms");
 };
 
+App.focus = function(focus) {
+    document.getElementById("content").style.display = 
+	focus ? "block" : "none";
+}
+
 // display given message in the chat-area
 App.displayMessage = function(message) {
    App._appendParagraph(App._createParagraph(message)); 
