@@ -151,6 +151,7 @@ function join(socket, name, password) {
 	    // cant leave anything you are not in
 	    return {
 		room: null,
+		errorCode: 4,
 		message: "You are not in a room, cannot leave."
 	    };
 	}
@@ -169,6 +170,7 @@ function join(socket, name, password) {
 	// room does not exist
 	return {
 	    room: null,
+	    errorCode: 1,
 	    message: "Room does not exist."
 	};
     }
@@ -178,8 +180,17 @@ function join(socket, name, password) {
     // giving a password we allow it
     if (room.password != null && !passwordMatch(password, room)) {
 	// password does not match
+	if (password == "") {
+	    // empty string is not a password
+	    return {
+		room: null,
+		errorCode: 2,
+		message: "Password is required."
+	    };
+	}
 	return {
 	    room: null,
+	    errorCode: 3,
 	    message: "Password does not match."
 	};
     }
@@ -236,6 +247,11 @@ function create(socket, name, password, visible) {
     // default visible to false
     if (visible == null) {
 	visible = true;
+    }
+
+    // do not consider empty string a password
+    if (password === "") {
+	password = null;
     }
     
     if (roomExists(name) != null) {
