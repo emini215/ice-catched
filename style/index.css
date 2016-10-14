@@ -241,7 +241,8 @@ footer p:nth-of-type(2) {
     font-family: "Oswald", "san-serif";
 }
 
-#login article input {
+#login article input[type="text"],
+#login article input[type="button"] {
     position: absolute;
     top: 0;
     
@@ -306,9 +307,8 @@ footer p:nth-of-type(2) {
     display: none;
 }
 
-#join-room-options,
-#create-room-options {
-    filter: brightness(50%);
+#show-rooms {
+    border-top: 1px solid #262727;
 }
 
 #room-list {
@@ -320,8 +320,16 @@ footer p:nth-of-type(2) {
 .room-list-item {
     display: flex;
 
-    border: 1px solid #262727;
+    border-top: 1px solid #262727;
     border-bottom: none;
+
+    padding: 10px;
+}
+
+.room-list-item:hover {
+    background-color: #000;
+    color: #fff;
+    transition: 0.4s;
 }
 
 .room-list-item:last-of-type {
@@ -331,14 +339,11 @@ footer p:nth-of-type(2) {
 .room-list-item > div {
     flex: 1;
 
-    border-left: 1px solid #262727;
     text-align: right;
 }
 
 .room-list-item > div:first-of-type {
     flex: 8;
-
-    border-left: none;
 
     text-align: left;
 }
