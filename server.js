@@ -173,7 +173,10 @@ function join(socket, name, password) {
 	};
     }
 
-    if (!passwordMatch(password, room)) {
+    // only check if the room is passworded
+    // if a client tries to join a room that does not have a password by 
+    // giving a password we allow it
+    if (room.password != null && !passwordMatch(password, room)) {
 	// password does not match
 	return {
 	    room: null,
