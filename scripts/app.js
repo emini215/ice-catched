@@ -6,9 +6,9 @@ App.create = function(room, password, visible) {
     App.socket.emit("create", room, password, visible);
 };
 
-App.joinRoom = function(room) {
+App.join = function(room, password) {
     // TODO: make it possible to enter password
-    App.socket.emit("join", room);
+    App.socket.emit("join", room, password);
 };
 
 App.sendNick = function(nick) {
