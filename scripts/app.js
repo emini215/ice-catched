@@ -123,7 +123,10 @@ App.init = function() {
     });
 
     socket.on("rooms", function(list) {
-	Login.fillRoomList(list);
+	// display available rooms, sorted in descending order
+	Login.fillRoomList(list.sort(
+	    function(x, y) { return y.users - x.users; }
+	));
     });
 
     socket.on("artist", function(artist) {
