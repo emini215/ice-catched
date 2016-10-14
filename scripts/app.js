@@ -94,6 +94,7 @@ App._resetVariables = function() {
 
 App.init = function() {
     // create canvas
+    Login.init();
     Draw.init();
 
     // whether or not its clients turn to draw
@@ -147,9 +148,10 @@ App.init = function() {
 
 	if (nick == null) {
 	    // display error
-	    Login.showError(message);
-	} else if (App.nick == null) {
-	    Login.showMainPage();
+	    Login.showError(true, message);
+	} else if (App.nickname == null) {
+	    Login.focus(false);
+	    App.focus(true);
 	}
 	
 	// update nick
@@ -162,10 +164,10 @@ App.init = function() {
 
 	if (room == null) {
 	    // display error message
-	    Login.showError(message);
+	    Login.showError(true, message);
 	} else {
 	    App.room = room;
-	    Login.showNick();
+	    Login.focusNick();
 	}
     });
 
@@ -174,13 +176,21 @@ App.init = function() {
 	var message = data.message;
 
 	if (room == null) {
-	    Login.showError(message);
+	    // error occured
+	    if (data.errorCode == 2) {
+		// required password
+		Login.showPassword();
+
+	    } else {
+		Login.showError(true, message);
+	    }
 	} else if (room !== 0){
 	    App.room = room;
-	    Login.showNick();
+	    Login.focusNick();
 	} else if (App.room != null) {
 	    App._resetVariables();
-	    Login.showLoginPage();
+	    App.focus(false);
+	    Login.focus(true);
 	}
     });
 
@@ -189,7 +199,7 @@ App.init = function() {
 
 	if (data.users == null) {
 	    // error occured
-	    Login.showError(data.message);
+	    Login.showError(true, data.message);
 	}
 	
 	// display list-label
