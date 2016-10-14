@@ -1,5 +1,146 @@
 var Login = {};
 
+Login.init = function() {
+
+    this._addEnterListener(document.getElementById("join-room-text"),
+	this.join);
+    this._addEnterListener(document.getElementById("create-room-text"),
+	this.create);
+    this._addEnterListener(document.getElementById("nick-text"),
+	this.nick);
+
+    // hover-listener on join/create room articles
+    var rooms = document.getElementsByClassName("rooms");
+    for(var i = 0; i < rooms.length; i++) {
+	rooms[i].addEventListener("mouseover", 
+	    this.focusRoom.bind(this, rooms[i], true));
+	rooms[i].addEventListener("mouseout", 
+	    this.focusRoom.bind(this, rooms[i], false));
+    }
+};
+
+Login.focus = function(focus) {
+    if (focus) {
+	// clear errors
+	this.showError(false);
+
+	// make sure rooms are focused instead of nick
+	this.focusNick(false);
+    }
+
+    // show or hide
+    document.getElementById("login").style.display = 
+	focus ? "block" : "none";
+};
+
+Login.showError = function(show, message) {
+    document.getElementById("login-error-message").innerHTML =
+	show ? message : "";
+    document.getElementById("login-error").style.display = 
+	show ? "block" : "none";
+};
+
+Login.join = function(room=null) {
+
+    // fetch name of room from text or given room
+    if (room == null) {	
+	room = document.getElementById("join-room-text").value;
+    } else {
+	if (room.password) {
+	    this.showPassword()
+	}
+	room = room.name;
+    }
+    
+    // if there is a password
+    password = document.getElementById("join-room-password").value;
+
+    App.join(room, password);
+};
+
+Login.create = function() {
+    App.create(document.getElementById("create-room-text").value,
+	document.getElementById("create-room-password").value,
+	document.getElementById("create-room-private").checked);
+};
+
+Login.nick = function() {
+    App.nick(document.getElementById("nick-text").value);
+};
+
+Login.focusRoom = function(element, focus=true) {
+    
+    // show input
+    var hyperlink = element.children[0];
+    if (focus) {
+	hyperlink.classList.add("shrink");
+	hyperlink.classList.remove("anti-shrink");
+    } else {
+	hyperlink.classList.add("anti-shrink");
+	hyperlink.classList.remove("shrink");
+    }
+    
+    if (element.id == "join")
+        this.focusJoin(element, focus);
+
+
+    this.displayRoomOptions(element, focus);
+};
+
+Login.focusNick = function(focus=true) {
+
+    // show either rooms or nick
+    if (focus) {
+	document.getElementById("join").style.display = "none";
+	document.getElementById("create").style.display = "none";
+	document.getElementById("nick").style.display = "block";
+    } else {
+	document.getElementById("nick").style.display = "none";	
+	document.getElementById("join").style.display = "block";	
+	document.getElementById("create").style.display = "block";
+    }
+}
+
+Login.focusJoin = function(element, focus) {
+    if (focus) {
+	// get available rooms
+	App.rooms();
+
+    } else {
+
+    }
+
+};
+
+Login.displayRoomOptions = function(element, focus) {
+    element.children[3].style.display = focus ? "block" : "none";
+};
+
+Login.showPassword = function(show=true) {
+    document.getElementById("join-room-password").style.display = show ?
+	"block" : "none";
+};
+
+/**
+ * Add listener for enter-keyup.
+ * @param {element} element - Element to add listener to.
+ * @param {function} callback - Function to call when event occurs.
+ */
+Login._addEnterListener = function(element, callback) {
+    element.addEventListener("keyup", function(event) {
+	event.preventDefault();
+	
+	// callback on enter
+	if (event.which == 13) {
+	    callback();
+	}
+    });
+};
+
+/**
+ * Fill the room-list with room-list-items from given list.
+ * @param {Object[]} list - List of the rooms to add.
+ */
 Login.fillRoomList = function(list) {
     
     // get room-list and clear it
@@ -30,7 +171,9 @@ Login._createListItem = function(room) {
     name.appendChild(document.createTextNode(room.name));
     
     var password = document.createElement("div");
-    password.appendChild(document.createTextNode(room.password));
+    password.appendChild(document.createTextNode(
+	room.password ? "Yes" : "No"
+    ));
 
     var users = document.createElement("div");
     users.appendChild(document.createTextNode(room.users));
@@ -40,149 +183,15 @@ Login._createListItem = function(room) {
     item.appendChild(password);
     item.appendChild(users);
 
+    // append a eventlistener
+    item.addEventListener("click", function(event) {
+	if (room.password) {
+	    showPassword(document.getElementById("create-room"));
+	} else {
+	    this.join(room);
+	}
+    });
+
     return item;
 };
 
-Login.showError = function(message) {
-    document.getElementById("login-error-message").innerHTML = message;
-    document.getElementById("login-error").style.display = "block";
-
-    // reenable input fields
-    document.getElementById("nick-text").disabled = false;
-    document.getElementById("nick-text").focus();
-    document.getElementById("join-room-text").disabled = false;
-    document.getElementById("create-room-text").disabled = false;
-};
-
-Login.hideError = function() {
-    document.getElementById("login-error").style.display = "none";
-};
-
-Login.joinRoom = function() {
-    App.joinRoom(document.getElementById("join-room-text").value);
-    document.getElementById("join-room-text").disabled = true;
-    document.getElementById("join-room-button").focus();
-};
-
-Login.createRoom = function() {
-    // try creating room
-    App.createRoom(document.getElementById("create-room-text").value);
-    document.getElementById("create-room-text").disabled = true;
-    document.getElementById("create-room-button").focus();
-};
-
-Login.register = function() {
-
-    // send nick to server
-    App.sendNick(document.getElementById("nick-text").value);
-    
-    // set focus to button and disable text input
-    document.getElementById("nick-text").disabled = true;
-    document.getElementById("nick-button").focus();
-};
-
-Login.showNick = function() {
-    // hide previous errors
-    Login.hideError();
-
-    // hide room buttons
-    var elements = document.getElementsByClassName("rooms");
-    for (var i = 0; i < elements.length; i++) {
-	elements[i].style.display = "none";
-    }
-
-    // show nick entry and focus input
-    document.getElementById("nick").style.display = "block";
-    document.getElementById("nick-text").focus();
-};
-
-Login.showLoginPage = function() {
-
-    // hide previous errors
-    Login.hideError();
-
-    // show login and hide content
-    document.getElementById("content").style.display = "none";
-    document.getElementById("login").style.display = "block";
-
-    // hide nick and show rooms
-    document.getElementById("nick").style.display = "none";
-    var elements = document.getElementsByClassName("rooms");
-    for (var i = 0; i < elements.length; i++) {
-	elements[i].style.display = "block";
-    }
-};
-
-// make the main page visible
-Login.showMainPage = function() {
-    // hide the login page and previous errors
-    document.getElementById("login").style.display = "none";
-    document.getElementById("content").style.display = "block";
-    Login.hideError();
-
-    // set focus to message-box
-    document.getElementById("message").focus();
-};
-
-// add slides to button-covers
-function createSlideButtons(id) {
-    
-    // set focus to input field when hovering over cover
-    document.getElementById(id)
-	.addEventListener("mouseover", function(event) {
-	    // set focus to input
-	    document.getElementById(id + "-text").focus();
-
-	    // show input
-	    this.classList.add("shrink");
-	    this.classList.remove("anti-shrink");
-
-	});
-
-    // when focus is lost of input hide the input again
-    document.getElementById(id + "-text")
-	.addEventListener("blur", function(e) {
-
-	    // hide input
-	    var label = document.getElementById(id);
-	    label.classList.remove("shrink");
-	    label.classList.add("anti-shrink");
-
-	}, true);
-}
-
-// onload
-window.addEventListener("load", function() {
-
-    // create sliding buttons
-    createSlideButtons("join-room");
-    createSlideButtons("create-room");
-
-    // focus text input and 
-    document.getElementById("nick-text").focus();
-    document.getElementById("nick-text")
-	.addEventListener("keyup", function(event) {
-	    event.preventDefault();
-	    if (event.which == 13) {
-		Login.register();
-	    }
-	});
-
-
-    document.getElementById("join-room-text")
-	.addEventListener("keyup", function(event) {
-	    event.preventDefault();
-	    if (event.which == 13) {
-		Login.joinRoom();
-	    }
-	});
-
-
-    document.getElementById("create-room-text")
-	.addEventListener("keyup", function(event) {
-	    event.preventDefault();
-	    if (event.which == 13) {
-		Login.createRoom();
-	    }
-	});
-});
