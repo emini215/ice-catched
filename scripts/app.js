@@ -11,7 +11,7 @@ App.join = function(room, password) {
     App.socket.emit("join", room, password);
 };
 
-App.sendNick = function(nick) {
+App.nick = function(nick) {
     App.socket.emit("nick", nick);
 };
 
@@ -83,7 +83,7 @@ App.undo = function() {
 
 App._resetVariables = function() {
     App.room = null;
-    App.nick = null;
+    App.nickname = null;
     App.active = false;
 };
 
@@ -95,7 +95,7 @@ App.init = function() {
     App.active = false;
 
     // user's nick
-    App.nick = null;
+    App.nickname = null;
     App.room = null;
 
     // loads the socket.io-client and connects
@@ -124,7 +124,7 @@ App.init = function() {
     socket.on("artist", function(artist) {
 
 	// set as artist if server tells you you are artist
-	if (App.nick === artist) {
+	if (App.nickname === artist) {
 	    App.active = true;
 	    App.displayMessage("You are drawing.");
 	} else {
@@ -145,7 +145,7 @@ App.init = function() {
 	}
 	
 	// update nick
-	App.nick = nick;
+	App.nickname = nick;
     });
 
     socket.on("create", function(data) {
@@ -200,18 +200,18 @@ App.init = function() {
     
 	if (data.skipped === data.nick) {
 	    // artist skipped
-	    App.displayMessage((data.nick === App.nick ?
+	    App.displayMessage((data.nick === App.nickname ?
 		"You" : data.nick) + " skipped.");
 
 	} else {
 	    // display who voted to skip and status
-	    App.displayMessage((data.nick === App.nick ?
+	    App.displayMessage((data.nick === App.nickname ?
 		"You" : data.nick) + " voted to skip. (" + 
 		    data.count + "/" + data.total + ")");
 
 	    if (data.code === 0) {
 		// vote was successful	    
-		App.displayMessage((data.skipped === App.nick ? 
+		App.displayMessage((data.skipped === App.nickname ? 
 		    "You were" : data.skipped + " was") + " skippped.");
 	    }
 	}
