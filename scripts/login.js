@@ -193,9 +193,10 @@ Login._createListItem = function(room) {
     // append a eventlistener
     item.addEventListener("click", function(event) {
 	if (room.password) {
-	    showPassword(document.getElementById("create-room"));
+	    // TODO: add password under item instead
+	    Login.showPassword();
 	} else {
-	    this.join(room);
+	    Login.join(room);
 	}
     });
 
