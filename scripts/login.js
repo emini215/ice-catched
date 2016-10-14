@@ -85,6 +85,7 @@ Login.focusRoom = function(element, focus=true) {
     } else {
 	hyperlink.classList.add("anti-shrink");
 	hyperlink.classList.remove("shrink");
+	this.showPassword(false);
     }
     
     if (element.id == "join")
