@@ -258,7 +258,8 @@ footer p:nth-of-type(2) {
     outline: none;
 }
 
-#login article input[type="text"] {
+#login article input[type="text"],
+#login article input[type="password"] {
     z-index: 50;
 
     left: 0;
@@ -282,12 +283,25 @@ footer p:nth-of-type(2) {
     outline: none;
 }
 
+#login article input[type="password"] {
+    box-sizing: border-box;
+    height: 50px;
+    padding: 5px;
+    
+    font-family: "Oswald", "san-serif";
+}
+
 #login article input[type="button"]:hover {
     filter: brightness(80%);
 }
 
 #login article input[type="button"]:focus {
     filter: brightness(60%);
+}
+
+#login label {
+    display: block;
+    padding: 5px;
 }
 
 #login-error {
