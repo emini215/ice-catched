@@ -58,6 +58,10 @@ io.on("connection", function(socket) {
 	}
     });
 
+    socket.on("room", function(name) {
+	socket.emit("room", room(name));
+    });
+
     socket.on("rooms", function() {
 	socket.emit("rooms", getRooms());
     });
@@ -133,6 +137,23 @@ function getRooms() {
 	});
     }
     return list;
+};
+
+function room(name) {
+    var room = roomExists(name);
+    if (!room) {
+	// room doesnt exist
+	return {
+	    room: null,
+	    message: "Room does not exist."
+	};
+    };
+    
+    // otherwise return room-name with bool if passworded
+    return {
+	room: room.name,
+	password: room.password != null
+    };
 };
 
 /**

@@ -28,6 +28,10 @@ App.skip = function() {
     App.socket.emit("skip");
 };
 
+App.room = function(name) {
+    App.socket.emit("room", name);
+};
+
 App.rooms = function() {
     App.socket.emit("rooms");
 };
@@ -122,6 +126,10 @@ App.init = function() {
 	console.log("EXCEPTION: " + error);
 	App.displayError(error);
     });
+
+    socket.on("room", function(data) {
+	// TODO: tell join/create 
+    };
 
     socket.on("rooms", function(list) {
 	// display available rooms, sorted in descending order
