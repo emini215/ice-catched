@@ -50,22 +50,16 @@ Login.showError = function(show, message) {
 	show ? "block" : "none";
 };
 
-Login.join = function(room=null) {
+Login.join = function(room=null, password=null) {
 
-    // fetch name of room from text or given room
-    if (room == null) {	
-	room = document.getElementById("join-room-text").value;
-    } else {
-	if (room.password) {
-	    this.showPassword()
-	}
-	room = room.name;
-    }
-    
-    // if there is a password
+    room = document.getElementById("join-room-text").value;
     password = document.getElementById("join-room-password").value;
 
     App.join(room, password);
+};
+
+Login.room = function(name) {
+    App.room(name);
 };
 
 Login.create = function() {
@@ -113,6 +107,7 @@ Login.focusNick = function(focus=true) {
 
     // show either rooms or nick
     if (focus) {
+	document.getElementById("nick-text").focus();
 	document.getElementById("join").style.display = "none";
 	document.getElementById("create").style.display = "none";
 	document.getElementById("nick").style.display = "block";
@@ -139,8 +134,14 @@ Login.displayRoomOptions = function(element, focus) {
 };
 
 Login.showPassword = function(show=true) {
-    document.getElementById("join-room-password").style.display = show ?
-	"block" : "none";
+    var password = document.getElementById("join-room-password");
+    password.style.display = show ? "block" : "none";
+   
+    // set focus respectively
+    if (show)
+        password.focus();
+    else
+	password.blur();
 };
 
 /**
@@ -198,11 +199,25 @@ Login._createListItem = function(room) {
     var item = document.createElement("div");
     item.className = "room-list-item";
     
+    // room info div
+    var info = document.createElement("div");
+    info.className = "room-list-info";
+
     // create children
     var name = document.createElement("div");
     name.appendChild(document.createTextNode(room.name));
     
     var password = document.createElement("div");
+    var passwordItem = null;
+    if (room.password) {
+	passwordItem = document.createElement("input");
+	passwordItem.type = "password";
+	passwordItem.placeholder = "password";
+	Login._addEnterListener(passwordItem, function() {
+	    App.join(room.name, passwordItem.value);
+	});
+    }
+    
     password.appendChild(document.createTextNode(
 	room.password ? "Yes" : "No"
     ));
@@ -211,17 +226,24 @@ Login._createListItem = function(room) {
     users.appendChild(document.createTextNode(room.users));
     
     // append children
-    item.appendChild(name);
-    item.appendChild(password);
-    item.appendChild(users);
+    info.appendChild(name);
+    info.appendChild(password);
+    info.appendChild(users);
+    item.appendChild(info);
+    if (room.password) { 
+	item.appendChild(passwordItem);
+	item.showPassword = function() {
+	    passwordItem.style.display = "block";
+	    passwordItem.focus();
+	}
+    }
 
     // append a eventlistener
     item.addEventListener("click", function(event) {
 	if (room.password) {
-	    // TODO: add password under item instead
-	    Login.showPassword();
+	    this.showPassword();
 	} else {
-	    Login.join(room);
+	    App.join(room);
 	}
     });
 
