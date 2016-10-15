@@ -139,6 +139,12 @@ function getRooms() {
     return list;
 };
 
+/**
+ * Find out if room exists.
+ * @param {string} name - The name of the room to search for.
+ * @return {Object} - Containing the name of room and if it is passworded if
+ *			successful, otherwise null.
+ */
 function room(name) {
     var room = roomExists(name);
     if (!room) {
