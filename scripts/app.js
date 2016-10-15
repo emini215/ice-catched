@@ -129,7 +129,7 @@ App.init = function() {
 
     socket.on("room", function(data) {
 	// TODO: tell join/create 
-    };
+    });
 
     socket.on("rooms", function(list) {
 	// display available rooms, sorted in descending order
