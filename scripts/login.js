@@ -171,6 +171,16 @@ Login.fillRoomList = function(list) {
 	// create list object and append to list
 	roomList.appendChild(Login._createListItem(room));
     });
+
+    if (roomList.children.length == 0) {
+	// let user know if no visible rooms were found
+	var item = document.createElement("p");
+	item.className = "no-rooms";
+	item.appendChild(document.createTextNode(
+	    "There are no visible rooms."
+	));
+	roomList.appendChild(item);
+    }
 };
 
 /**

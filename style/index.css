@@ -318,6 +318,7 @@ footer p:nth-of-type(2) {
 #join-option-header {
     padding: 10px;
     border-top: 1px solid #262727;
+    border-bottom: 1px solid #262727;
 }
 
 #join-option-header h6 {
@@ -358,8 +359,7 @@ footer p:nth-of-type(2) {
 .room-list-item {
     display: flex;
 
-    border-top: 1px solid #262727;
-    border-bottom: none;
+    border-bottom: 1px solid #262727;
 
     padding: 10px;
 }
@@ -368,10 +368,6 @@ footer p:nth-of-type(2) {
     background-color: #000;
     color: #fff;
     transition: 0.4s;
-}
-
-.room-list-item:last-of-type {
-    border-bottom: 1px solid #262727;
 }
 
 .room-list-item > div {
@@ -388,6 +384,13 @@ footer p:nth-of-type(2) {
 
 .room-list-item > div:nth-of-type(2) {
     flex: 6;
+}
+
+.no-rooms {
+    font-size: 12px;
+    padding: 10px;
+    font-style: "Oswald", "san-serif";
+    font-weight: bold;
 }
 
 .purple {
