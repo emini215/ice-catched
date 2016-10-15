@@ -99,6 +99,9 @@ Login.focusRoom = function(element, focus=true) {
     
     if (element.id == "join") {
         this.focusJoin(element, focus);
+    }
+
+    if (element.id == "join" || !focus) {
         this.displayRoomOptions(element, focus);
     }
 };
