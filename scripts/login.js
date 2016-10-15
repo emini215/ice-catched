@@ -86,6 +86,9 @@ Login.focusRoom = function(element, focus=true) {
     // otherwise update status
     element.focused = focus;
 
+    // set focus to input
+    element.children[1].focus();
+
     // show input
     var hyperlink = element.children[0];
     if (focus) {
