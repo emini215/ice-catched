@@ -128,7 +128,7 @@ function getRooms() {
 
 	list.push({
 	    name: rooms[i].name,
-	    password: (rooms[i].password != null),
+	    password: rooms[i].password != null,
 	    users: rooms[i].users.length
 	});
     }
