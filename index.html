@@ -28,11 +28,17 @@
 		<input id="join-room-text" type="text" placeholder="#room"/>
 		<input id="join-room-button" type="button" value="OK"
 		    class="purple" onclick="Login.join();"/>
+
 		<div id="join-room-options" class="purple">
 		    <input id="join-room-password" type="password" 
 			placeholder="password"/>
-		    <a id="update-rooms" href="#" 
-			onclick="App.rooms()">Update</a>
+		    
+		    <div id="join-option-header">
+			<h6>Available rooms</h6>
+			<a id="update-rooms" href="#" 
+			    onclick="App.rooms()">Update</a>
+		    </div>
+
 		    <div id="room-list">
 			<!-- visible rooms -->
 		    </div>
