@@ -5,9 +5,13 @@ Login.init = function() {
     this._addEnterListener(document.getElementById("join-room-text"),
 	this.join);
     this._addEnterListener(document.getElementById("create-room-text"),
-	this.create);
+	this.createRoom);
     this._addEnterListener(document.getElementById("nick-text"),
 	this.nick);
+    this._addEnterListener(document.getElementById("create-room-password"),
+	this.create);
+    this._addEnterListener(document.getElementById("join-room-password"),
+	this.join);
 
     // hover-listener on join/create room articles
     var rooms = document.getElementsByClassName("rooms");
@@ -18,6 +22,11 @@ Login.init = function() {
 	rooms[i].addEventListener("mouseout", 
 	    this.focusRoom.bind(this, rooms[i], false));
     }
+};
+
+Login.createRoom = function() {
+    Login.displayRoomOptions(document.getElementById("create"), true);
+    document.getElementById("create-room-password").focus();
 };
 
 Login.focus = function(focus) {
@@ -88,11 +97,10 @@ Login.focusRoom = function(element, focus=true) {
 	this.showPassword(false);
     }
     
-    if (element.id == "join")
+    if (element.id == "join") {
         this.focusJoin(element, focus);
-
-
-    this.displayRoomOptions(element, focus);
+        this.displayRoomOptions(element, focus);
+    }
 };
 
 Login.focusNick = function(focus=true) {
