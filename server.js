@@ -166,7 +166,7 @@ function join(socket, name, password) {
     }
    
     var room = roomExists(name);
-    if (room == null) {
+    if (!room) {
 	// room does not exist
 	return {
 	    room: null,
@@ -254,7 +254,7 @@ function create(socket, name, password, visible) {
 	password = null;
     }
     
-    if (roomExists(name) != null) {
+    if (!!roomExists(name)) {
 	// room already exists
 	return {
 	    room: null,
@@ -777,7 +777,7 @@ function nickIsTaken(nick, room) {
 /**
  * Check if the room exists.
  * @param {string} room - The name of room to check whether exists.
- * @return {undefined|Object} - Either undefined or the room found.
+ * @return {false|Object} - Either false or the room found.
  */
 function roomExists(room) {
     
@@ -786,7 +786,8 @@ function roomExists(room) {
 	return false;
 
     // otherwise rooms exist if there are a room with given name
-    return rooms.find(function(other) { return other.name===room; });
+    var room = rooms.find(function(other) { return other.name==room; });
+    return room === undefined ? false : room;
 };
 
 /**
