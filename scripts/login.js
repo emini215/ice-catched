@@ -185,10 +185,10 @@ Login.focusNick = function(focus=true) {
 
     // show either rooms or nick
     if (focus) {
-	document.getElementById("nick-text").focus();
 	document.getElementById("join").style.display = "none";
 	document.getElementById("create").style.display = "none";
 	document.getElementById("nick").style.display = "block";
+ 	document.getElementById("nick-text").focus();
     } else {
 	document.getElementById("create-room-password").onclick = 
 	    this.room.bind(
