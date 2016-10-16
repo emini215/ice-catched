@@ -2,7 +2,6 @@ var App = {};
 
 // send a request to create a room with given name
 App.create = function(room, password, visible) {
-    // TODO: Make it possible to send password and private
     App.socket.emit("create", room, password, visible);
 };
 

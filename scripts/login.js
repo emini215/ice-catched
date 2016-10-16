@@ -1,28 +1,34 @@
 var Login = {};
 
 Login.init = function() {
-    this._addEnterListener(
-	document.getElementById("join-room-text"), 
-	Login.room.bind(
-	    this,
-	    document.getElementById("join-room-text"),
-	    Login.joinCallback
+
+    this._addKeyUpListener(document.getElementById("join-room-password"), 
+	Login.onKeyUp(this.join, this.focusJoin));
+    this._addKeyUpListener(document.getElementById("create-room-password"), 
+	Login.onKeyUp(this.create, this.focusCreate));
+    
+    this._addKeyUpListener(document.getElementById("join-room-text"), 
+	this.onKeyUp(
+	    Login.room.bind(
+		this, 
+		document.getElementById("join-room-text"),
+		Login.joinCallback
+	    )
 	)
     );
-    this._addEnterListener(
-	document.getElementById("create-room-text"), 
-	Login.room.bind(
-	    this,
-	    document.getElementById("create-room-text"), 
-	    Login.createCallback
+    
+    this._addKeyUpListener(document.getElementById("create-room-text"), 
+	this.onKeyUp(
+	    Login.room.bind(
+		this, 
+		document.getElementById("create-room-text"),
+		Login.createCallback
+	    )
 	)
     );
-    this._addEnterListener(document.getElementById("nick-text"),
-	this.nick);
-    this._addEnterListener(document.getElementById("create-room-password"),
-	this.create);
-    this._addEnterListener(document.getElementById("join-room-password"),
-	this.join);
+
+    this._addKeyUpListener(document.getElementById("nick-text"),
+	Login.onKeyUp(this.nick, Login.focus.bind(this, true)));
 
     document.getElementById("join-room-button").onclick =
 	Login.room.bind(
@@ -47,6 +53,18 @@ Login.init = function() {
 	rooms[i].addEventListener("mouseleave", 
 	    this.focusRoom.bind(this, rooms[i], false));
     }
+};
+
+Login.onKeyUp = function(enterFunc, escapeFunc) {
+    return function(keyCode) {
+	if (escapeFunc != null && keyCode == 27) {
+	    // ESC
+	    escapeFunc();
+	} else if (enterFunc != null && keyCode == 13) {
+	    // ENTER
+	    enterFunc();
+	}
+    };
 };
 
 Login.createCallback = function(data) {
@@ -81,6 +99,7 @@ Login.joinCallback = function(data) {
 Login.createRoom = function() {
     Login.displayRoomOptions(document.getElementById("create"), true);
     document.getElementById("create-room-text").style.display = "none";
+    document.getElementById("create-room-password").style.display = "block";
     document.getElementById("create-room-password").focus();
     document.getElementById("create-room-button").onclick = this.create;
 };
@@ -199,6 +218,7 @@ Login.focusJoin = function() {
 
 Login.focusCreate = function() {
     var text = document.getElementById("create-room-text");
+    document.getElementById("create-room-password").style.display = "none";
     text.style.display = "block";
     text.disabled = false;
     text.focus();
@@ -231,18 +251,14 @@ Login.showPassword = function(show=true) {
 };
 
 /**
- * Add listener for enter-keyup.
+ * Add listener for keyup.
  * @param {element} element - Element to add listener to.
  * @param {function} callback - Function to call when event occurs.
  */
-Login._addEnterListener = function(element, callback) {
+Login._addKeyUpListener = function(element, callback) {
     element.addEventListener("keyup", function(event) {
 	event.preventDefault();
-	
-	// callback on enter
-	if (event.which == 13) {
-	    callback();
-	}
+	callback(event.keyCode);
     });
 };
 
@@ -295,15 +311,6 @@ Login._createListItem = function(room) {
     name.appendChild(document.createTextNode(room.name));
     
     var password = document.createElement("div");
-    var passwordItem = null;
-    if (room.password) {
-	passwordItem = document.createElement("input");
-	passwordItem.type = "password";
-	passwordItem.placeholder = "password";
-	Login._addEnterListener(passwordItem, function() {
-	    App.join(room.name, passwordItem.value);
-	});
-    }
     
     password.appendChild(document.createTextNode(
 	room.password ? "Yes" : "No"
@@ -318,11 +325,28 @@ Login._createListItem = function(room) {
     info.appendChild(users);
     item.appendChild(info);
     if (room.password) { 
+	var passwordItem = document.createElement("input");
+	passwordItem.type = "password";
+	passwordItem.placeholder = "password";
+	
 	item.appendChild(passwordItem);
 	item.showPassword = function(bool) {
 	    passwordItem.style.display = bool ? "block" : "none";
-	    passwordItem.focus();
+	    if (bool)
+		passwordItem.focus();
+	    else
+		passwordItem.blur();
 	}
+	passwordItem.addEventListener("keyup", function(event) {
+	    event.preventDefault();
+	    if (event.keyCode == 13) {
+		// enter
+		App.join(room.name, passwordItem.value);
+	    } else if (event.keyCode == 27) {
+		// esc
+		item.showPassword(false);
+	    }
+	});
     }
 
     // append a eventlistener
