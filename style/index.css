@@ -287,7 +287,11 @@ footer p:nth-of-type(2) {
     box-sizing: border-box;
     height: 50px;
     padding: 5px;
-    
+
+    position: absolute;
+    top: 0;
+    z-index: 30;
+
     font-family: "Oswald", "san-serif";
 }
 

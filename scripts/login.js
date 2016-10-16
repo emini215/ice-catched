@@ -75,6 +75,7 @@ Login.joinCallback = function(data) {
 
 Login.createRoom = function() {
     Login.displayRoomOptions(document.getElementById("create"), true);
+    document.getElementById("create-room-text").style.display = "none";
     document.getElementById("create-room-password").focus();
     document.getElementById("create-room-button").onclick = this.create;
 };
@@ -142,8 +143,10 @@ Login.focusRoom = function(element, focus=true) {
     }
     
     if (element.id == "join") {
-        this.focusJoin(element, focus);
+        this.focusJoin();
 	App.rooms();
+    } else {
+	this.focusCreate();
     }
 
     if (element.id == "join" || !focus) {
@@ -183,6 +186,7 @@ Login.focusNick = function(focus=true) {
 
 Login.focusJoin = function() {
     var text = document.getElementById("join-room-text");
+    document.getElementById("join-room-password").style.display = "none";
     text.style.display = "block";
     text.disabled = false;
     text.focus();
