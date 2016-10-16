@@ -35,7 +35,7 @@ Login.init = function() {
 	Login.room.bind(
 	    this,
 	    document.getElementById("create-room-text"),
-	    Login.joinCallback
+	    Login.createCallback
 	);
 
 
