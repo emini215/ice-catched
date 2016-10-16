@@ -104,7 +104,7 @@ App.init = function() {
     // whether or not its clients turn to draw
     App.active = false;
 
-    // user's nick
+    // user's nick and room
     App.nickname = null;
     App.currentRoom = null;
 
@@ -182,7 +182,6 @@ App.init = function() {
     socket.on("join", function(data) {
 	var room = data.room;
 	var message = data.message;
-
 	if (room == null) {
 	    // error occured
 	    if (data.errorCode == 2) {
@@ -192,10 +191,10 @@ App.init = function() {
 	    } else {
 		Login.showError(true, message);
 	    }
-	} else if (room !== 0){
+	} else if (room !== 0) {
 	    App.currentRoom = room;
 	    Login.focusNick();
-	} else if (App.currrentRoom != null) {
+	} else if (App.currentRoom != null) {
 	    App._resetVariables();
 	    App.focus(false);
 	    Login.focus(true);
