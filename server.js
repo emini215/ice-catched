@@ -499,7 +499,8 @@ function skip(socket) {
  * @param {Object} [room] - The room which's history to send.
  */
 function sendHistory(socket, room) {
-    room = room || socket.room;
+    if (room == null)
+	room = socket.room;
 
     if (room.history == null) {
 	// server error
@@ -507,7 +508,10 @@ function sendHistory(socket, room) {
     }
 
     for (var line in room.history) {
-        socket.emit("draw", JSON.stringify(room.history[line]));
+	if (socket.room != null)
+	    socket.emit("draw", JSON.stringify(room.history[line]));
+	else
+	    io.to(room.name).emit("draw", JSON.stringify(room.history[line]));
     }
 };
 
