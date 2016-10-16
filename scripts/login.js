@@ -257,12 +257,7 @@ Login.fillRoomList = function(list) {
     while (roomList.firstChild)
 	roomList.removeChild(roomList.firstChild);
 
-    list.forEach(function(room) {
-	// create list object and append to list
-	roomList.appendChild(Login._createListItem(room));
-    });
-
-    if (roomList.children.length == 0) {
+    if (list.length == 0) {
 	// let user know if no visible rooms were found
 	var item = document.createElement("p");
 	item.className = "no-rooms";
@@ -270,7 +265,13 @@ Login.fillRoomList = function(list) {
 	    "There are no visible rooms."
 	));
 	roomList.appendChild(item);
-    }
+    } else {
+	// add all rooms
+	list.forEach(function(room) {
+	   // create list object and append to list
+	    roomList.appendChild(Login._createListItem(room));
+	});
+}
 };
 
 /**
