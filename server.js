@@ -813,7 +813,7 @@ function roomExists(room) {
 	return false;
 
     // otherwise rooms exist if there are a room with given name
-    var room = rooms.find(function(other) { return other.name==room; });
+    room = rooms.find(function(other) { return other.name==room; });
     return room === undefined ? false : room;
 };
 
