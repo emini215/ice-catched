@@ -306,7 +306,7 @@ function create(socket, name, password, visible) {
     }
 
     // everything fine, create the room and return
-    room = {};
+    var room = {};
     room.name = name;
     room.password = password;
     room.visible = visible;
