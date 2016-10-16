@@ -64,12 +64,17 @@ Login.joinCallback = function(data) {
 	// room does not exist
 	Login.focusJoin();
 	Login.showError(true, "The room does not exist.");
-    } else if (data.password) { 
-	// password required
-	Login.showPassword();
-    } else {
-	// nothing more needed, just join
-	Login.join();
+    } else { 
+	// remove previous errors
+	Login.showError(false);
+
+	if (data.password) { 
+	    // password required
+	    Login.showPassword();
+	} else {
+	    // nothing more needed, just join
+	    Login.join();
+	}
     }
 };
 
