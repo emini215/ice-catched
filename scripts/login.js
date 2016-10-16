@@ -42,7 +42,6 @@ Login.init = function() {
     // hover-listener on join/create room articles
     var rooms = document.getElementsByClassName("rooms");
     for(var i = 0; i < rooms.length; i++) {
-	rooms[i].focused = false;
 	rooms[i].addEventListener("mouseenter", 
 	    this.focusRoom.bind(this, rooms[i], true));
 	rooms[i].addEventListener("mouseleave", 
@@ -124,9 +123,6 @@ Login.nick = function() {
 };
 
 Login.focusRoom = function(element, focus=true) {
-    // no need to do anything if already focused
-    if (focus == element.focused)
-	return;
     
     // otherwise update status
     element.focused = focus;
