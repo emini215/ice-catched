@@ -445,7 +445,7 @@ function skip(socket) {
 	};
     }
 
-    if (room.skip[socket.room.users.indexOf(socket.nick)] === 1) {
+    if (socket.room.skip[socket.room.users.indexOf(socket.nick)] === 1) {
 	// user already skipped
 	return {
 	    statusCode: -1,
@@ -454,7 +454,7 @@ function skip(socket) {
     } 
 
     // set skip of user
-    room.skip[socket.room.users.indexOf(socket.nick)] = 1;
+    socket.room.skip[socket.room.users.indexOf(socket.nick)] = 1;
 
     if (isMajority(socket.room)) {
 	// majority of the users skipped, accepted
