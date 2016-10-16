@@ -52,10 +52,11 @@ Login.init = function() {
 
 Login.createCallback = function(data) {
     if (data.room == null) {
-	this.createRoom();
+	Login.showError(false);
+	Login.createRoom();
     } else {
-	this.focusCreate();
-	this.showError(true, "There is already a room with given name.");
+	Login.focusCreate();
+	Login.showError(true, "There is already a room with given name.");
     }
 };
 
