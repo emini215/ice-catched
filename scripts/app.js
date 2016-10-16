@@ -192,7 +192,7 @@ App.init = function() {
 	    }
 	} else if (room !== 0) {
 	    App.currentRoom = room;
-	    Login.focusNick();
+	    Login.focusNick(true);
 	} else if (App.currentRoom != null) {
 	    App._resetVariables();
 	    App.focus(false);
