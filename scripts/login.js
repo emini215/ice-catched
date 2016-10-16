@@ -318,8 +318,8 @@ Login._createListItem = function(room) {
     item.appendChild(info);
     if (room.password) { 
 	item.appendChild(passwordItem);
-	item.showPassword = function() {
-	    passwordItem.style.display = "block";
+	item.showPassword = function(bool) {
+	    passwordItem.style.display = bool ? "block" : "none";
 	    passwordItem.focus();
 	}
     }
@@ -327,10 +327,15 @@ Login._createListItem = function(room) {
     // append a eventlistener
     item.addEventListener("click", function(event) {
 	if (room.password) {
-	    this.showPassword();
+	    this.showPassword(true);
 	} else {
 	    App.join(room.name);
 	}
+    });
+
+    item.addEventListener("mouseleave", function(event) {
+	if (room.password)
+	    this.showPassword(false);
     });
 
     return item;

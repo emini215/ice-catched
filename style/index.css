@@ -258,8 +258,9 @@ footer p:nth-of-type(2) {
     outline: none;
 }
 
-#login article input[type="text"],
-#login article input[type="password"] {
+#create-room-options input[type="password"],
+#login article > input[type="text"],
+#login article > input[type="password"] {
     z-index: 50;
 
     left: 0;
@@ -269,7 +270,7 @@ footer p:nth-of-type(2) {
     color: #262727;
 }
 
-#login article input[type="button"] {
+#login article > input[type="button"] {
     z-index: 50;
 
     min-width: 20%;
@@ -283,7 +284,8 @@ footer p:nth-of-type(2) {
     outline: none;
 }
 
-#login article input[type="password"] {
+#create-room-options input[type="password"],
+#login article > input[type="password"] {
     box-sizing: border-box;
     height: 50px;
     padding: 5px;
@@ -396,7 +398,11 @@ footer p:nth-of-type(2) {
 
 .room-list-item input[type="password"] {
     display: none;
-    height: 50px;
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px;
+    box-sizing: border-box;
+    font-family: "Oswald", "san-serif";
 }
 
 .no-rooms {
