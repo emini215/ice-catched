@@ -258,6 +258,7 @@ footer p:nth-of-type(2) {
     outline: none;
 }
 
+#join-room-options > input[type="password"],
 #create-room-options input[type="password"],
 #login article > input[type="text"],
 #login article > input[type="password"] {
@@ -284,6 +285,7 @@ footer p:nth-of-type(2) {
     outline: none;
 }
 
+#join-room-options > input[type="password"],
 #create-room-options input[type="password"],
 #login article > input[type="password"] {
     box-sizing: border-box;
