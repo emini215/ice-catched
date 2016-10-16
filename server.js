@@ -70,9 +70,10 @@ io.on("connection", function(socket) {
 	var firstTime = socket.nick == null;
 
 	// respond to nick-register
-	socket.emit("nick", nick(socket, name));
+	var res =  nick(socket, name);
+	socket.emit("nick", res);
 
-	if (firstTime) {
+	if (res.statusCode == 0 && firstTime) {
 	    // try to start the game and tell client who is the current 
 	    // artist, if the game was not started the client becomes 
 	    // the artist
@@ -337,6 +338,7 @@ function nick(socket, nick) {
 	// nick is not correct
 	return {
 	    nick: socket.nick,
+	    statusCode: -1,
 	    message: "The nick must be of type string and at least" + 
 		" 3 characters long."
 	};
@@ -346,6 +348,7 @@ function nick(socket, nick) {
 	// the nick is already taken
 	return {
 	    nick: socket.nick,
+	    statusCode: -1,
 	    message: "The nick is already taken."
 	};
     }
@@ -372,7 +375,8 @@ function nick(socket, nick) {
     socket.nick = nick;
 
     return {
-	nick: nick
+	nick: nick,
+	statusCode: 0
     };
 };
 
