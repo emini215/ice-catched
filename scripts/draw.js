@@ -98,11 +98,20 @@ Draw._mouseDown = function(event) {
 
     var rect = Draw.canvas.getBoundingClientRect();
     var e = {};
-    e.type = event.type;
-    e.clientX = (event.clientX - rect.left) / 
-	(rect.right - rect.left) * Draw.canvas.width;
-    e.clientY = (event.clientY - rect.top) / 
-	(rect.bottom - rect.top) * Draw.canvas.height;
+    e.type = "mousedown";
+    if (event.type == "mousedown") {
+	e.clientX = (event.clientX - rect.left) / 
+	    (rect.right - rect.left) * Draw.canvas.width;
+	e.clientY = (event.clientY - rect.top) / 
+	    (rect.bottom - rect.top) * Draw.canvas.height;
+    } else {
+	// set from touch
+	e.clientX = event.PageX;
+	e.clientY = event.PageY;
+	
+	// also set focus to canvas
+	Draw.canvas.focus();
+     }
 
     // start line and emit to other clients
     Draw._drawDown(e);
@@ -122,7 +131,7 @@ Draw._mouseUp = function(event) {
     // stop drawing and send to server
     Draw._drawUp(event); 
     App.draw(JSON.stringify({
-	"type": event.type
+	"type": "mouseup"
     }));
 };
 
@@ -133,12 +142,17 @@ Draw._mouseMove = function(event) {
 
     var rect = Draw.canvas.getBoundingClientRect();
     var e = {};
-    e.type = event.type;
-    e.clientX = (event.clientX - rect.left) / 
-	(rect.right - rect.left) * Draw.canvas.width;
-    e.clientY = (event.clientY - rect.top) / 
-	(rect.bottom - rect.top) * Draw.canvas.height;
-
+    e.type = "mousemove"; 
+    if (event.type =="mousemove") {
+	e.clientX = (event.clientX - rect.left) / 
+	    (rect.right - rect.left) * Draw.canvas.width;
+	e.clientY = (event.clientY - rect.top) / 
+	    (rect.bottom - rect.top) * Draw.canvas.height;
+    } else {
+	// use touch-screen properties
+	e.clientX = event.PageX;
+	e.ClienyY = event.PageY;
+    }
     // draw the move and emit object to other clients
     Draw._drawMove(e);
     App.draw(JSON.stringify({
