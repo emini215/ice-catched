@@ -64,6 +64,11 @@ Draw._addEventListeners = function() {
 	Draw.canvas.addEventListener("mouseup", Draw._mouseUp);
 	Draw.canvas.addEventListener("mousemove", Draw._mouseMove);
 	Draw.canvas.addEventListener("keyup", Draw._keyUp);
+	
+	// touch-screen support
+	Draw.canvas.addEventListener("touchstart", Draw._mouseDown);
+	Draw.canvas.addEventListener("touchend", Draw._mouseUp);
+	Draw.canvas.addEventListener("touchmove", Draw._mouseMove);
     }
     else if (document.attachEvent) {
 	// for cross-browser support IE8-
@@ -71,6 +76,10 @@ Draw._addEventListeners = function() {
 	Draw.canvas.attachEvent("mouseup", Draw._mouseUp);
 	Draw.canvas.attachEvent("mousemove", Draw._mouseMove);
 	Draw.canvas.attachEvent("keyup", Draw._keyUp);
+
+	Draw.canvas.attachEvent("touchstart", Draw._mouseDown);
+	Draw.canvas.attachEvent("touchend", Draw._mouseUp);
+	Draw.canvas.attachEvent("touchmove", Draw._mouseMove);
     }
 };
 
