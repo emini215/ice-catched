@@ -240,6 +240,7 @@ function join(socket, name, password) {
  */
 function leave(socket) {
 
+    socket.leave(socket.room.name);
     if (socket.room.users.length === 1) {
 	// if the user is only one in the room delete it
 	rooms =	rooms.filter(function(other) { 
