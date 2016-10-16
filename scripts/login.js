@@ -43,9 +43,9 @@ Login.init = function() {
     var rooms = document.getElementsByClassName("rooms");
     for(var i = 0; i < rooms.length; i++) {
 	rooms[i].focused = false;
-	rooms[i].addEventListener("mouseover", 
+	rooms[i].addEventListener("mouseenter", 
 	    this.focusRoom.bind(this, rooms[i], true));
-	rooms[i].addEventListener("mouseout", 
+	rooms[i].addEventListener("mouseleave", 
 	    this.focusRoom.bind(this, rooms[i], false));
     }
 };
