@@ -7,7 +7,6 @@ App.create = function(room, password, visible) {
 };
 
 App.join = function(room, password) {
-    // TODO: make it possible to enter password
     App.socket.emit("join", room, password);
 };
 
@@ -28,7 +27,8 @@ App.skip = function() {
     App.socket.emit("skip");
 };
 
-App.room = function(name) {
+App.room = function(name, callback) {
+    App.roomCallback = callback;
     App.socket.emit("room", name);
 };
 
@@ -91,7 +91,7 @@ App.undo = function() {
 };
 
 App._resetVariables = function() {
-    App.room = null;
+    App.currentRoom = null;
     App.nickname = null;
     App.active = false;
 };
@@ -106,7 +106,7 @@ App.init = function() {
 
     // user's nick
     App.nickname = null;
-    App.room = null;
+    App.currentRoom = null;
 
     // loads the socket.io-client and connects
     var socket = io();
@@ -128,7 +128,7 @@ App.init = function() {
     });
 
     socket.on("room", function(data) {
-	// TODO: tell join/create 
+	App.roomCallback(data);
     });
 
     socket.on("rooms", function(list) {
@@ -174,7 +174,7 @@ App.init = function() {
 	    // display error message
 	    Login.showError(true, message);
 	} else {
-	    App.room = room;
+	    App.currentRoom = room;
 	    Login.focusNick();
 	}
     });
@@ -193,9 +193,9 @@ App.init = function() {
 		Login.showError(true, message);
 	    }
 	} else if (room !== 0){
-	    App.room = room;
+	    App.currentRoom = room;
 	    Login.focusNick();
-	} else if (App.room != null) {
+	} else if (App.currrentRoom != null) {
 	    App._resetVariables();
 	    App.focus(false);
 	    Login.focus(true);

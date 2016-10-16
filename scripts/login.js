@@ -1,17 +1,43 @@
 var Login = {};
 
 Login.init = function() {
-
-    this._addEnterListener(document.getElementById("join-room-text"),
-	this.join);
-    this._addEnterListener(document.getElementById("create-room-text"),
-	this.createRoom);
+    this._addEnterListener(
+	document.getElementById("join-room-text"), 
+	Login.room.bind(
+	    this,
+	    document.getElementById("join-room-text"),
+	    Login.joinCallback
+	)
+    );
+    this._addEnterListener(
+	document.getElementById("create-room-text"), 
+	Login.room.bind(
+	    this,
+	    document.getElementById("create-room-text"), 
+	    Login.createCallback
+	)
+    );
     this._addEnterListener(document.getElementById("nick-text"),
 	this.nick);
     this._addEnterListener(document.getElementById("create-room-password"),
 	this.create);
     this._addEnterListener(document.getElementById("join-room-password"),
 	this.join);
+
+    document.getElementById("join-room-button").onclick =
+	Login.room.bind(
+	    this,
+	    document.getElementById("join-room-text"),
+	    Login.joinCallback
+	);
+
+    document.getElementById("create-room-button").onclick =
+	Login.room.bind(
+	    this,
+	    document.getElementById("create-room-text"),
+	    Login.joinCallback
+	);
+
 
     // hover-listener on join/create room articles
     var rooms = document.getElementsByClassName("rooms");
@@ -24,9 +50,33 @@ Login.init = function() {
     }
 };
 
+Login.createCallback = function(data) {
+    if (data.room == null) {
+	this.createRoom();
+    } else {
+	this.focusCreate();
+	this.showError(true, "There is already a room with given name.");
+    }
+};
+
+Login.joinCallback = function(data) {
+    if (data.room == null) {
+	// room does not exist
+	Login.focusJoin();
+	Login.showError(true, "The room does not exist.");
+    } else if (data.password) { 
+	// password required
+	Login.showPassword();
+    } else {
+	// nothing more needed, just join
+	Login.join();
+    }
+};
+
 Login.createRoom = function() {
     Login.displayRoomOptions(document.getElementById("create"), true);
     document.getElementById("create-room-password").focus();
+    document.getElementById("create-room-button").onclick = this.create;
 };
 
 Login.focus = function(focus) {
@@ -50,17 +100,17 @@ Login.showError = function(show, message) {
 	show ? "block" : "none";
 };
 
-Login.join = function(room=null, password=null) {
-
+Login.join = function() {
     room = document.getElementById("join-room-text").value;
     password = document.getElementById("join-room-password").value;
 
     App.join(room, password);
 };
 
-Login.room = function(name) {
-    App.room(name);
-};
+Login.room = function(element, callback) {
+    element.disabled = true;
+    App.room(element.value, callback);
+}
 
 Login.create = function() {
     App.create(document.getElementById("create-room-text").value,
@@ -81,6 +131,7 @@ Login.focusRoom = function(element, focus=true) {
     element.focused = focus;
 
     // set focus to input
+    element.children[1].disabled = false;
     element.children[1].focus();
 
     // show input
@@ -91,11 +142,11 @@ Login.focusRoom = function(element, focus=true) {
     } else {
 	hyperlink.classList.add("anti-shrink");
 	hyperlink.classList.remove("shrink");
-	this.showPassword(false);
     }
     
     if (element.id == "join") {
         this.focusJoin(element, focus);
+	App.rooms();
     }
 
     if (element.id == "join" || !focus) {
@@ -105,6 +156,9 @@ Login.focusRoom = function(element, focus=true) {
 
 Login.focusNick = function(focus=true) {
 
+    // hide previous errors
+    Login.showError(false);
+
     // show either rooms or nick
     if (focus) {
 	document.getElementById("nick-text").focus();
@@ -112,22 +166,38 @@ Login.focusNick = function(focus=true) {
 	document.getElementById("create").style.display = "none";
 	document.getElementById("nick").style.display = "block";
     } else {
+	document.getElementById("create-room-password").onclick = 
+	    this.room.bind(
+		null,
+		document.getElementById("create-room-text"),
+		Login.createCallBack
+	    );	
+	document.getElementById("join-room-password").onclick = 
+	    this.room.bind(
+		null,
+		document.getElementById("join-room-text"),
+		Login.joinCallback
+	    );
 	document.getElementById("nick").style.display = "none";	
 	document.getElementById("join").style.display = "block";	
 	document.getElementById("create").style.display = "block";
     }
 }
 
-Login.focusJoin = function(element, focus) {
-    if (focus) {
-	// get available rooms
-	App.rooms();
-
-    } else {
-
-    }
-
+Login.focusJoin = function() {
+    var text = document.getElementById("join-room-text");
+    text.style.display = "block";
+    text.disabled = false;
+    text.focus();
 };
+
+Login.focusCreate = function() {
+    var text = document.getElementById("create-room-text");
+    text.style.display = "block";
+    text.disabled = false;
+    text.focus();
+};
+
 
 Login.displayRoomOptions = function(element, focus) {
     element.children[3].style.display = focus ? "block" : "none";
@@ -135,13 +205,23 @@ Login.displayRoomOptions = function(element, focus) {
 
 Login.showPassword = function(show=true) {
     var password = document.getElementById("join-room-password");
+    var button = document.getElementById("join-room-button");
+    var text = document.getElementById("join-room-text");
     password.style.display = show ? "block" : "none";
+    text.style.display = show ?
+	"none" : "block";
    
-    // set focus respectively
-    if (show)
+    // set focus respectively and set button to respond same
+    if (show) {
         password.focus();
-    else
+	button.onclick = this.join;
+    } else {
 	password.blur();
+	button.onclick = this.room.bind(
+	    null,
+	    text, 
+	    Login.joinCallback);
+    }
 };
 
 /**
@@ -243,7 +323,7 @@ Login._createListItem = function(room) {
 	if (room.password) {
 	    this.showPassword();
 	} else {
-	    App.join(room);
+	    App.join(room.name);
 	}
     });
 
