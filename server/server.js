@@ -1,26 +1,13 @@
-var express = require("express");
-var app = express();
-var http = require("http").Server(app);
-var io = require("socket.io")(http);
-
-// port used to serve files
-var PORT = 3000;
-
-// as this is a single-page application this is the only
-// html-file that will be served
-app.get("/", function(req, res) {
-    res.sendFile(__dirname + "/client/index.html");
-});
-
-// set path for serving scripts and style
-app.use("/scripts", express.static(__dirname + "/client/scripts"));
-app.use("/style", express.static(__dirname + "/client/style"));
+var socketio = require("socket.io")(http);
 
 // history of drawn lines
 var rooms = [];
 
 // main function for handling connection to client
-io.on("connection", function(socket) {
+module.exports.listen = function(http) {
+    io = socketio.listen(http);
+
+    io.on("connection", function(socket) {
 
     // reactions on messages
     socket.on("help", function(data){});
@@ -118,6 +105,7 @@ io.on("connection", function(socket) {
     });
 
 });
+};
 
 /**
  * Find all visible rooms.
@@ -836,8 +824,4 @@ function roomExists(room) {
 function passwordMatch(password, room) {
     return room.password == password;
 };
-
-http.listen(PORT, function() {
-    console.log("Listening on port " + PORT + ".");
-});
 
