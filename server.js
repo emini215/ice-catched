@@ -7,12 +7,12 @@ var io = require("socket.io")(http);
 // as this is a single-page application this is the only
 // html-file that will be served
 app.get("/", function(req, res) {
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/client/index.html");
 });
 
 // set path for serving scripts and style
-app.use("/scripts", express.static(__dirname + "/scripts"));
-app.use("/style", express.static(__dirname + "/style"));
+app.use("/scripts", express.static(__dirname + "/client/scripts"));
+app.use("/style", express.static(__dirname + "/client/style"));
 
 // history of drawn lines
 var rooms = [];
