@@ -360,10 +360,18 @@ function nick(socket, nick) {
 	console.log(socket.room.name + "@" + nick + " joined this room.");
     } else {
 	// rename user
-	renameUser(nick, socket.room);
-
-	// message room
-	messageRoom(socket.room, socket.nick + " is now called: " + nick);
+	if (socket.room.renameUser(socket.nick, nick)) {
+	    // message room
+	    messageRoom(socket.room, socket.nick + " is now called: " + nick); 
+	} else {
+	    // else nick was taken or not a member of the room.
+	    // (where the first is the only one which should be possible)
+	    return {
+		nick: socket.nick,
+		statusCode: -1,
+		message: "Could not change to given name."
+	    };
+	} 
     }
 
     // update socket.nick
@@ -544,7 +552,7 @@ function sendMessage(socket, message) {
  * @return {Object} - Containing "statusCode" set to 0 if successful.
  */
 function draw(socket, data) {
-    
+
     if (!isArtist(socket)) {
 	// the user is not artist
 	return {
@@ -678,20 +686,6 @@ function skipCount(room) {
  */
 function isMajority(room) {
     return skipCount(room) > room.skip.length/2;
-};
-
-/**
- * Rename the user.
- * @param {string} prev - The previous name of the user.
- * @param {string} next - The new name of the user.
- * @param {Object} room - The room to change user's name in.
- * @param {string[]} room.users - A list of users in the room.
- */
-function renameUser(prev, next, room) {
-    var index = room.users.indexOf(prev);
-
-    if (index !== -1)
-	room[index] = next;
 };
 
 /**
