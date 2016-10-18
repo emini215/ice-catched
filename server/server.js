@@ -470,7 +470,7 @@ function skip(socket) {
 	    code: 0,
 	    count: skipCount(socket.room),
 	    nick: socket.nick,
-	    skipped: artistNick(socket.room),
+	    skipped: socket.room.getArtist(),
 	    total: socket.room.skip.length
 	});
 	
@@ -648,15 +648,6 @@ function isArtist(socket) {
     }
 
     return socket.nick === socket.room.users[socket.room.artist];
-}
-
-/**
- * Get the name of the artist.
- * @param {Object} room - The room to return artist of.
- * @return {string} - The nick of the artist.
- */
-function artistNick(room) {
-    return room.users[room.artist];
 }
 
 /**
