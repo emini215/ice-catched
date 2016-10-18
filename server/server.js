@@ -339,7 +339,7 @@ function nick(socket, nick) {
 	};
     }
 
-    if (nickIsTaken(nick, socket.room)) {
+    if (socket.room.nickIsTaken(nick)) {
 	// the nick is already taken
 	return {
 	    nick: socket.nick,
@@ -704,17 +704,6 @@ function nickIsValid(nick) {
        return false;
 
     return true;    
-};
-
-/**
- * Check if the nick is used in a room.
- * @param {string} nick - The nick to check.
- * @param {Object} room - The room to check if nick is taken in.
- * @param {string[]} room.users - List of users in room.
- * @return {boolean}
- */
-function nickIsTaken(nick, room) {
-    return null != room.users.find(function(other) { return other==nick; });
 };
 
 /**
