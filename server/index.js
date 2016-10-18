@@ -1,12 +1,13 @@
 var socketio = require("socket.io");
 var Room = require("./room/room.js");
+var io;
 
 // history of drawn lines
 var rooms = [];
 
 // main function for handling connection to client
 module.exports.listen = function(http) {
-    var io = socketio.listen(http);
+    io = socketio.listen(http);
 
     io.on("connection", function(socket) {
 
