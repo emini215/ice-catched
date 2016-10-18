@@ -1,4 +1,4 @@
-var socketio = require("socket.io")(http);
+var socketio = require("socket.io");
 var Room = require("./room/room.js");
 
 // history of drawn lines
