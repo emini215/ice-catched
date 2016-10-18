@@ -257,7 +257,7 @@ function leave(socket) {
     }
 
     // remove the user from the room
-    removeUser(socket.nick, socket.room);
+    socket.room.removeUser(socket.nick);
    
     // let other clients know that user has disconnected
     messageRoom(socket.room, socket.nick + " has disconnected.");
@@ -692,30 +692,6 @@ function renameUser(prev, next, room) {
 
     if (index !== -1)
 	room[index] = next;
-};
-
-/**
-/**
- * Remove user from room.
- * @param {string} nick - Name of user to remove.
- * @param {Object} room - The room to leave.
- * @param {string[]} room.users - List of users.
- */
-function removeUser(nick, room) {
-
-    // if the artist is after the to be removed user then
-    // decrement the artist-index
-    if (room.users.indexOf(nick) < room.artist) {
-	room.artist--;
-    }
-
-    // remove user's skip value
-    room.skip.splice(room.users.indexOf(nick), 1);
-
-    // remove user from list
-    room.users = room.users.filter(
-	function(other) { return other !== nick }
-    );
 };
 
 /**
