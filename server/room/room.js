@@ -1,3 +1,9 @@
+/**
+ * Creates a new room object.
+ * @param {!string} name - The name of the room.
+ * @param {?string} password - The password of the room.
+ * @param {!boolean} visible - Whether the room should be visible or not.
+ */
 var Room = function(name, password, visible) {
     this.name = name;
     this.password = password;

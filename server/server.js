@@ -269,7 +269,7 @@ function leave(socket) {
  * Create a room.
  * @param {Object} socket - The socket of the user creating the room.
  * @param {string} name - The name of the room.
- * @param {string} password - The password of the room.
+ * @param {string} [password] - The password of the room.
  * @param {boolean} [visible] - Whether or not the room shows in room-list.
  * @return {Object} - A response to request.
  */
