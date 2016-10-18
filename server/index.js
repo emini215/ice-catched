@@ -597,25 +597,6 @@ function list(socket) {
 };
 
 /**
- * Find the index of last "mouseup"-event in array or the last 
- * "mousedown"-event if the previous was not found.
- * @param {Object[]} arr - Array of draw-events.
- * @return {int|null} - The index of last "mouseup", or if none found last
- *			"mousedown", if none of those were found returns null.
- */
-function findStrokeEnd(arr) {
-    for (var i = arr.length; --i >= 0;) {
-	if (arr[i].type == "mouseup")
-	    return i;
-    }
-    for (var i = arr.length; --i >= 0;) {
-	if (arr[i].type == "mousedown")
-	    return i;
-    }
-    return null;
-};
-
-/**
  * Set artist to next in line.
  * @param {Object} room - The room to switch artist in.
  * @param {int} room.artist - Index of artist in room.users.
