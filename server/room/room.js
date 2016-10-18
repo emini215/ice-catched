@@ -50,7 +50,11 @@ Room.prototype.nextArtist = function() {
     if (this.artist == this.users.length -1 || this.artist == null) {
 	// the artist is the last in the list or has not been assigned yet
 	// set it to the first one in the list
-	this.artist = 0;
+	if (this.users.length != 0 ) {
+	    // make sure there are actually users in the room before setting 
+	    // the new artist
+	    this.artist = 0;
+	}
     } else {
 	// otherwise just take the next one in the list
 	this.artist++;
