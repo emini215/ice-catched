@@ -66,6 +66,10 @@ Room.prototype.isArtist = function(nick) {
     return nick === this.users[this.artist];
 }
 
+/**
+ * Get the name of the artist.
+ * @return {?string} - The name of the artist or null if there is no artist.
+ */
 Room.prototype.getArtist = function() {
     return this.users[this.artist];
 }
