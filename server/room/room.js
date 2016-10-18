@@ -57,6 +57,11 @@ Room.prototype.nextArtist = function() {
     }
 }
 
+/**
+ * Check if the user is the room's artist.
+ * @param {string} nick - The nick of the user
+ * @return {boolean}
+ */
 Room.prototype.isArtist = function(nick) {
     if (nick == null) {
 	// must check if nick is null first as artist might be, if no one is
@@ -145,6 +150,5 @@ Room.prototype.nickIsTaken = function(nick) {
 Room.prototype.passwordMatch = function(password) {
     return this.password == password;
 }
-
 
 module.exports = Room;
