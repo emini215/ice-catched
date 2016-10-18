@@ -250,7 +250,7 @@ function leave(socket) {
 	    return other.name !== socket.room.name 
 	});
     } else {
-	if (isArtist(socket)) {
+	if (socket.room.isArtist(socket.nick)) {
 	    // restart round
 	    restart(socket, true);
 	}
@@ -439,7 +439,7 @@ function restart(socket) {
  * @return {Object} - Containing "statusCode" set to 0 if successful.
  */
 function skip(socket) {
-    if (isArtist(socket)) {
+    if (socket.room.isArtist(socket.nick)) {
 	// artists can always skip
 	io.to(socket.room.name).emit("skip", {
 	    code: 0,
@@ -553,7 +553,7 @@ function sendMessage(socket, message) {
  */
 function draw(socket, data) {
 
-    if (!isArtist(socket)) {
+    if (!socket.room.isArtist(socket.nick)) {
 	// the user is not artist
 	return {
 	    statusCode: -1,
@@ -632,23 +632,6 @@ function nextArtist(room) {
     // notify members of room
     io.to(room.name).emit("artist", room.users[room.artist]);
 };
-
-/**
- * Check if user is the artist.
- * @param {Object} socket - The connection to the user.
- * @param {string} socket.nick - The user's nick.
- * @param {Object} socket.room - The room to check if artist in.
- * @return {boolean}
- */
-function isArtist(socket) {
-    if (socket.nick == null) {
-	// if the user is not connected return false
-	// there is no way the user is artist
-	return false;
-    }
-
-    return socket.nick === socket.room.users[socket.room.artist];
-}
 
 /**
  * Send message to room.
