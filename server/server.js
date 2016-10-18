@@ -1,4 +1,5 @@
 var socketio = require("socket.io")(http);
+var Room = require("./room/room.js");
 
 // history of drawn lines
 var rooms = [];
@@ -296,21 +297,14 @@ function create(socket, name, password, visible) {
     }
 
     // everything fine, create the room and return
-    var room = {};
-    room.name = name;
-    room.password = password;
-    room.visible = visible;
-    room.users = [];
-    room.artist = null;
-    room.history = [];
-    room.skip = [];
+    var room = new Room(name, password, visible);
     rooms.push(room);
 
     // remember which room user created
     socket.room = room;
 
     return {
-	room: name
+	room: room.name
     };
 };
 
