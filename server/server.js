@@ -621,14 +621,10 @@ function findStrokeEnd(arr) {
  * @param {string[]} room.users - List of users in room.
  */
 function nextArtist(room) {
-    
-    // update artist
-    if (room.artist == room.users.length -1 || room.artist == null) {
-	room.artist = 0;
-    } else {
-	room.artist++;
-    }
-    
+   
+    // update artist 
+    room.nextArtist();
+
     // notify members of room
     io.to(room.name).emit("artist", room.users[room.artist]);
 };
