@@ -39,7 +39,7 @@ Room.prototype.clear = function(nick) {
  */
 Room.prototype.undo = function(nick) {
 
-    if (!isArtist(nick)) {
+    if (!this.isArtist(nick)) {
 	// only artists can undo
 	return false;
     }
