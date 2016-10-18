@@ -46,6 +46,9 @@ Room.prototype.undo = function(nick) {
     return true;
 }
 
+/**
+ * Set the artist to next user in line.
+ */
 Room.prototype.nextArtist = function() {
     if (this.artist == this.users.length -1 || this.artist == null) {
 	// the artist is the last in the list or has not been assigned yet
