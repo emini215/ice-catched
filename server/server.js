@@ -6,7 +6,7 @@ var rooms = [];
 
 // main function for handling connection to client
 module.exports.listen = function(http) {
-    io = socketio.listen(http);
+    var io = socketio.listen(http);
 
     io.on("connection", function(socket) {
 
