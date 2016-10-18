@@ -70,10 +70,30 @@ Room.prototype.getArtist = function() {
     return this.users[this.artist];
 }
 
-Room.message(message) // io
+/**
+ * Rename user.
+ * @param {string} prev - The previous name of the user.
+ * @param {string} next - The next name of the user.
+ * @return {boolean} - Whether or not the user was renamed.
+ */
+Room.prototype.renameUser = function(prev, next) {
+    
+    if (this.nickIsTaken(next)) {
+	// the nick is already taken
+	return false;
+    }
 
+    var index = this.users.indexOf(prev);
 
-Room.renameUser(prev, next)
+    if (index !== -1) {
+	// TODO: check if next nick is valid
+	room[index] = next;
+	return true;
+    } 
+
+    // user does not exist
+    return false;
+}
 
 /**
  * Add user to the room.
