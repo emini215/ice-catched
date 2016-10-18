@@ -350,7 +350,7 @@ function nick(socket, nick) {
 
     if (socket.nick == null) {
 	// add user to room
-	addUser(nick, socket.room);
+	socket.room.addUser(nick);
 
 	// add the user to the socket.io's room
 	socket.join(socket.room.name);
@@ -695,16 +695,6 @@ function renameUser(prev, next, room) {
 };
 
 /**
- * Add user to room.
- * @param {string} nick - Name of user.
- * @param {Object} room - The room to join.
- * @param {string[]} room.users - List of users.
- */
-function addUser(nick, room) {
-    room.users.push(nick);
-    room.skip.push(0);
-};
-
 /**
  * Remove user from room.
  * @param {string} nick - Name of user to remove.
