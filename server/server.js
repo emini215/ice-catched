@@ -25,9 +25,16 @@ module.exports.listen = function(http) {
     });
 
     socket.on("undo", function() {
-	var res = undo(socket);
-	if (res.statusCode !== 0) {
-	    socket.emit("exception", res.message);
+	var success = socket.room.undo(socket.nick);
+
+	if (success) {
+	    // clear clients and send history to all
+	    // should not be any need to check if clear is successful as it
+	    // has the same check as undo. unless problems with concurrency
+	    socket.room.clear(socket.nick);
+	    sendHistory(io, socket.room);
+	} else {
+	    socket.emit("exception", "Could not undo.");
 	}
     });
 
@@ -599,36 +606,6 @@ function clear(socket) {
     };
 };
 
-/**
- * Undo previous draw-event in room.
- * @param {Object} socket - The user performing undo.
- * @return {Object} - Containing "statusCode" set to 0 if successful.
- */
-function undo(socket) {
-
-    if (!isArtist(socket)) {
-	// only artsits can undo
-	return {
-	    statusCode: -1,
-	    message: "Only artists can undo."
-	};
-    }
-
-    // remove the last element
-    var strokeEnd = findStrokeEnd(socket.room.history);
-    if (strokeEnd != null)
-	socket.room.history.splice(strokeEnd);
-
-    // clear clients and send history to all
-    clear(socket);
-    sendHistory(io, socket.room);
-
-    return {
-	statusCode: 0
-    };
-};
-
-/**
  * Find the index of last "mouseup"-event in array or the last 
  * "mousedown"-event if the previous was not found.
  * @param {Object[]} arr - Array of draw-events.
