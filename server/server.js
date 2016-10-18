@@ -208,7 +208,7 @@ function join(socket, name, password) {
     // only check if the room is passworded
     // if a client tries to join a room that does not have a password by 
     // giving a password we allow it
-    if (room.password != null && !passwordMatch(password, room)) {
+    if (room.password != null && !room.passwordMatch(password)) {
 	// password does not match
 	if (password == "") {
 	    // empty string is not a password
@@ -731,16 +731,5 @@ function roomExists(room) {
     // otherwise rooms exist if there are a room with given name
     room = rooms.find(function(other) { return other.name==room; });
     return room === undefined ? false : room;
-};
-
-/**
- * Check if the password matches password of room.
- * @param {?string} password - The password to check.
- * @param {Object} room	- The room to check password with.
- * @param {?string] room.password - The password of the room.
- * @return {boolean}
- */
-function passwordMatch(password, room) {
-    return room.password == password;
 };
 
