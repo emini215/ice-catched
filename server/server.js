@@ -47,9 +47,15 @@ module.exports.listen = function(http) {
     });
 
     socket.on("clear", function() {
-	var res = clear(socket);
-	if (res.statusCode !== 0) {
-	    socket.emit("exception", res.message);
+	// try to clear
+	var success = socket.room.clear(socket.nick);
+	
+	if (success) {
+	    // send clear-message
+	    io.to(socket.room.name).emit("clear");
+	} else {
+	    // send error to clearer
+	    socket.emit("exception", "Could not clear.");
 	}
     });
 
@@ -582,30 +588,6 @@ function list(socket) {
 };
 
 /**
- * Clear the drawing for everyone in room.
- * @param {Object} socket - The user who clears the room.
- * @param {Objecc} socket.room - The room to be cleared.
- * @return {Object} - Containing "statusCode" set to 0 if successful.
- */
-function clear(socket) {
-    
-    if (!isArtist(socket)) {
-	// only artists can clear
-	return {
-	    statusCode: -1,
-	    message: "Only artists can clear."
-	};
-    }
-
-    // send clear-message
-    io.to(socket.room.name).emit("clear");
-
-    // all goood
-    return {
-	statusCode: 0
-    };
-};
-
  * Find the index of last "mouseup"-event in array or the last 
  * "mousedown"-event if the previous was not found.
  * @param {Object[]} arr - Array of draw-events.
