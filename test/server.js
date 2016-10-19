@@ -74,7 +74,8 @@ describe("Test socket connection", function() {
 	it("Room exist", function(done) {
 	    // create room and ask if exists
 	    var roomName = "#room";
-	    client.emit("create", roomName);
+	    var password = "secretpassword";
+	    client.emit("create", roomName, password);
 	    client.emit("room", roomName);
 
 	    client.once("room", function(data) {
@@ -124,6 +125,8 @@ describe("Test socket connection", function() {
 	    client.emit("create", name);
 
 	    client.once("create", function(data) {
+		expect(data).to.equal(name);
+
 		// should have worked fine, now create a new one
 		client.emit("create", name);
 
@@ -137,9 +140,10 @@ describe("Test socket connection", function() {
 
 	it("Create room with invalid password", function(done) {
 	    var name = "#room";
-	    client.emit("create", name, null);
+	    client.emit("create", name, { "something": "wow" });
 
 	    client.once("exception", function(e) {
+		// should result in error
 		done();
 	    });
 	});
@@ -151,6 +155,7 @@ describe("Test socket connection", function() {
 	    client.emit("create", name, password, visible);
 
 	    client.once("exception", function(e) {
+		// should result in error
 		done();
 	    });
 	});
