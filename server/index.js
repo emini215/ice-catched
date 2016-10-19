@@ -46,12 +46,6 @@ module.exports.listen = function(http) {
 	} catch (e) {
 	    socket.emit("exception", e);
 	}
-
-	var res = skip(socket);
-	if (res.statusCode !== 0) {
-	    // could not skip
-	    socket.emit("exception", res.message);
-	}
     });
 
     socket.on("clear", function() {
