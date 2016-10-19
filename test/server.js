@@ -46,6 +46,7 @@ describe("Test socket connection", function() {
 	done();
     });
 
+    // test checking room status
     describe("room", function() {
 
 	it("Room not provided", function(done) {
@@ -79,6 +80,5 @@ describe("Test socket connection", function() {
 		done();
 	    });
 	});
-
     });
 });
