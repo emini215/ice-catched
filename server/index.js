@@ -163,7 +163,7 @@ function room(name) {
     // otherwise return room-name with bool if passworded
     return {
 	room: room.name,
-	password: room.password != null
+	password: room.isPassworded()
     };
 };
 
@@ -210,7 +210,7 @@ function join(socket, name, password) {
     // only check if the room is passworded
     // if a client tries to join a room that does not have a password by 
     // giving a password we allow it
-    if (room.password != null && !room.passwordMatch(password)) {
+    if (room.isPassworded() && !room.passwordMatch(password)) {
 	// password does not match
 	if (password == "") {
 	    // empty string is not a password

@@ -156,6 +156,14 @@ Room.prototype.nickIsTaken = function(nick) {
 }
 
 /**
+ * Check if the room is passworded.
+ * @return {boolean}
+ */
+Room.prototype.isPassworded = function() {
+    return this.password != null;
+}
+
+/**
  * Check if the password matches the password of the room.
  * @param {?string} password - The password to check.
  * @return {boolean}
