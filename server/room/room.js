@@ -9,10 +9,10 @@ var DEFAULT_SKIP_THRESHOLD = 1/2;
  */
 var Room = function(name, password, visible) {
     
-    if (typeof name !== "string") {
-	// name must be defined and be a string
-	throw "Name of room must be a string.";
-    } // TODO: check if valid name
+    if (!isValidRoomName(name)) {
+	// name must be defined and be a string with at least 3 characters.
+	throw "Name of room must be a string of at least 3 characters.";
+    }
 
     if (password === "") {
 	// empty string is not considered a password
@@ -286,5 +286,14 @@ function findStrokeEnd(arr) {
     }
     return null;
 };
+
+/**
+ * A room's name has to be a string and at least 3 characters long.
+ * @param {!string} name - The proposed name of the room.
+ * @return {boolean}
+ */
+isValidRoomName = function(name) {
+    return typeof name === "string" && name.length >= 3;
+}
 
 module.exports = Room;
