@@ -555,6 +555,13 @@ function sendMessage(socket, message) {
  * @return {Object} - Containing "statusCode" set to 0 if successful.
  */
 function draw(socket, data) {
+    if (socket.room == null) {
+	// the user is not connected
+	return {
+	    statusCode: -1,
+	    message: "You are not connected to a room."
+	};
+    }
 
     if (!socket.room.isArtist(socket.nick)) {
 	// the user is not artist
