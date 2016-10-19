@@ -278,6 +278,7 @@ function leave(socket) {
  * @param {string} name - The name of the room.
  * @param {string} [password] - The password of the room.
  * @param {boolean} [visible] - Whether or not the room shows in room-list.
+ * @throws Throws error when room could not be created.
  * @return {Room) - The created Room if successful.
  */
 function create(socket, name, password, visible) {
