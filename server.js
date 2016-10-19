@@ -3,8 +3,6 @@ var app = express();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 
-// port used to serve files
-var PORT = 3000;
 
 // as this is a single-page application this is the only
 // html-file that will be served
@@ -837,7 +835,5 @@ function passwordMatch(password, room) {
     return room.password == password;
 };
 
-http.listen(PORT, function() {
-    console.log("Listening on port " + PORT + ".");
-});
+module.exports = http;
 
