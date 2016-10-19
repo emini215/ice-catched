@@ -21,8 +21,8 @@ describe("Test socket connection", function() {
 	
 	// make sure previous cached versions of server is deleted, then
 	// import and start the server
-	delete require.cache[require.resolve("../app.js")];
-	server = require("../app.js");
+	delete require.cache[require.resolve("../app")];
+	server = require("../app");
 
 	// setup socket
 	client = io.connect(SERVER_URL, SERVER_OPTIONS);
@@ -38,7 +38,7 @@ describe("Test socket connection", function() {
     });
 
     afterEach(function(done) {
-	
+
 	// close connection if not already done
 	if (client.connected) {
 	    client.disconnect();

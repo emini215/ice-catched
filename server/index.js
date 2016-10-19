@@ -3,11 +3,16 @@ var Room = require("./room/room.js");
 var io;
 
 // history of drawn lines
-var rooms = [];
+var rooms;
+
+module.exports.close = function() {
+    io.server.close();
+}
 
 // main function for handling connection to client
 module.exports.listen = function(http) {
     io = socketio.listen(http);
+    rooms = [];
 
     io.on("connection", function(socket) {
 

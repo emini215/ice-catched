@@ -15,6 +15,9 @@ app.use("/style", express.static(__dirname + "/client/style"));
 
 require("./server/index.js").listen(http);
 
-module.exports = http.listen(port, function() {
-    console.log("Listening on port " + port + ".");
+http.listen(port, function() {
+    if (!module.parent)
+	console.log("Listening on port " + port + ".");
 });
+
+module.exports = http;
