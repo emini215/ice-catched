@@ -1,3 +1,5 @@
+var DEFAULT_SKIP_THRESHOLD = 1/2;
+
 /**
  * Creates a new room object.
  * @param {!string} name - The name of the room.
@@ -41,6 +43,7 @@ var Room = function(name, password, visible) {
     this.artist = null;
     this.history = [];
     this.skip = [];
+    this.skipThreshold = DEFAULT_SKIP_THRESHOLD;
 }
 
 /**
@@ -121,6 +124,14 @@ Room.prototype.getArtist = function() {
 }
 
 /**
+ * Get the count of room's members.
+ * @return {int}
+ */
+Room.prototype.memberCount = function() {
+    return room.users.length;
+}
+
+/**
  * Rename user.
  * @param {string} prev - The previous name of the user.
  * @param {string} next - The next name of the user.
@@ -198,6 +209,63 @@ Room.prototype.isPassworded = function() {
  */
 Room.prototype.passwordMatch = function(password) {
     return this.password == password;
+}
+
+/** 
+ * Vote to skip the next artist.
+ * @param {string} nick - The name of the user skipping.
+ * @throws Error if the user cannot add skip.
+ * @return {boolean} If the artist is skipped.
+ */
+Room.prototype.skipArtist = function(nick) {
+    
+    if (this.isArtist(nick)) {
+	// artist can always skip
+	return true;
+    } else {
+	// other users has to vote
+
+	if (this.hasSkipped(nick)) {
+	    throw "You already voted to skip."
+	}
+    
+	// set skip of user
+	this.skip[this.users.indexOf(nick)] = 1;
+
+	return this.majoritySkipped();
+    }
+}
+
+/**
+ * Reset all skips.
+ */
+Room.prototype.resetSkip = function() {
+    this.skip.fill(0);
+}
+
+/**
+ * Check if given user has already skipped.
+ * @return {boolean}
+ */
+Room.prototype.hasSkipped = function(nick) {
+    return this.skip[this.users.indexOf(nick)] === 1;
+}
+
+/**
+ * Get the sum of all the room's skips.
+ * @return {int} - The sum.
+ */
+Room.prototype.skipCount = function() {
+    return this.skip.reduce(function(x, y) { return x + y; }, 0);
+}
+
+/**
+ * Check if the majority of the room's users, according to skip-threshold, 
+ * wants to skip.
+ * @return {boolean}
+ */
+Room.prototype.majoritySkipped = function() {
+    return this.skipCount() / this.users.length > this.skipLimit;
 }
 
 /**
