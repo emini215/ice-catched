@@ -2,6 +2,7 @@
  * Creates a new room object.
  * @param {!string} name - The name of the room.
  * @param {?string} password - The password of the room.
+ * @throws Error when arguments are not valid.
  * @param {?boolean} [visible] - Whether the room should be visible or not.
  */
 var Room = function(name, password, visible) {
