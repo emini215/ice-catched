@@ -1,7 +1,7 @@
 var DEFAULT_SKIP_THRESHOLD = 1/2;
 
 /**
- * Creates a new room object.
+ * Create a new room object.
  * @param {!string} name - The name of the room.
  * @param {?string} password - The password of the room.
  * @throws Error when arguments are not valid.
