@@ -51,20 +51,33 @@ describe("Test socket connection", function() {
 	it("Room not provided", function(done) {
 	    client.emit("room", null);
 
+	    // always assume response on room, should be null
 	    client.once("room", function(data) {
-		console.log(data);	
+		expect(data.room).to.equal(null);
 		done();
 	    });
 	});
 
 	it("Room does not exist", function(done) {
 	    client.emit("room", "non-existent-room");
-	    done();
+
+	    // expect room to be null
+	    client.once("room", function(data) {
+		expect(data.room).to.equal(null);
+		done();
+	    });
 	});
 
 	it("Room exist", function(done) {
-	    client.emit("room", "existing-room");
-	    done();
+	    // create room and ask if exists
+	    var roomName = "#room";
+	    client.emit("create", roomName);
+	    client.emit("room", roomName);
+
+	    client.once("room", function(data) {
+		expect(data.room).to.equal(roomName);
+		done();
+	    });
 	});
 
     });
