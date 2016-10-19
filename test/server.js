@@ -84,4 +84,77 @@ describe("Test socket connection", function() {
 	    });
 	});
     });
+
+    // test creating rooms
+    describe("create", function() {
+
+	it("Create valid room", function(done) {
+	    
+	    // call create
+	    var name = "#room";
+	    client.emit("create", name);
+
+	    // expect return good
+	    client.once("create", function(data) {
+		// the data is the name returned
+		expect(data).to.equal(name);
+
+		// see if the room now exists
+		client.emit("room", name);
+		client.once("room", function(data) {
+		    expect(data.room).to.equal(name);
+		    done();
+		});
+	    });
+	});
+	
+	it("Create room without name", function(done) {
+	    
+	    // create
+	    var name = "";
+	    client.emit("create", name);
+
+	    client.once("exception", function(e) {
+		// should return exception
+		done();
+	    });
+	});
+
+	it("Create room with name already taken", function(done) {
+	    var name = "#room";
+	    client.emit("create", name);
+
+	    client.once("create", function(data) {
+		// should have worked fine, now create a new one
+		client.emit("create", name);
+
+		client.once("exception", function(e) {
+		    // should not be able to create another room with the same
+		    // name
+		    done();
+		});
+	    });
+	});
+
+	it("Create room with invalid password", function(done) {
+	    var name = "#room";
+	    client.emit("create", name, null);
+
+	    client.once("exception", function(e) {
+		done();
+	    });
+	});
+
+	it("Create room with invalid visible", function(done) {
+	    var name = "#room";
+	    var password = "password";
+	    var visible = "a string";
+	    client.emit("create", name, password, visible);
+
+	    client.once("exception", function(e) {
+		done();
+	    });
+	});
+
+    });
 });
