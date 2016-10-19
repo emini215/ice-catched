@@ -32,7 +32,8 @@ module.exports.listen = function(http) {
 	    // clear clients and send history to all
 	    // should not be any need to check if clear is successful as it
 	    // has the same check as undo. unless problems with concurrency
-	    socket.room.clear(socket.nick);
+	    socket.room.undo(socket.nick);
+	    io.to(socket.room.name).emit("clear");
 	    sendHistory(io, socket.room);
 	} else {
 	    socket.emit("exception", "Could not undo.");
@@ -424,9 +425,10 @@ function start(socket) {
 function restart(socket) {
     
     // clear the canvas before selecting new artist
-    clear(socket);
-    socket.room.history = [];
+    socket.room.clear(socket.nick);
+    io.to(socket.room.name).emit("clear");
 
+    // TODO: make method of room
     // reset skip
     socket.room.skip.fill(0);
 
