@@ -128,7 +128,7 @@ Room.prototype.getArtist = function() {
  * @return {int}
  */
 Room.prototype.memberCount = function() {
-    return room.users.length;
+    return this.users.length;
 }
 
 /**
