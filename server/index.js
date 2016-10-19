@@ -92,7 +92,12 @@ module.exports.listen = function(http) {
     });
     
     socket.on("create", function(room, password, visible) {
-	socket.emit("create", create(socket, room, password, visible)) 
+	try {
+	    var room = create(socket, room, password, visible);
+	    socket.emit("create", room.name);
+	} catch (e) {
+	    socket.emit("exception", e);
+	}
     });
     
     socket.on("join", function(room, password) {
@@ -273,54 +278,21 @@ function leave(socket) {
  * @param {string} name - The name of the room.
  * @param {string} [password] - The password of the room.
  * @param {boolean} [visible] - Whether or not the room shows in room-list.
- * @return {Object} - A response to request.
+ * @return {Room) - The created Room if successful.
  */
 function create(socket, name, password, visible) {
 
-    // default visible to false
-    if (visible == null) {
-	visible = true;
-    }
-
-    // do not consider empty string a password
-    if (password === "") {
-	password = null;
-    }
-    
     if (!!roomExists(name)) {
 	// room already exists
-	return {
-	    room: null,
-	    message: "Room already exists."
-	};
+	throw "Room already exists.";
     }
 
-    if (password != null && typeof password !== "string") {
-	// password must a string (or null if not given)
-	return {
-	    room: null,
-	    message: "Password must be of type string or null."
-	};
-    }
-
-    if (typeof visible !== "boolean") {
-	// visible must be a boolean
-	return {
-	    room: null,
-	    message: "Visibility must be set by a boolean or null."
-	};
-    }
-
-    // everything fine, create the room and return
+    // create room and save reference in room-list and creating user
     var room = new Room(name, password, visible);
     rooms.push(room);
-
-    // remember which room user created
     socket.room = room;
 
-    return {
-	room: room.name
-    };
+    return room;
 };
 
 /**

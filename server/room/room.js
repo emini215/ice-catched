@@ -2,9 +2,36 @@
  * Creates a new room object.
  * @param {!string} name - The name of the room.
  * @param {?string} password - The password of the room.
- * @param {!boolean} visible - Whether the room should be visible or not.
+ * @param {?boolean} [visible] - Whether the room should be visible or not.
  */
 var Room = function(name, password, visible) {
+    
+    if (typeof name !== "string") {
+	// name must be defined and be a string
+	throw "Name of room must be a string.";
+    } // TODO: check if valid name
+
+    if (password === "") {
+	// empty string is not considered a password
+	password = null;
+    }
+
+    if (password != null && typeof password !== "string") {
+	// password must be either null or string
+	throw "Password must be of type string or null.";
+    }
+
+    if (visible == null) {
+	// visible by default
+	visible = true;
+    }
+
+    if (typeof visible !== "boolean") {
+	// visible must be boolean
+	throw "Visibility must be a boolean or null."
+    }
+
+    // everything fine, create object
     this.name = name;
     this.password = password;
     this.visible = visible;

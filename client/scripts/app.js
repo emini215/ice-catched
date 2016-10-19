@@ -165,17 +165,9 @@ App.init = function() {
 	App.nickname = nick;
     });
 
-    socket.on("create", function(data) {
-	var room = data.room;
-	var message = data.message;
-
-	if (room == null) {
-	    // display error message
-	    Login.showError(true, message);
-	} else {
-	    App.currentRoom = room;
-	    Login.focusNick();
-	}
+    socket.on("create", function(name) {
+	App.currentRoom = name;
+	Login.focusNick();
     });
 
     socket.on("join", function(data) {
