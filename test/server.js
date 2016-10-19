@@ -21,9 +21,8 @@ describe("Test socket connection", function() {
 	
 	// make sure previous cached versions of server is deleted, then
 	// import and start the server
-	delete require.cache[require.resolve('../server')];
-	server = require("../server.js");
-	server.listen(port);
+	delete require.cache[require.resolve("../app.js")];
+	server = require("../app.js");
 
 	// setup socket
 	client = io.connect(SERVER_URL, SERVER_OPTIONS);
