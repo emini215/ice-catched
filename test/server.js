@@ -3,7 +3,6 @@ var request = require("request");
 
 var port = 3000;
 var io = require("socket.io-client");
-var server = require("../server.js");
 
 var SERVER_URL = "http://localhost:" + port;
 var SERVER_OPTIONS =  
@@ -16,10 +15,14 @@ var SERVER_OPTIONS =
 
 describe("Test socket connection", function() {
     var client;
+    var server;
 
     beforeEach(function(done) {
 	
-	// start server
+	// make sure previous cached versions of server is deleted, then
+	// import and start the server
+	delete require.cache[require.resolve('../server')];
+	server = require("../server.js");
 	server.listen(port);
 
 	// setup socket
@@ -41,9 +44,9 @@ describe("Test socket connection", function() {
 	if (client.connected) {
 	    client.disconnect();
 	}
-	
-	server.close();
-	done();
+
+	// make sure all connections are closed before returning done	
+	server.close(done);
     });
 
     // test checking room status
