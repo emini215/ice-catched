@@ -542,15 +542,13 @@ function list(socket) {
 
 /**
  * Set artist to next in line.
- * @param {Object} room - The room to switch artist in.
- * @param {int} room.artist - Index of artist in room.users.
- * @param {string[]} room.users - List of users in room.
+ * @param {Room} room - The room to switch artist in.
  */
 function nextArtist(room) {
    
     // update artist, and notifiy members 
     room.nextArtist();
-    io.to(room.name).emit("artist", room.users[room.artist]);
+    io.to(room.name).emit("artist", room.getArtist());
 };
 
 /**
