@@ -222,8 +222,8 @@ App.init = function() {
     socket.on("skip", function(data) {	
 	if (data.skipped == null) {
 	    // user was not skipped
-	    App.displayMessage((data.nick === App.nickname ?
-		"You" : data.nick) + " voted to skip. (" + 
+	    App.displayMessage((data.skipper === App.nickname ?
+		"You" : data.skipper) + " voted to skip. (" + 
 		    data.count + "/" + data.total + ")");
 
 	} else if (data.skipped == data.skipper) {
