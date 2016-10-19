@@ -586,10 +586,8 @@ function list(socket) {
  */
 function nextArtist(room) {
    
-    // update artist 
+    // update artist, and notifiy members 
     room.nextArtist();
-
-    // notify members of room
     io.to(room.name).emit("artist", room.users[room.artist]);
 };
 
@@ -629,7 +627,7 @@ function isMajority(room) {
  */
 function nickIsValid(nick) {
     if (typeof nick !== "string" || nick.length < 3)
-       return false;
+	return false;
 
     return true;    
 };
