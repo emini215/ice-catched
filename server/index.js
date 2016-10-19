@@ -41,6 +41,12 @@ module.exports.listen = function(http) {
     });
 
     socket.on("skip", function() {
+	try {
+	    skip(socket);
+	} catch (e) {
+	    socket.emit("exception", e);
+	}
+
 	var res = skip(socket);
 	if (res.statusCode !== 0) {
 	    // could not skip
@@ -259,7 +265,7 @@ function leave(socket) {
     } else {
 	if (socket.room.isArtist(socket.nick)) {
 	    // restart round
-	    restart(socket, true);
+	    restart(socket.room);
 	}
     }
 
@@ -389,86 +395,48 @@ function start(socket) {
 };
 
 /**
- * Restart the round.
- * @param {Object} socket - The client restarting.
- * @param {Object} socket.room - The room to be restarted.
- * @param {boolean} leaving - Whether restart is because of leaving user 
- *				or not.
+ * Restart the round of a room.
+ * @param {Room} room - The room which's round to restart.
  */
-function restart(socket) {
+function restart(room) {
     
     // clear the canvas before selecting new artist
-    socket.room.clear(socket.nick);
-    io.to(socket.room.name).emit("clear");
+    room.clear(room.getArtist());
+    io.to(room.name).emit("clear");
 
-    // TODO: make method of room
-    // reset skip
-    socket.room.skip.fill(0);
+    // reset skip-count
+    room.resetSkip();
 
     // set the next artist
-    nextArtist(socket.room);
+    nextArtist(room);
 };
 
 /**
  * Vote to skip round.
  * @param {Object} socket - The client voting to skip.
- * @return {Object} - Containing "statusCode" set to 0 if successful.
+ * @throws Error if the user could not skip.
  */
 function skip(socket) {
-    if (socket.room.isArtist(socket.nick)) {
-	// artists can always skip
-	io.to(socket.room.name).emit("skip", {
-	    code: 0,
-	    nick: socket.nick,
-	    skipped: socket.nick
-	});
 
-	restart(socket);
-	return {
-	    statusCode: 0
-	};
-    }
-
-    if (socket.room.skip[socket.room.users.indexOf(socket.nick)] === 1) {
-	// user already skipped
-	return {
-	    statusCode: -1,
-	    message: "You have already voted to skip."
-	};
-    } 
-
-    // set skip of user
-    socket.room.skip[socket.room.users.indexOf(socket.nick)] = 1;
-
-    if (isMajority(socket.room)) {
-	// majority of the users skipped, accepted
-	io.to(socket.room.name).emit("skip", { 
-	    code: 0,
-	    count: skipCount(socket.room),
-	    nick: socket.nick,
-	    skipped: socket.room.getArtist(),
-	    total: socket.room.skip.length
-	});
+    if (socket.room.skipArtist(socket.nick)) {
+	// the artist should be skipped
 	
-	// start new round
-	restart(socket);
-	return {
-	    statusCode: 0
-	};
-
+	io.to(socket.room.name).emit("skip", {
+	    count: socket.room.skipCount(),
+	    total: socket.room.memberCount(),
+	    skipper: socket.nick,
+	    skipped: socket.room.getArtist()
+	});
+	    
+	restart(socket.room);
     } else {
 	// skip added, but not yet majority
 	// tell the room of updated status
 	io.to(socket.room.name).emit("skip", {
-	    code: -1,
-	    count: skipCount(socket.room),
-	    nick: socket.nick,
-	    total: socket.room.skip.length
+	    count: socket.room.skipCount(),
+	    total: socket.room.memberCount(),
+	    skipper: socket.nick
 	});
-
-	return {
-	    statusCode: 0
-	};
     }
 };
 
@@ -599,25 +567,6 @@ function nextArtist(room) {
  */
 function messageRoom(room, message) {
     io.to(room.name).emit("msg", message);
-};
-
-/**
- * Add all skips.
- * @param {Object} room - The room to count skips in.
- * @param {int[]} room.skip - The skips to count.
- * @return {int} - The count.
- */
-function skipCount(room) {
-    return room.skip.reduce(function(x, y) { return x + y; }, 0);
-};
-
-/**
- * Check if majority of room-members want to skip.
- * @param {Object} room - The room to check.
- * @return {boolean}
- */
-function isMajority(room) {
-    return skipCount(room) > room.skip.length/2;
 };
 
 /**

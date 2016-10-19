@@ -212,24 +212,29 @@ App.init = function() {
 	App.displayMessage("");
     });
 
-    socket.on("skip", function(data) {
-    
-	if (data.skipped === data.nick) {
-	    // artist skipped
-	    App.displayMessage((data.nick === App.nickname ?
-		"You" : data.nick) + " skipped.");
-
-	} else {
-	    // display who voted to skip and status
+    /**
+     * Response to skip-message.
+     * @param {!string} data.skipper - The user skipping.
+     * @param {?string} data.skipped - The artist that was skipped.
+     * @param {!int} data.count - The count of users wanting to skip.
+     * @param {!int} data.total - The total count of users.
+     */
+    socket.on("skip", function(data) {	
+	if (data.skipped == null) {
+	    // user was not skipped
 	    App.displayMessage((data.nick === App.nickname ?
 		"You" : data.nick) + " voted to skip. (" + 
 		    data.count + "/" + data.total + ")");
 
-	    if (data.code === 0) {
-		// vote was successful	    
-		App.displayMessage((data.skipped === App.nickname ? 
-		    "You were" : data.skipped + " was") + " skippped.");
-	    }
+	} else if (data.skipped == data.skipper) {
+	    // the artists skipped himself 
+	    App.displayMessage((data.skipper === App.nickname ?
+		"You" : data.skipper) + " skipped.");
+
+	} else {
+	    // the artist was skipped
+	    App.displayMessage((data.skipped === App.nickname ? 
+		"You were" : data.skipped + " was") + " skippped.");
 	}
     });
 
